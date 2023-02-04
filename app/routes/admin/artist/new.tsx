@@ -17,23 +17,23 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const NewArtistFormSchema = z.object({
   name: z.string().min(2, "require-name"),
-  name_kor: z.string().min(1, "require-name_kor"),
-  artist_logo: z.string().min(2, "require-artist_logo link"),
-  artist_poster: z.string().min(2, "require-artist_poster link"),
+  nameKor: z.string().min(1, "require-nameKor"),
+  artistLogo: z.string().min(2, "require-artistLogo link"),
+  artistPoster: z.string().min(2, "require-artistPoster link"),
   company: z.string().min(2, "require-company"),
 });
 
 type ActionData = {
   name?: string;
-  name_kor?: string;
-  artist_logo?: string;
-  artist_poster?: string;
+  nameKor?: string;
+  artistLogo?: string;
+  artistPoster?: string;
   company?: string;
   errors?: {
     name?: string;
-    name_kor?: string;
-    artist_logo?: string;
-    artist_poster?: string;
+    nameKor?: string;
+    artistLogo?: string;
+    artistPoster?: string;
     company?: string;
   };
 };
@@ -55,14 +55,14 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const { name, name_kor, artist_logo, artist_poster, company } =
+  const { name, nameKor, artistLogo, artistPoster, company } =
     formValidation.data;
 
   const artist = await createArtist(
     name,
-    name_kor,
-    artist_logo,
-    artist_poster,
+    nameKor,
+    artistLogo,
+    artistPoster,
     company
   );
 
@@ -109,23 +109,23 @@ export default function NewNotePage() {
           htmlFor="message"
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
         >
-          name_kor :
+          nameKor :
         </label>
         <input
-          {...inputProps("name_kor")}
-          name="name_kor"
-          id="name_kor"
+          {...inputProps("nameKor")}
+          name="nameKor"
+          id="nameKor"
           placeholder="Name Korean"
           className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          aria-invalid={actionData?.errors?.name_kor ? true : undefined}
+          aria-invalid={actionData?.errors?.nameKor ? true : undefined}
           aria-errormessage={
-            actionData?.errors?.name_kor ? "name_kor-error" : undefined
+            actionData?.errors?.nameKor ? "nameKor-error" : undefined
           }
           disabled={disabled}
         />
-        {actionData?.errors?.name_kor && (
-          <div className="pt-1 text-red-700" id="name_kor-error">
-            {actionData.errors.name_kor}
+        {actionData?.errors?.nameKor && (
+          <div className="pt-1 text-red-700" id="nameKor-error">
+            {actionData.errors.nameKor}
           </div>
         )}
       </div>
@@ -135,23 +135,23 @@ export default function NewNotePage() {
           htmlFor="message"
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
         >
-          artist_logo :
+          artistLogo :
         </label>
         <input
-          {...inputProps("artist_logo")}
-          name="artist_logo"
-          id="artist_logo"
-          placeholder="artist_logo url link"
+          {...inputProps("artistLogo")}
+          name="artistLogo"
+          id="artistLogo"
+          placeholder="artistLogo url link"
           className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          aria-invalid={actionData?.errors?.artist_logo ? true : undefined}
+          aria-invalid={actionData?.errors?.artistLogo ? true : undefined}
           aria-errormessage={
-            actionData?.errors?.artist_logo ? "artist_logo-error" : undefined
+            actionData?.errors?.artistLogo ? "artistLogo-error" : undefined
           }
           disabled={disabled}
         />
-        {actionData?.errors?.artist_logo && (
-          <div className="pt-1 text-red-700" id="artist_logo-error">
-            {actionData.errors.artist_logo}
+        {actionData?.errors?.artistLogo && (
+          <div className="pt-1 text-red-700" id="artistLogo-error">
+            {actionData.errors.artistLogo}
           </div>
         )}
       </div>
@@ -161,25 +161,25 @@ export default function NewNotePage() {
           htmlFor="message"
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
         >
-          artist_poster :
+          artistPoster :
         </label>
         <input
-          {...inputProps("artist_poster")}
-          name="artist_poster"
-          id="artist_poster"
-          placeholder="artist_poster url link"
+          {...inputProps("artistPoster")}
+          name="artistPoster"
+          id="artistPoster"
+          placeholder="artistPoster url link"
           className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          aria-invalid={actionData?.errors?.artist_poster ? true : undefined}
+          aria-invalid={actionData?.errors?.artistPoster ? true : undefined}
           aria-errormessage={
-            actionData?.errors?.artist_poster
-              ? "artist_poster-error"
+            actionData?.errors?.artistPoster
+              ? "artistPoster-error"
               : undefined
           }
           disabled={disabled}
         />
-        {actionData?.errors?.artist_poster && (
-          <div className="pt-1 text-red-700" id="artist_poster-error">
-            {actionData.errors.artist_poster}
+        {actionData?.errors?.artistPoster && (
+          <div className="pt-1 text-red-700" id="artistPoster-error">
+            {actionData.errors.artistPoster}
           </div>
         )}
       </div>

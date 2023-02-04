@@ -39,12 +39,12 @@ model Note {
 }
 
 model Artist {
-  id            String @id @default(cuid())
-  name          String
-  name_kor      String
-  artist_logo   String
-  artist_poster String
-  company       String
+  id           String @id @default(cuid())
+  name         String
+  nameKor     String
+  artistLogo   String
+  artistPoster String
+  company      String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,14 +52,33 @@ model Artist {
 }
 
 model Video {
-  id         String @id @default(cuid())
-  title      String
-  role       String @default("mv")
-  youtube_id String
+  id        String @id @default(cuid())
+  title     String
+  role      String @default("mv")
+  youtubeId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  artistId String
+  artist      Artist        @relation(fields: [artistId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  artistId    String
+  YoutubeInfo YoutubeInfo[]
+}
+
+model YoutubeInfo {
+  id                   String @id @default(cuid())
+  youtubeId            String
+  youtubeTitle         String
+  youtubeDescription   String
+  youtubePublishedAt   String
+  youtubeThumbnail     String
+  youtubeViewCount     String
+  youtubeLikeCount     String
+  youtubeCommentCount  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  video   Video  @relation(fields: [videoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  videoId String
 }

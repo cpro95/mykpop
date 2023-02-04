@@ -18,8 +18,22 @@ import { getArtistsIdAndName } from "~/models/artist.server";
 
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { createYoutubeInfo } from "~/models/youtubeInfo.server";
+
+const NewVideoFormSchema = z.object({
+  title: z.string().min(2, "require-name"),
+  youtubeId: z.string().min(1, "require-name_kor"),
+});
+
+type ActionData = {
+  title?: string;
+  youtubeId?: string;
+  errors?: {
+    title?: string;
+    youtubeId?: string;
+  };
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   await requireUserId(request);
@@ -33,19 +47,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json({ allArtist });
 };
 
-const NewVideoFormSchema = z.object({
-  title: z.string().min(2, "require-name"),
-  youtube_id: z.string().min(1, "require-name_kor"),
-});
 
-type ActionData = {
-  title?: string;
-  youtube_id?: string;
-  errors?: {
-    title?: string;
-    youtube_id?: string;
-  };
-};
 
 export const action: ActionFunction = async ({ request }) => {
   assertIsPost(request);
@@ -53,10 +55,10 @@ export const action: ActionFunction = async ({ request }) => {
 
   const formData = request.formData();
   const artistId = (await formData).get("artist[id]") as string;
-  const artistName = (await formData).get("artist[name]") as string;
+  // const artistName = (await formData).get("artist[name]") as string;
   const title = (await formData).get("title") as string;
-  const youtube_id = (await formData).get("youtube_id") as string;
-  console.log(artistId, artistName, title, youtube_id);
+  const youtubeId = (await formData).get("youtubeId") as string;
+  // console.log(artistId, artistName, title, youtubeId);
 
   // const formValidation = await getFormData(request, NewVideoFormSchema);
 
@@ -71,9 +73,10 @@ export const action: ActionFunction = async ({ request }) => {
   //   );
   // }
 
-  // const { artistId, title, youtube_id } = formValidation.data;
+  // const { artistId, title, youtubeId } = formValidation.data;
 
-  const video = await createVideo(artistId, title, youtube_id);
+  const video = await createVideo(artistId, title, youtubeId);
+  await createYoutubeInfo(video.id, youtubeId);
 
   return redirect(`/admin/video/${video.id}`);
   // return json({});
@@ -192,26 +195,26 @@ export default function NewVideoPage() {
 
       <div>
         <label
-          htmlFor="youtube_id"
+          htmlFor="youtubeId"
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
         >
-          Youtube_id :
+          youtubeId :
         </label>
         <input
-          {...inputProps("youtube_id")}
-          name="youtube_id"
-          id="youtube_id"
+          {...inputProps("youtubeId")}
+          name="youtubeId"
+          id="youtubeId"
           placeholder="Youtube ID"
           className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          aria-invalid={actionData?.errors?.youtube_id ? true : undefined}
+          aria-invalid={actionData?.errors?.youtubeId ? true : undefined}
           aria-errormessage={
-            actionData?.errors?.youtube_id ? "youtube_id-error" : undefined
+            actionData?.errors?.youtubeId ? "youtubeId-error" : undefined
           }
           disabled={disabled}
         />
-        {actionData?.errors?.youtube_id && (
-          <div className="pt-1 text-red-700" id="youtube_id-error">
-            {actionData.errors.youtube_id}
+        {actionData?.errors?.youtubeId && (
+          <div className="pt-1 text-red-700" id="youtubeId-error">
+            {actionData.errors.youtubeId}
           </div>
         )}
       </div>

@@ -6,7 +6,7 @@ export function Footers() {
 
         <div className="pt-2 pb-4">
           <p className="text-center text-gray-800 dark:text-white">
-            © myKpop 2022 - All rights reserved
+            © myKpop 2023 - All rights reserved
           </p>
         </div>
       </div>

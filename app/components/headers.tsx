@@ -7,7 +7,7 @@ import DropdownMenu from "./dropdownmenu";
 
 const home: { to: string; name: string } = {
   to: "/",
-  name: "myKpop",
+  name: "myKPop",
 };
 
 const links: { to: string; name: string }[] = [

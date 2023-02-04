@@ -11,27 +11,27 @@ export type { Artist, Note } from "@prisma/client";
 // }
 
 export function createArtist(
-    name: string, name_kor: string, artist_logo: string, artist_poster: string, company: string) {
+    name: string, nameKor: string, artistLogo: string, artistPoster: string, company: string) {
     return prisma.artist.create({
         data: {
             name,
-            name_kor,
-            artist_logo,
-            artist_poster,
+            nameKor,
+            artistLogo,
+            artistPoster,
             company,
         },
     });
 }
 
-export function updateArtist(id: string, name: string, name_kor: string, artist_logo: string, artist_poster: string, company: string) {
+export function updateArtist(id: string, name: string, nameKor: string, artistLogo: string, artistPoster: string, company: string) {
 
     return prisma.artist.update({
         where: { id },
         data: {
             name,
-            name_kor,
-            artist_logo,
-            artist_poster,
+            nameKor,
+            artistLogo,
+            artistPoster,
             company,
         },
     });
@@ -80,7 +80,7 @@ export async function getAllArtist(query: string, page: number, itemsPerPage: nu
     let x = {}
     let select = {
         select: {
-            id: true, name: true, name_kor: true, artist_logo: true, artist_poster: true, company: true, updatedAt: true, _count: {
+            id: true, name: true, nameKor: true, artistLogo: true, artistPoster: true, company: true, updatedAt: true, _count: {
                 select: {
                     videos: true
                 }
@@ -104,7 +104,7 @@ export async function getAllArtist(query: string, page: number, itemsPerPage: nu
                     },
                 },
                 {
-                    name_kor: {
+                    nameKor: {
                         contains: query,
                     },
                 },

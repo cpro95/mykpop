@@ -9,7 +9,6 @@ import { AgGridReact } from "ag-grid-react";
 import agGrid from "ag-grid-community/styles/ag-grid.css";
 import agThemeAlpine from "ag-grid-community/styles/ag-theme-alpine.css";
 import { useMemo, useState, useCallback } from "react";
-import { getVideoCountByArtistId } from "~/models/video.server";
 
 type MyLoaderData = {
   allArtist: Artist[];
@@ -88,13 +87,13 @@ export default function ArtistIndex() {
 
   const [columnDefs] = useState([
     { field: "name", headerName: "Artist" },
-    { field: "name_kor", headerName: "그룹명" },
+    { field: "nameKor", headerName: "그룹명" },
     { field: "_count.videos", headerName: "Videos" },
     {
-      field: "artist_logo",
+      field: "artistLogo",
       cellRenderer: myCellRenderer,
     },
-    { field: "artist_poster", cellRenderer: myCellRenderer2 },
+    { field: "artistPoster", cellRenderer: myCellRenderer2 },
     { field: "company" },
   ]);
 
@@ -139,18 +138,18 @@ export default function ArtistIndex() {
                 <div className="space-x-4">
                   <img
                     alt="artist logo"
-                    src={aa.artist_logo}
+                    src={aa.artistLogo}
                     className="h-12 w-12 rounded-full bg-gray-500 object-cover shadow"
                   />
                 </div>
                 <div className="mx-auto w-full">
                   <img
-                    src={aa.artist_poster}
+                    src={aa.artistPoster}
                     alt="artist poster"
                     className="mb-4 w-full bg-gray-500 object-cover sm:h-96"
                   />
                   <h2 className="mb-1 text-xl font-semibold">
-                    {aa.name} / {aa.name_kor}
+                    {aa.name} / {aa.nameKor}
                   </h2>
                   <p className="text-sm text-gray-600">{aa.company}</p>
                 </div>

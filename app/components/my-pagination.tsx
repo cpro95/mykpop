@@ -1,102 +1,104 @@
-import { Link } from "@remix-run/react";
+import { Link } from '@remix-run/react'
 
 type PaginationType = {
-  query: string;
-  genreId: number;
-  page: number;
-  itemsPerPage: number;
-  total_pages: number;
-  viewType: string;
-};
+  q: string
+  page: number
+  itemsPerPage: number
+  total_pages: number
+}
 
 export default function MyPagination({
-  query,
-  genreId,
+  q,
   page,
   itemsPerPage,
   total_pages,
-  viewType,
 }: PaginationType) {
-  const leftDoubleArrow = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-      />
-    </svg>
-  );
+  // const leftDoubleArrow = (
+  //   <svg
+  //     xmlns='http://www.w3.org/2000/svg'
+  //     className='h-5 w-5'
+  //     fill='none'
+  //     viewBox='0 0 24 24'
+  //     stroke='currentColor'
+  //     strokeWidth='2'
+  //   >
+  //     <path
+  //       strokeLinecap='round'
+  //       strokeLinejoin='round'
+  //       d='M11 19l-7-7 7-7m8 14l-7-7 7-7'
+  //     />
+  //   </svg>
+  // )
 
   const leftArrow = (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
+      xmlns='http://www.w3.org/2000/svg'
+      className='h-5 w-5'
+      fill='none'
+      viewBox='0 0 24 24'
+      stroke='currentColor'
+      strokeWidth='2'
     >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+      <path strokeLinecap='round' strokeLinejoin='round' d='M15 19l-7-7 7-7' />
     </svg>
-  );
+  )
 
   const rightArrow = (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
+      xmlns='http://www.w3.org/2000/svg'
+      className='h-5 w-5'
+      fill='none'
+      viewBox='0 0 24 24'
+      stroke='currentColor'
+      strokeWidth='2'
     >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
     </svg>
-  );
+  )
 
-  const rightDoubleArrow = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M13 5l7 7-7 7M5 5l7 7-7 7"
-      />
-    </svg>
-  );
+  // const rightDoubleArrow = (
+  //   <svg
+  //     xmlns='http://www.w3.org/2000/svg'
+  //     className='h-5 w-5'
+  //     fill='none'
+  //     viewBox='0 0 24 24'
+  //     stroke='currentColor'
+  //     strokeWidth='2'
+  //   >
+  //     <path
+  //       strokeLinecap='round'
+  //       strokeLinejoin='round'
+  //       d='M13 5l7 7-7 7M5 5l7 7-7 7'
+  //     />
+  //   </svg>
+  // )
 
   const linkStyle =
-    "px-2 sm:px-4 py-1 sm:py-2 sm:mx-1 text-gray-700 transition-colors duration-200 transform bg-dodger-50 rounded-md sm:inline dark:bg-dodger-900 dark:text-gray-200 hover:bg-dodger-500 dark:hover:bg-dodger-500 hover:text-white dark:hover:text-gray-200";
+    'px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-gray-700 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200'
+
+  const currentLinkStyle =
+    'px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-gray-700 rounded-md sm:inline bg-blue-500 text-white dark:bg-blue-500 dark:text-gray-200'
 
   return (
-    <nav aria-label="Pagination" className="mt-4 mb-8 flex py-4">
-      <Link
-        to={`?query=${query}&genreId=${genreId}&page=${1}&itemsPerPage=${itemsPerPage}&view=${viewType}`}
+    <nav
+      aria-label='Pagination'
+      className='mt-4 mb-8 -ml-4 flex justify-evenly py-4 sm:justify-start'
+    >
+      {/* <Link
+        to={`?q=${q}&page=${1}&itemsPerPage=${itemsPerPage}`}
         className={linkStyle}
       >
-        <span className="sr-only">First</span>
+        <span className='sr-only'>First</span>
         {leftDoubleArrow}
-      </Link>
+      </Link> */}
 
       <Link
-        to={`?query=${query}&genreId=${genreId}&page=${
+        to={`?q=${q}&page=${
           page === 1 ? 1 : page - 1
-        }&itemsPerPage=${itemsPerPage}&view=${viewType}`}
+        }&itemsPerPage=${itemsPerPage}`}
         className={linkStyle}
       >
-        <span className="sr-only">Previous</span>
+        <span className='sr-only'>Previous</span>
         {leftArrow}
       </Link>
       {page === 1 ? (
@@ -104,10 +106,8 @@ export default function MyPagination({
       ) : (
         <>
           <Link
-            to={`?query=${query}&genreId=${genreId}&page=${
-              page - 1
-            }&itemsPerPage=${itemsPerPage}&view=${viewType}`}
-            aria-current="page"
+            to={`?q=${q}&page=${page - 1}&itemsPerPage=${itemsPerPage}`}
+            aria-current='page'
             className={linkStyle}
           >
             {page - 1}
@@ -115,9 +115,9 @@ export default function MyPagination({
         </>
       )}
       <Link
-        to={`?query=${query}&genreId=${genreId}&page=${page}&itemsPerPage=${itemsPerPage}&view=${viewType}`}
-        aria-current="page"
-        className={linkStyle}
+        to={`?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}`}
+        aria-current='page'
+        className={currentLinkStyle}
       >
         {page}
       </Link>
@@ -125,9 +125,7 @@ export default function MyPagination({
         <></>
       ) : (
         <Link
-          to={`?query=${query}&genreId=${genreId}&page=${
-            page + 1
-          }&itemsPerPage=${itemsPerPage}&view=${viewType}`}
+          to={`?q=${q}&page=${page + 1}&itemsPerPage=${itemsPerPage}`}
           className={linkStyle}
         >
           {page + 1}
@@ -141,16 +139,14 @@ export default function MyPagination({
           </button>
 
           <Link
-            to={`?query=${query}&genreId=${genreId}&page=${
-              total_pages - 1
-            }&itemsPerPage=${itemsPerPage}&view=${viewType}`}
+            to={`?q=${q}&page=${total_pages - 1}&itemsPerPage=${itemsPerPage}`}
             className={linkStyle}
           >
             {total_pages - 1}
           </Link>
 
           <Link
-            to={`?query=${query}&genreId=${genreId}&page=${total_pages}&itemsPerPage=${itemsPerPage}&view=${viewType}`}
+            to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}`}
             className={linkStyle}
           >
             {total_pages}
@@ -161,22 +157,22 @@ export default function MyPagination({
       )}
 
       <Link
-        to={`?query=${query}&genreId=${genreId}&page=${
+        to={`?q=${q}&page=${
           page === total_pages ? total_pages : page + 1
-        }&itemsPerPage=${itemsPerPage}&view=${viewType}`}
+        }&itemsPerPage=${itemsPerPage}`}
         className={linkStyle}
       >
-        <span className="sr-only">Next</span>
+        <span className='sr-only'>Next</span>
         {rightArrow}
       </Link>
 
-      <Link
-        to={`?query=${query}&genreId=${genreId}&page=${total_pages}&itemsPerPage=${itemsPerPage}&view=${viewType}`}
+      {/* <Link
+        to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}`}
         className={linkStyle}
       >
-        <span className="sr-only">Last</span>
+        <span className='sr-only'>Last</span>
         {rightDoubleArrow}
-      </Link>
+      </Link> */}
     </nav>
-  );
+  )
 }

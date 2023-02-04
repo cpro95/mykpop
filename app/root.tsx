@@ -22,6 +22,7 @@ import { useTheme, ThemeProvider } from "~/utils/theme-provider";
 import type { Theme } from "~/utils/theme-provider";
 import { getThemeSession } from "./utils/theme.server";
 import invariant from "tiny-invariant";
+import { RecoilRoot } from "recoil";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
@@ -29,7 +30,7 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "myKpop",
+  title: "myKPop",
   viewport: "width=device-width,initial-scale=1",
 });
 
@@ -78,9 +79,11 @@ export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>();
 
   return (
-    <ThemeProvider specifiedTheme={data.requestInfo.session.theme}>
-      <App />
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider specifiedTheme={data.requestInfo.session.theme}>
+        <App />
+      </ThemeProvider>
+    </RecoilRoot>
   );
 }
 

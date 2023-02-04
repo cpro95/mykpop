@@ -83,7 +83,7 @@ export default function ArtistDetailPage() {
     { field: "id", hide: true },
     { field: "title" },
     { field: "role" },
-    { field: "youtube_id" },
+    { field: "youtubeId" },
     { field: "createdAt" },
     { field: "updatedAt" },
     { field: "artistId", hide: true },
@@ -118,12 +118,12 @@ export default function ArtistDetailPage() {
           to={`/admin/video/new?artistId=${artist.id}`}
           className="text-blue-700 hover:text-blue-300"
         >
-          + New MusicVideo in {artist.name} / {artist.name_kor}
+          + New MusicVideo in {artist.name} / {artist.nameKor}
         </Link>
       </div>
       <div className="flex w-full items-center justify-around">
         <h2 className="text-xl font-semibold">
-          {artist.name} / {artist.name_kor}
+          {artist.name} / {artist.nameKor}
         </h2>
         <div className="flex space-x-1">
           <div className="flex items-center justify-center">
@@ -163,12 +163,12 @@ export default function ArtistDetailPage() {
                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                       <Dialog.Title
                         as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900 mb-4"
+                        className="mb-4 text-lg font-medium leading-6 text-gray-900"
                       >
                         Are you sure for Delete?
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm mb-2 text-gray-500">
+                        <p className="mb-2 text-sm text-gray-500">
                           Press ESC key to cancel!
                         </p>
                       </div>

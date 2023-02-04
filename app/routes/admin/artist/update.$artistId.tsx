@@ -17,9 +17,9 @@ import { z } from "zod";
 const NewArtistFormSchema = z.object({
   artistId: z.string().min(2, "reuqire-artistId"),
   name: z.string().min(2, "require-name"),
-  name_kor: z.string().min(1, "require-name_kor"),
-  artist_logo: z.string().min(2, "require-artist_logo link"),
-  artist_poster: z.string().min(2, "require-artist_poster link"),
+  nameKor: z.string().min(1, "require-nameKor"),
+  artistLogo: z.string().min(2, "require-artistLogo link"),
+  artistPoster: z.string().min(2, "require-artistPoster link"),
   company: z.string().min(2, "require-company"),
 });
 
@@ -29,15 +29,15 @@ type LoaderData = {
 
 type ActionData = {
   name?: string;
-  name_kor?: string;
-  artist_logo?: string;
-  artist_poster?: string;
+  nameKor?: string;
+  artistLogo?: string;
+  artistPoster?: string;
   company?: string;
   errors?: {
     name?: string;
-    name_kor?: string;
-    artist_logo?: string;
-    artist_poster?: string;
+    nameKor?: string;
+    artistLogo?: string;
+    artistPoster?: string;
     company?: string;
   };
 };
@@ -58,10 +58,17 @@ export const action: ActionFunction = async ({ request }) => {
       }
     );
   }
-  const { artistId, name, name_kor, artist_logo, artist_poster, company } =
+  const { artistId, name, nameKor, artistLogo, artistPoster, company } =
     formValidation.data;
 
-  await updateArtist(artistId, name, name_kor, artist_logo, artist_poster, company);
+  await updateArtist(
+    artistId,
+    name,
+    nameKor,
+    artistLogo,
+    artistPoster,
+    company
+  );
 
   return redirect(`/admin/artist`);
 };
@@ -78,13 +85,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function UpdateartistPage() {
-  const { artist } = useLoaderData<typeof loader>()
+  const { artist } = useLoaderData<typeof loader>();
 
   const actionData = useActionData() as ActionData;
   const nameRef = React.useRef<HTMLInputElement>(null);
-  const name_korRef = React.useRef<HTMLInputElement>(null);
-  const artist_logoRef = React.useRef<HTMLInputElement>(null);
-  const artist_posterRef = React.useRef<HTMLInputElement>(null);
+  const nameKorRef = React.useRef<HTMLInputElement>(null);
+  const artistLogoRef = React.useRef<HTMLInputElement>(null);
+  const artistPosterRef = React.useRef<HTMLInputElement>(null);
   const companyRef = React.useRef<HTMLInputElement>(null);
   const inputProps = useFormInputProps(NewArtistFormSchema);
   const transition = useTransition();
@@ -97,17 +104,17 @@ export default function UpdateartistPage() {
       nameRef.current.value = artist?.name;
       nameRef.current?.focus();
     }
-    if (artist.name_kor && name_korRef.current !== null) {
-      name_korRef.current.value = artist?.name_kor;
-      name_korRef.current?.focus();
+    if (artist.nameKor && nameKorRef.current !== null) {
+      nameKorRef.current.value = artist?.nameKor;
+      nameKorRef.current?.focus();
     }
-    if (artist.artist_logo && artist_logoRef.current !== null) {
-      artist_logoRef.current.value = artist?.artist_logo;
-      artist_logoRef.current?.focus();
+    if (artist.artistLogo && artistLogoRef.current !== null) {
+      artistLogoRef.current.value = artist?.artistLogo;
+      artistLogoRef.current?.focus();
     }
-    if (artist.artist_poster && artist_posterRef.current !== null) {
-      artist_posterRef.current.value = artist?.artist_poster;
-      artist_posterRef.current?.focus();
+    if (artist.artistPoster && artistPosterRef.current !== null) {
+      artistPosterRef.current.value = artist?.artistPoster;
+      artistPosterRef.current?.focus();
     }
     if (artist.company && companyRef.current !== null) {
       companyRef.current.value = artist?.company;
@@ -151,24 +158,24 @@ export default function UpdateartistPage() {
             htmlFor="message"
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            name_kor :
+            nameKor :
           </label>
           <input
-            {...inputProps("name_kor")}
-            name="name_kor"
-            ref={name_korRef}
-            id="name_kor"
+            {...inputProps("nameKor")}
+            name="nameKor"
+            ref={nameKorRef}
+            id="nameKor"
             placeholder="Name Korean"
             className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            aria-invalid={actionData?.errors?.name_kor ? true : undefined}
+            aria-invalid={actionData?.errors?.nameKor ? true : undefined}
             aria-errormessage={
-              actionData?.errors?.name_kor ? "name_kor-error" : undefined
+              actionData?.errors?.nameKor ? "nameKor-error" : undefined
             }
             disabled={disabled}
           />
-          {actionData?.errors?.name_kor && (
-            <div className="pt-1 text-red-700" id="name_kor-error">
-              {actionData.errors.name_kor}
+          {actionData?.errors?.nameKor && (
+            <div className="pt-1 text-red-700" id="nameKor-error">
+              {actionData.errors.nameKor}
             </div>
           )}
         </div>
@@ -178,24 +185,24 @@ export default function UpdateartistPage() {
             htmlFor="message"
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            artist_logo :
+            artistLogo :
           </label>
           <input
-            {...inputProps("artist_logo")}
-            name="artist_logo"
-            ref={artist_logoRef}
-            id="artist_logo"
-            placeholder="artist_logo url link"
+            {...inputProps("artistLogo")}
+            name="artistLogo"
+            ref={artistLogoRef}
+            id="artistLogo"
+            placeholder="artistLogo url link"
             className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            aria-invalid={actionData?.errors?.artist_logo ? true : undefined}
+            aria-invalid={actionData?.errors?.artistLogo ? true : undefined}
             aria-errormessage={
-              actionData?.errors?.artist_logo ? "artist_logo-error" : undefined
+              actionData?.errors?.artistLogo ? "artistLogo-error" : undefined
             }
             disabled={disabled}
           />
-          {actionData?.errors?.artist_logo && (
-            <div className="pt-1 text-red-700" id="artist_logo-error">
-              {actionData.errors.artist_logo}
+          {actionData?.errors?.artistLogo && (
+            <div className="pt-1 text-red-700" id="artistLogo-error">
+              {actionData.errors.artistLogo}
             </div>
           )}
         </div>
@@ -205,26 +212,26 @@ export default function UpdateartistPage() {
             htmlFor="message"
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            artist_logo :
+            artistLogo :
           </label>
           <input
-            {...inputProps("artist_poster")}
-            ref={artist_posterRef}
-            name="artist_poster"
-            id="artist_poster"
-            placeholder="artist_poster url link"
+            {...inputProps("artistPoster")}
+            ref={artistPosterRef}
+            name="artistPoster"
+            id="artistPoster"
+            placeholder="artistPoster url link"
             className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            aria-invalid={actionData?.errors?.artist_poster ? true : undefined}
+            aria-invalid={actionData?.errors?.artistPoster ? true : undefined}
             aria-errormessage={
-              actionData?.errors?.artist_poster
-                ? "artist_poster-error"
+              actionData?.errors?.artistPoster
+                ? "artistPoster-error"
                 : undefined
             }
             disabled={disabled}
           />
-          {actionData?.errors?.artist_poster && (
-            <div className="pt-1 text-red-700" id="artist_poster-error">
-              {actionData.errors.artist_poster}
+          {actionData?.errors?.artistPoster && (
+            <div className="pt-1 text-red-700" id="artistPoster-error">
+              {actionData.errors.artistPoster}
             </div>
           )}
         </div>

@@ -43,9 +43,9 @@ export default function VideoIndex() {
   const [columnDefs] = useState([
     { field: "title" },
     { field: "artist.name", headerName: "Artist" },
-    { field: "artist.name_kor", headerName: "그룹명" },
+    { field: "artist.nameKor", headerName: "그룹명" },
     { field: "artist.company" },
-    { field: "youtube_id" },
+    { field: "youtubeId" },
     { field: "role" },
   ]);
 

@@ -16,16 +16,11 @@ import { requireUserId } from "~/utils/session.server";
 
 import { deleteVideo } from "~/models/video.server";
 import { getVideo } from "~/models/video.server";
-
-type YoutubeInfo = {
-  publishedAt: string;
-  title: string;
-  thumbnail: string;
-  viewCount: string;
-  likeCount: string;
-  favoriteCount: string;
-  commentCount: string;
-};
+import type { YoutubeInfo } from "~/models/youtubeApi.server";
+import {
+  getYoutubeInfoByVideoId,
+  updateYoutubeInfo,
+} from "~/models/youtubeInfo.server";
 
 type MyLoaderData = {
   video: Video;
@@ -35,8 +30,8 @@ type MyLoaderData = {
 export const meta: MetaFunction = (props) => {
   // default return
   return {
-    title: "Admin video",
-    description: "Admin video",
+    title: "Admin Page of Video",
+    description: "Admin Page of Video",
   };
 };
 
@@ -45,50 +40,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.videoId, "videoId not found");
 
   const video = await getVideo(params.videoId);
-  // console.debug(video);
 
   if (!video) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const result = await fetch(
-    `https://www.googleapis.com/youtube/v3/videos?id=${video.youtube_id}&key=${process.env.YOUTUBE_API_KEY}&part=sni%20%20%20%20ppet,statistics&fields=items(id,snippet,statistics)`
-  );
-  // https://www.googleapis.com/youtube/v3/videos?id=RDJh4QFaPmdss&key=AIzaSyCsVQhZdb26hNg2d7PnxuXr__EowIh6z7o&part=snippet,statistics&fields=items(id,snippet,statistics)
-  // Jh4QFaPmdss
-  // AIzaSyCsVQhZdb26hNg2d7PnxuXr__EowIh6z7o
+  const currentYoutubeInfo = await getYoutubeInfoByVideoId(video.id);
 
-  const youtube = await result.json();
-  // console.log("youtube is");
-  // console.log(youtube.items[0].snippet);
-  // console.log(youtube.items[0].statistics);
-
-  let youtubeInfo: YoutubeInfo;
-  if (youtube.items.length === 0) {
-    console.log("no video");
-    youtubeInfo = {
-      publishedAt: "",
-      title: "",
-      thumbnail: "",
-      viewCount: "",
-      likeCount: "",
-      favoriteCount: "",
-      commentCount: "",
-    };
-  } else {
-    youtubeInfo = {
-      publishedAt: youtube.items[0].snippet.publishedAt,
-      title: youtube.items[0].snippet.title,
-      thumbnail: youtube.items[0].snippet.thumbnails.high.url,
-      viewCount: youtube.items[0].statistics.viewCount,
-      likeCount: youtube.items[0].statistics.likeCount,
-      favoriteCount: youtube.items[0].statistics.favoriteCount,
-      commentCount: youtube.items[0].statistics.commentCount,
-    };
+  if (!currentYoutubeInfo) {
+    throw new Response("Not Found", { status: 404 });
   }
 
-  // console.log(youtubeInfo);
-  return json<MyLoaderData>({ video, youtubeInfo });
+  return json<MyLoaderData>({ video, youtubeInfo: currentYoutubeInfo });
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -98,7 +61,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.videoId, "videoId not found");
 
   const formData = request.formData();
-  const actionType = (await formData).get("_action");
+  const actionType = (await formData).get("_action") as string;
 
   if (actionType === "delete-video") {
     await deleteVideo({ id: params.videoId });
@@ -108,12 +71,22 @@ export const action: ActionFunction = async ({ request, params }) => {
     return redirect(`/admin/video/update/${params.videoId}`);
   }
 
+  if (actionType === "update-youtubeInfo") {
+    const youtubeInfoId = (await formData).get("youtubeInfoId") as string;
+    const youtubeInfoYoutubeId = (await formData).get(
+      "youtubeInfoYoutubeId"
+    ) as string;
+    console.log(youtubeInfoId, youtubeInfoYoutubeId);
+    await updateYoutubeInfo(youtubeInfoId, youtubeInfoYoutubeId);
+
+    return redirect(`/admin/video/${params.videoId}`);
+  }
+
   return redirect("/admin/video");
 };
 
 export default function VideoDetailPage() {
   const { video, youtubeInfo, error } = useLoaderData<typeof loader>();
-  console.log(youtubeInfo);
 
   let [isOpen, setIsOpen] = useState(false);
 
@@ -128,7 +101,7 @@ export default function VideoDetailPage() {
   if (error) {
     return (
       <div className="flex w-full flex-row items-center justify-around">
-        <h2 className="text-xl font-semibold my-4">Error : {error}</h2>
+        <h2 className="my-4 text-xl font-semibold">Error : {error}</h2>
       </div>
     );
   }
@@ -184,12 +157,12 @@ export default function VideoDetailPage() {
                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                       <Dialog.Title
                         as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900 mb-4"
+                        className="mb-4 text-lg font-medium leading-6 text-gray-900"
                       >
                         Are you sure for Delete?
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm mb-2 text-gray-500">
+                        <p className="mb-2 text-sm text-gray-500">
                           Press ESC key to cancel!
                         </p>
                       </div>
@@ -222,17 +195,41 @@ export default function VideoDetailPage() {
           </Form>
         </div>
       </div>
-      {youtubeInfo.title !== "" && (
-        <div>
-          <span>{youtubeInfo.title}</span>
+      {youtubeInfo.youtubeTitle !== "" && (
+        <div className="">
+          <span>{youtubeInfo.youtubeTitle}</span>
 
-          <img src={youtubeInfo.thumbnail} alt="youtube" />
+          <img
+            src={youtubeInfo.youtubeThumbnail}
+            className="w-full object-cover"
+            alt={youtubeInfo.youtubeTitle}
+          />
           <div>
-            count: {Number(youtubeInfo.viewCount).toLocaleString("ko-KR")}{' / '}
-            likeCount: {Number(youtubeInfo.likeCount).toLocaleString("ko-KR")}
+            View: {Number(youtubeInfo.youtubeViewCount).toLocaleString("ko-KR")}
+            {" / "}
+            Like: {Number(youtubeInfo.youtubeLikeCount).toLocaleString("ko-KR")}
+            {" / "}
+            Comment:{" "}
+            {Number(youtubeInfo.youtubeCommentCount).toLocaleString("ko-KR")}
           </div>
         </div>
       )}
+      <Form method="post">
+        <input type="hidden" name="youtubeInfoId" value={youtubeInfo.id} />
+        <input
+          type="hidden"
+          name="youtubeInfoYoutubeId"
+          value={youtubeInfo.youtubeId}
+        />
+        <button
+          type="submit"
+          name="_action"
+          value="update-youtubeInfo"
+          className="rounded bg-green-900 bg-opacity-50 py-2 px-4 text-sm font-medium text-white hover:bg-green-600 focus:bg-green-400 dark:bg-green-300 dark:text-gray-700 dark:hover:bg-green-400"
+        >
+          Update Youtube Info
+        </button>
+      </Form>
     </div>
   );
 }
