@@ -1,6 +1,5 @@
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
-// import { Form } from "@remix-run/react";
 import { Fragment } from "react";
 
 export function DialogModal({
@@ -54,9 +53,7 @@ export function DialogModal({
                   {title}
                 </Dialog.Title>
                 <div className="mt-2">
-                  <p className="mb-2 text-sm text-gray-500">
-                    {exitTitle}
-                  </p>
+                  <p className="mb-2 text-sm text-gray-500">{exitTitle}</p>
                 </div>
                 {children}
               </Dialog.Panel>

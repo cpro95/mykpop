@@ -1,13 +1,8 @@
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { getAllVideoIds } from "~/models/video.server";
-import { modalState, videoState } from "~/atoms/modalAtom";
-import { useRecoilState } from "recoil";
-import YoutubeModal from "~/components/youtubemodal";
+import { Link, useLoaderData } from "@remix-run/react";
 import { Layout } from "~/components/layout";
-import { getYoutubeApiInfosByIdArray } from "~/models/youtubeInfo.server";
-import type { YoutubeInfo } from "@prisma/client";
+import { getAllArtist } from "~/models/artist.server";
 
 export function headers() {
   return {
@@ -24,72 +19,63 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderArgs) {
-  const allVideos = await getAllVideoIds("", 1, 4);
+  const allArtist = await getAllArtist("", 1, 10000);
 
-  if (!allVideos) {
+  if (!allArtist) {
     return json({});
   }
 
-  const youtubeInfos = await getYoutubeApiInfosByIdArray(allVideos);
-
-  return json(youtubeInfos);
+  return json(allArtist);
 }
 
 function Home() {
-  const mvData = useLoaderData<Array<YoutubeInfo>>();
-
-  // console.log(mvData);
-
-  const [showModal, setShowModal] = useRecoilState(modalState);
-  const [video, setVideo] = useRecoilState(videoState);
+  const allArtist = useLoaderData<typeof loader>();
 
   return (
     <Layout title="Home" linkTo="/">
-      <section className="flex justify-center">
-        {/* Popular Movies */}
-        <div className="flex w-full flex-col p-4 lg:w-10/12">
-          <h1 className="mb-2 text-2xl font-bold dark:text-white">
-            Popular MVs
-          </h1>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
-            {mvData &&
-              mvData.map((mv: any) => (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowModal(true);
-                    setVideo(mv);
-                  }}
-                  key={mv.id}
-                  className="cursor-pointer hover:scale-105 hover:shadow-2xl"
-                >
-                  <div className="mx-auto max-w-xs overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800">
-                    {mv.youtubeThumbnail && (
-                      <img
-                        className="w-full object-cover"
-                        src={mv.youtubeThumbnail}
-                        alt={mv.youtubeTitle}
-                      />
-                    )}
-
-                    <div className="h-28 py-5 text-center">
-                      <p className="block text-lg font-semibold text-gray-800 dark:text-white">
-                        {mv.youtubeTitle}
-                      </p>
-                      <span className="text-xs text-gray-700 dark:text-gray-200">
-                        {new Date(mv.youtubePublishedAt).toLocaleDateString(
-                          "ko-Kr"
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                </button>
-              ))}
+      <div className="w-full space-y-8 dark:text-white sm:overflow-hidden lg:w-10/12">
+        <section className="">
+          <div className="w-full rounded-lg border border-dodger-200 bg-white p-4 text-center shadow dark:border-dodger-700 dark:bg-dodger-800 sm:p-8">
+            <h5 className="mb-2 text-3xl font-bold text-dodger-900 dark:text-white">
+              K-Pop is Everywhere!
+            </h5>
+            <p className="mb-5 text-base text-dodger-600 dark:text-dodger-400 sm:text-lg">
+              Stay up to date and find out how many k-pop music videos have
+              youtube views!
+            </p>
           </div>
-
-          {showModal && <YoutubeModal />}
+        </section>
+        <div className="flex items-center justify-center">
+          <section className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {allArtist &&
+              Array.isArray(allArtist) &&
+              allArtist.map((aa: any) => (
+                <Link
+                  key={aa.id}
+                  to={`mv/${aa.id}`}
+                  className="max-w-sm rounded-lg border border-dodger-200 bg-white shadow dark:border-dodger-700 dark:bg-dodger-800"
+                >
+                  <img
+                    className="h-48 w-full object-cover"
+                    src={aa.artistPoster}
+                    alt={aa.nameKor}
+                  />
+                  <div className="p-5">
+                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-dodger-900 dark:text-white">
+                      {aa.name} / {aa.nameKor}
+                    </h5>
+                    <p className="mb-3 font-normal text-dodger-700 dark:text-dodger-400">
+                      {aa._count.videos} Music Videos
+                    </p>
+                    <p className="mb-3 font-bold text-dodger-800 dark:text-dodger-300">
+                      {aa.company}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+          </section>
         </div>
-      </section>
+      </div>
     </Layout>
   );
 }

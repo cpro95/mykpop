@@ -1,66 +1,58 @@
-import { Menu, Popover, Tab } from "@headlessui/react";
-import React from "react";
+import { useLoaderData } from "@remix-run/react";
+import type { YoutubeInfo } from "@prisma/client";
+import type { LoaderArgs } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
+import { useRecoilState } from "recoil";
+import { modalState, videoState } from "~/atoms/modalAtom";
+import { getAllVideoIds } from "~/models/video.server";
+import { getYoutubeApiInfosByIdArray } from "~/models/youtubeInfo.server";
+import { sortYoutubeInfos } from "~/utils/youtubeApi.server";
+import VideoCard from "~/components/videocard";
+import YoutubeModal from "~/components/youtubemodal";
 
-function Mv2() {
+export async function loader({ request }: LoaderArgs) {
+  const allVideos = await getAllVideoIds("", 1, 10000);
+
+  if (!allVideos) {
+    return json({});
+  }
+
+  let youtubeInfos = await getYoutubeApiInfosByIdArray(allVideos);
+  sortYoutubeInfos(youtubeInfos, "youtubeViewCount");
+
+  return json(youtubeInfos);
+}
+
+function MVHome() {
+  const mvData = useLoaderData<Array<YoutubeInfo>>();
+
+  // console.log(mvData);
+
+  const [showModal, setShowModal] = useRecoilState(modalState);
+  const [video, setVideo] = useRecoilState(videoState);
+
   return (
-    <>
-      <Tab.Group>
-        <Tab.List>
-          <Tab>Tab 1</Tab>
-          <Tab>Tab 2</Tab>
-          <Tab>Tab 3</Tab>
-        </Tab.List>
-        <Tab.Panels>
-          <Tab.Panel>Content 1</Tab.Panel>
-          <Tab.Panel>Content 2</Tab.Panel>
-          <Tab.Panel>Content 3</Tab.Panel>
-        </Tab.Panels>
-      </Tab.Group>
+    <section>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {mvData &&
+          mvData.map((mv: any) => (
+            <button
+              type="button"
+              onClick={() => {
+                setShowModal(true);
+                setVideo(mv);
+              }}
+              key={mv.id}
+              className="cursor-pointer hover:scale-105 hover:shadow-2xl"
+            >
+              <VideoCard mv={mv} />
+            </button>
+          ))}
+      </div>
 
-      <Menu>
-        <Menu.Button>More</Menu.Button>
-        <Menu.Items>
-          <Menu.Item>
-            {({ active }) => (
-              <a
-                className={`${active && "bg-blue-500"}`}
-                href="/account-settings"
-              >
-                Account settings
-              </a>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <a
-                className={`${active && "bg-blue-500"}`}
-                href="/account-settings"
-              >
-                Documentation
-              </a>
-            )}
-          </Menu.Item>
-          <Menu.Item disabled>
-            <span className="opacity-75">Invite a friend (coming soon!)</span>
-          </Menu.Item>
-        </Menu.Items>
-      </Menu>
-      <Popover className="relative">
-        <Popover.Button>Solutions</Popover.Button>
-
-        <Popover.Panel className="absolute z-10">
-          <div className="grid grid-cols-2">
-            <a href="/analytics">Analytics</a>
-            <a href="/engagement">Engagement</a>
-            <a href="/security">Security</a>
-            <a href="/integrations">Integrations</a>
-          </div>
-
-          <img src="/solutions.jpg" alt="" />
-        </Popover.Panel>
-      </Popover>
-    </>
+      {showModal && <YoutubeModal />}
+    </section>
   );
 }
 
-export default Mv2;
+export default MVHome;

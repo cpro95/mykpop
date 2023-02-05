@@ -93,7 +93,7 @@ export default function LoginPage() {
   return (
     <Layout>
       <div className="mt-16 mb-8 flex min-h-full w-full flex-col justify-center">
-        <div className="bg-dodger-50 dark:bg-dodger-800 m-auto w-full max-w-sm rounded-md p-6 shadow-md">
+        <div className="m-auto w-full max-w-sm rounded-md bg-dodger-50 p-6 shadow-md dark:bg-dodger-800">
           <h1 className="text-center text-3xl font-semibold text-gray-700 dark:text-white">
             Log in
           </h1>

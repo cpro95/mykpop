@@ -50,7 +50,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   if (!currentYoutubeInfo) {
     // throw new Response("Not Found", { status: 404 });
-    currentYoutubeInfo = {};
+    currentYoutubeInfo = {
+      id: "",
+      youtubeId: "",
+      youtubeCommentCount: "",
+      youtubeDescription: "",
+      youtubeLikeCount: "",
+      youtubePublishedAt: "",
+      youtubeThumbnail: "",
+      youtubeTitle: "",
+      youtubeViewCount: "",
+      createdAt: new Date("1900-1-1"),
+      updatedAt: new Date("1900-1-1"),
+      videoId: "",
+      artistId: "",
+    };
   }
 
   return json<MyLoaderData>({ video, youtubeInfo: currentYoutubeInfo });

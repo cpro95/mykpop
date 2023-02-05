@@ -2,12 +2,11 @@
 
 BLACKPINK / https://logos-world.net/wp-content/uploads/2020/12/Blackpink-Logo.png / https://upload.wikimedia.org/wikipedia/commons/0/00/%EB%B8%94%EB%9E%99%ED%95%91%ED%81%AC%28BlackPink%29_-_%EB%A7%88%EC%A7%80%EB%A7%89%EC%B2%98%EB%9F%BC_171001_%EC%BD%94%EB%A6%AC%EC%95%84%EB%AE%A4%EC%A7%81%ED%8E%98%EC%8A%A4%ED%8B%B0%EB%B2%8C.jpg / YG Entertainment
 
-IVE /  https://raw.githubusercontent.com/cpro95/cdn/main/images/ive_logo.jpg / https://raw.githubusercontent.com/cpro95/cdn/main/images/ive_poster.jpeg / STARSHIP ENTERTAINMENT
+IVE / https://raw.githubusercontent.com/cpro95/cdn/main/images/ive_logo.jpg / https://raw.githubusercontent.com/cpro95/cdn/main/images/ive_poster.jpeg / STARSHIP ENTERTAINMENT
 
 (G)I-DLE / https://raw.githubusercontent.com/cpro95/cdn/main/images/g-i-dle_logo.png / https://raw.githubusercontent.com/cpro95/cdn/main/images/g-i-dle_poster.jpeg / CUBE ENTERTAINMENT
 
-
-Title   /    YoutubeID
+Title / YoutubeID
 TOMBOY / Jh4QFaPmdss
 After LIKE / F0B7HDiY-10
 LOVE DIVE / Y8JFxS1HlDo
@@ -23,7 +22,6 @@ Kill This Love / 2S24-y0Ij3Y
 Lovesick Girls / dyRsYk0LyA8
 불장난 (PLAYING WITH FIRE) / 9pdj4iJD08s
 휘파람 (WHISTLE) / dISNgvVpWlo
-
 
 # Remix Indie Stack
 

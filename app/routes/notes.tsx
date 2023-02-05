@@ -262,12 +262,10 @@ export default function NotesPage() {
 
         {/* Pagination */}
         <MyPagination
-          query={query}
-          genreId={0}
+          q={query}
           page={page}
           itemsPerPage={itemsPerPage}
           total_pages={Math.ceil(Number(data.nbOfNotes) / itemsPerPage)}
-          viewType={viewType}
         />
         {/* Pagination */}
       </div>

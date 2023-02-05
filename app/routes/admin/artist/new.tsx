@@ -171,9 +171,7 @@ export default function NewNotePage() {
           className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           aria-invalid={actionData?.errors?.artistPoster ? true : undefined}
           aria-errormessage={
-            actionData?.errors?.artistPoster
-              ? "artistPoster-error"
-              : undefined
+            actionData?.errors?.artistPoster ? "artistPoster-error" : undefined
           }
           disabled={disabled}
         />

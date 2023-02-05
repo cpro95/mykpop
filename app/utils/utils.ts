@@ -75,20 +75,20 @@ export function validateEmail(email: unknown): email is string {
 function getRequiredEnvVarFromObj(
   obj: Record<string, string | undefined>,
   key: string,
-  devValue: string = `${key}-dev-value`,
+  devValue: string = `${key}-dev-value`
 ) {
-  let value = devValue
-  const envVal = obj[key]
+  let value = devValue;
+  const envVal = obj[key];
   if (envVal) {
-    value = envVal
-  } else if (obj.NODE_ENV === 'production') {
-    throw new Error(`${key} is a required env variable`)
+    value = envVal;
+  } else if (obj.NODE_ENV === "production") {
+    throw new Error(`${key} is a required env variable`);
   }
-  return value
+  return value;
 }
 
 export function getRequiredServerEnvVar(key: string, devValue?: string) {
-  return getRequiredEnvVarFromObj(process.env, key, devValue)
+  return getRequiredEnvVarFromObj(process.env, key, devValue);
 }
 
 export function getRandomInt(min: number, max: number) {

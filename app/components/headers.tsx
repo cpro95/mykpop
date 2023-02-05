@@ -16,10 +16,6 @@ const links: { to: string; name: string }[] = [
     name: "MV",
   },
   {
-    to: "/song",
-    name: "Song",
-  },
-  {
     to: "/notes",
     name: "Notes",
   },

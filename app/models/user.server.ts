@@ -91,13 +91,14 @@ export async function updatePasswordById(id: User["id"], password: string) {
 
   return prisma.password.update({
     data: {
-      hash: hashedPassword
-    }, where: { userId: id }
-  })
+      hash: hashedPassword,
+    },
+    where: { userId: id },
+  });
 }
 
 export async function getUserRoleById(id: User["id"]) {
-  return prisma.user.findUnique({ where: { id }, select: { role: true } })
+  return prisma.user.findUnique({ where: { id }, select: { role: true } });
 }
 
 export async function toggleUserRole(id: User["id"], role: User["role"]) {
@@ -105,11 +106,11 @@ export async function toggleUserRole(id: User["id"], role: User["role"]) {
   if (user) {
     return prisma.user.update({
       data: {
-        role
+        role,
       },
-      where: { id }
-    })
-  } else return {}
+      where: { id },
+    });
+  } else return {};
 }
 
 export async function getAllUsersByAdmin(id: User["id"]) {
@@ -123,9 +124,9 @@ export async function getAllUsersByAdmin(id: User["id"]) {
         _count: {
           select: {
             notes: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
   } else return {};
 }

@@ -1,6 +1,12 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams, useTransition } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useSearchParams,
+  useTransition,
+} from "@remix-run/react";
 import * as React from "react";
 
 import { getUserId, createUserSession } from "~/utils/session.server";
@@ -81,7 +87,7 @@ export default function Join() {
   const transition = useTransition();
   const disabled =
     transition.state === "submitting" || transition.state === "loading";
-    
+
   React.useEffect(() => {
     if (actionData?.errors?.email) {
       emailRef.current?.focus();

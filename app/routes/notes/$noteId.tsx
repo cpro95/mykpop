@@ -16,6 +16,8 @@ import { getUserById } from "~/models/user.server";
 
 import { Editor } from "@tinymce/tinymce-react";
 import { DEFAULT_LANGUAGE, useOptionalUser } from "~/utils/utils";
+import { DialogModal } from "~/components/dialogmodal";
+import { useState } from "react";
 
 type MyLoaderData = {
   note: Note;
@@ -70,13 +72,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function NoteDetailsPage() {
+  let [isOpen, setIsOpen] = useState(false);
+
   const user = useOptionalUser();
   const data = useLoaderData<typeof loader>();
   // console.log(data);
   // console.log("user ===>", user);
 
   const userIsOwner: boolean = data.note.userId === user?.id;
-
   return (
     <div>
       <div className="mb-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
@@ -116,16 +119,39 @@ export default function NoteDetailsPage() {
 
         {userIsOwner ? (
           <div className="mt-1 flex flex-row justify-start pt-1">
-            <Form method="delete">
-              <button
-                type="submit"
-                name="_action"
-                value="delete-note"
-                className="btn-warning mr-2 mb-2"
+            <button
+              type="button"
+              onClick={() => setIsOpen(true)}
+              className="btn-warning mr-2 mb-2"
+            >
+              Delete
+            </button>
+            <DialogModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              title="Are you sure for Delete?"
+              exitTitle=""
+            >
+              <Form
+                method="delete"
+                className="mx-10 flex justify-between space-x-2"
               >
-                Delete
-              </button>
-            </Form>
+                <button
+                  type="submit"
+                  name="_action"
+                  value="delete-note"
+                  className="btn-warning mr-2 mb-2"
+                >
+                  Delete
+                </button>
+                <div
+                  onClick={() => setIsOpen(false)}
+                  className="btn-primary mr-2 mb-2"
+                >
+                  Close
+                </div>
+              </Form>
+            </DialogModal>
             <Form method="post">
               <button
                 type="submit"

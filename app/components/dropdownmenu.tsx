@@ -5,6 +5,7 @@ import {
   CogIcon,
   ArrowRightOnRectangleIcon,
   ArrowLeftOnRectangleIcon,
+  WrenchIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "@remix-run/react";
 
@@ -50,6 +51,23 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                           Log out
                         </button>
                       </form>
+                    </div>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <div
+                      className={`${
+                        active ? "bg-violet-500 text-white" : "text-gray-900"
+                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    >
+                      <Link to="/admin" className="flex w-full">
+                        <WrenchIcon
+                          className="mr-2 h-5 w-5"
+                          aria-hidden="true"
+                        />
+                        Admin
+                      </Link>
                     </div>
                   )}
                 </Menu.Item>

@@ -47,8 +47,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json({ allArtist });
 };
 
-
-
 export const action: ActionFunction = async ({ request }) => {
   assertIsPost(request);
   await requireUserId(request);

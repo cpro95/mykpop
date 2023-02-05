@@ -1,7 +1,8 @@
 import type { YoutubeInfo } from "@prisma/client";
 
 import { prisma } from "~/utils/db.server";
-import { getYoutubeApiInfoById, YoutubeApiInfo } from "../utils/youtubeApi.server";
+import { getYoutubeApiInfoById } from "../utils/youtubeApi.server";
+import type { YoutubeApiInfo } from "../utils/youtubeApi.server";
 
 export function getYoutubeInfoByVideoId(videoId: string) {
   return prisma.youtubeInfo.findFirst({
@@ -9,7 +10,11 @@ export function getYoutubeInfoByVideoId(videoId: string) {
   });
 }
 
-export async function createYoutubeInfo(artistId: string, videoId: string, youtubeId: string) {
+export async function createYoutubeInfo(
+  artistId: string,
+  videoId: string,
+  youtubeId: string
+) {
   const currentYoutubeInfo = await getYoutubeApiInfoById(youtubeId);
 
   return prisma.youtubeInfo.create({
@@ -25,19 +30,20 @@ export async function createYoutubeInfo(artistId: string, videoId: string, youtu
       video: {
         connect: {
           id: videoId,
-        }
+        },
       },
       artist: {
         connect: {
           id: artistId,
-        }
-      }
+        },
+      },
     },
   });
 }
 
 export async function updateYoutubeInfo(
-  youtubeInfoId: string, youtubeId: string
+  youtubeInfoId: string,
+  youtubeId: string
 ) {
   const currentYoutubeInfo = await getYoutubeApiInfoById(youtubeId);
 
@@ -52,15 +58,28 @@ export async function updateYoutubeInfo(
   });
 }
 
-export async function updateYoutubeInfosByArtistId(
-  artistId: string
-) {
+export async function updateYoutubeInfosByArtistId(artistId: string) {
   // Need : youtubeInfoId, youtubeId
   const neededData = await prisma.youtubeInfo.findMany({
     where: { artistId },
-    select: { id: true, youtubeId: true }
-  })
+    select: { id: true, youtubeId: true },
+  });
 
+  await Promise.all(
+    neededData.map(
+      (item: any): Promise<YoutubeApiInfo> =>
+        updateYoutubeInfo(item.id, item.youtubeId)
+    )
+  );
+}
+
+export async function updateYoutubeInfosAll() {
+  // Need : youtubeId
+  const neededData = await prisma.youtubeInfo.findMany({
+    select: { id: true, youtubeId: true },
+  });
+
+  console.log(neededData);
   await Promise.all(
     neededData.map(
       (item: any): Promise<YoutubeApiInfo> =>
@@ -87,7 +106,9 @@ export async function getYoutubeInfos(videoId: string) {
   return data[0];
 }
 
-export async function getYoutubeApiInfosByIdArray(allVideos: Array<{ id: string }>) {
+export async function getYoutubeApiInfosByIdArray(
+  allVideos: Array<{ id: string }>
+) {
   let youtubeInfos: Array<YoutubeInfo>;
 
   youtubeInfos = await Promise.all(

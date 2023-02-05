@@ -8,6 +8,8 @@ import { modalState, videoState } from "~/atoms/modalAtom";
 import YoutubeModal from "~/components/youtubemodal";
 import { getYoutubeApiInfosByIdArray } from "~/models/youtubeInfo.server";
 import { getVideoIdsByArtistId } from "~/models/video.server";
+import VideoCard from "~/components/videocard";
+import { sortYoutubeInfos } from "~/utils/youtubeApi.server";
 
 export function headers() {
   return {
@@ -28,6 +30,7 @@ export async function loader({ params }: LoaderArgs) {
   }
 
   const youtubeInfos = await getYoutubeApiInfosByIdArray(allVideos);
+  sortYoutubeInfos(youtubeInfos, "youtubeViewCount");
 
   return json(youtubeInfos);
 }
@@ -41,7 +44,7 @@ export default function MVArtistDetailsPage() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {youtubeInfos &&
           youtubeInfos.map((mv: any) => (
             <button
@@ -53,26 +56,7 @@ export default function MVArtistDetailsPage() {
               key={mv.videoId}
               className="cursor-pointer hover:scale-105 hover:shadow-2xl"
             >
-              <div className="mx-auto max-w-xs overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800">
-                {mv.youtubeThumbnail && (
-                  <img
-                    className="w-full object-cover"
-                    src={mv.youtubeThumbnail}
-                    alt={mv.youtubeTitle}
-                  />
-                )}
-
-                <div className="h-28 py-5 text-center">
-                  <p className="block text-lg font-semibold text-gray-800 dark:text-white">
-                    {mv.youtubeTitle}
-                  </p>
-                  <span className="text-xs text-gray-700 dark:text-gray-200">
-                    {new Date(mv.youtubePublishedAt).toLocaleDateString(
-                      "ko-Kr"
-                    )}
-                  </span>
-                </div>
-              </div>
+              <VideoCard mv={mv} />
             </button>
           ))}
         {showModal && <YoutubeModal />}

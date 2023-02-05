@@ -1,6 +1,10 @@
-import { Link, useLoaderData, useNavigate } from "@remix-run/react";
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react";
+import type {
+  ActionFunction,
+  LinksFunction,
+  LoaderFunction,
+} from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { requireUserId } from "~/utils/session.server";
 import { getAllVideo } from "~/models/video.server";
 import type { Video } from "@prisma/client";
@@ -10,6 +14,8 @@ import agGrid from "ag-grid-community/styles/ag-grid.css";
 import agThemeAlpine from "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { useMemo, useState, useCallback } from "react";
+import { assertIsPostOrDelete } from "~/utils/http.server";
+import { updateYoutubeInfosAll } from "~/models/youtubeInfo.server";
 
 type MyLoaderData = {
   allVideo: Video[];
@@ -32,6 +38,21 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   return json<MyLoaderData>({ allVideo });
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  assertIsPostOrDelete(request);
+
+  await requireUserId(request);
+
+  const formData = request.formData();
+  const actionType = (await formData).get("_action") as string;
+
+  if (actionType === "update-youtubeinfos") {
+    await updateYoutubeInfosAll();
+  }
+
+  return redirect("/admin/video");
 };
 
 export default function VideoIndex() {
@@ -87,6 +108,19 @@ export default function VideoIndex() {
       <div className="p-2 dark:text-gray-200">
         Total {allVideo.length} video(s)
       </div>
+      <div className="p-2">
+        <Form method="post">
+          <button
+            type="submit"
+            name="_action"
+            value="update-youtubeinfos"
+            className="rounded bg-blue-900 bg-opacity-50 py-2 px-4 text-sm font-medium text-white hover:bg-blue-600 focus:bg-blue-400 dark:bg-blue-300 dark:text-gray-700 dark:hover:bg-blue-400"
+          >
+            Update YoutubeInfos of all Videos!
+          </button>
+        </Form>
+      </div>
+
       <div className="w-full">
         {/* {allVideo?.map((av: any) => (
           <div key={av.id}>

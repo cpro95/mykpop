@@ -1,29 +1,29 @@
 import { createCookieSessionStorage } from "@remix-run/node";
-import { getRequiredServerEnvVar } from './utils'
-import { Theme, isTheme } from './theme-provider'
+import { getRequiredServerEnvVar } from "./utils";
+import { Theme, isTheme } from "./theme-provider";
 
 const themeStorage = createCookieSessionStorage({
-    cookie: {
-        name: 'mykpoptheme',
-        secure: true,
-        secrets: [getRequiredServerEnvVar('SESSION_SECRET')],
-        sameSite: 'lax',
-        path: '/',
-        expires: new Date('2088-10-18'),
-        httpOnly: true,
-    },
-})
+  cookie: {
+    name: "mykpoptheme",
+    secure: true,
+    secrets: [getRequiredServerEnvVar("SESSION_SECRET")],
+    sameSite: "lax",
+    path: "/",
+    expires: new Date("2088-10-18"),
+    httpOnly: true,
+  },
+});
 
 async function getThemeSession(request: Request) {
-    const session = await themeStorage.getSession(request.headers.get('Cookie'))
-    return {
-        getTheme: () => {
-            const themeValue = session.get('mykpoptheme')
-            return isTheme(themeValue) ? themeValue : Theme.LIGHT
-        },
-        setTheme: (theme: Theme) => session.set('mykpoptheme', theme),
-        commit: () => themeStorage.commitSession(session),
-    }
+  const session = await themeStorage.getSession(request.headers.get("Cookie"));
+  return {
+    getTheme: () => {
+      const themeValue = session.get("mykpoptheme");
+      return isTheme(themeValue) ? themeValue : Theme.LIGHT;
+    },
+    setTheme: (theme: Theme) => session.set("mykpoptheme", theme),
+    commit: () => themeStorage.commitSession(session),
+  };
 }
 
-export { getThemeSession }
+export { getThemeSession };

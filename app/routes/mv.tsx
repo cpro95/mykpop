@@ -16,17 +16,17 @@ function Mv() {
 
   return (
     <Layout title="MV" linkTo="/mv">
-      <div className="w-full rounded-lg shadow-xl dark:text-white sm:overflow-hidden lg:w-10/12">
-        <div className="grid grid-cols-12">
-          <div className="col-span-2 border border-blue-800">
-            <ul className="flex flex-col p-4">
+      <div className="w-full dark:text-white sm:overflow-hidden lg:w-10/12">
+        <div className="flex flex-col md:grid md:grid-cols-12">
+          <div className="md:col-span-2">
+            <ul className="flex flex-row flex-wrap space-x-4 p-4 md:flex-col md:items-baseline md:space-y-4">
               {allArtist &&
                 allArtist.map((aa) => (
                   <li key={aa.id}>
                     <NavLink
                       className={({ isActive }) =>
-                        `sm:text-md my-2 block border-b text-xs dark:text-gray-200 md:text-xl ${
-                          isActive ? "bg-white dark:bg-gray-700" : ""
+                        `my-2 text-base tracking-wider dark:text-dodger-200 sm:text-base md:text-xl ${
+                          isActive ? "border-b-4 border-b-dodger-500" : ""
                         }`
                       }
                       to={aa.id}
@@ -37,7 +37,7 @@ function Mv() {
                 ))}
             </ul>
           </div>
-          <div className="col-span-10 border border-lime-800">
+          <div className="md:col-span-10">
             <Outlet />
           </div>
         </div>

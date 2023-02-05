@@ -48,8 +48,11 @@ export function updateNote({
   noteId,
   body,
   title,
-}: { noteId: Note["id"], body: Note["body"], title: Note["title"] }
-) {
+}: {
+  noteId: Note["id"];
+  body: Note["body"];
+  title: Note["title"];
+}) {
   return prisma.note.update({
     where: { id: noteId },
     data: {
@@ -76,22 +79,31 @@ export async function getNotes({ userId }: { userId: User["id"] }) {
   });
 }
 
-export async function getNoteWithoutUserId({
-  id,
-}: Pick<Note, "id">
-) {
+export async function getNoteWithoutUserId({ id }: Pick<Note, "id">) {
   return prisma.note.findFirst({
     where: { id },
-  })
+  });
 }
 
-export async function getAllNotes(query: string, page: number, itemsPerPage: number) {
-  let x = {}
-  let select = { select: { id: true, title: true, createdAt: true, updatedAt: true, user: { select: { email: true } } } }
+export async function getAllNotes(
+  query: string,
+  page: number,
+  itemsPerPage: number
+) {
+  let x = {};
+  let select = {
+    select: {
+      id: true,
+      title: true,
+      createdAt: true,
+      updatedAt: true,
+      user: { select: { email: true } },
+    },
+  };
 
   let pageAndItemsPerPage = {
     skip: page === 1 ? 0 : (page - 1) * itemsPerPage,
-    take: itemsPerPage
+    take: itemsPerPage,
   };
 
   let whereQuery = {
@@ -100,7 +112,6 @@ export async function getAllNotes(query: string, page: number, itemsPerPage: num
         {
           title: {
             contains: query,
-
           },
         },
         {
@@ -109,13 +120,12 @@ export async function getAllNotes(query: string, page: number, itemsPerPage: num
           },
         },
       ],
-    }
+    },
   };
 
   let orderBy = { orderBy: { createdAt: "desc" } };
 
-  if (query === "")
-    Object.assign(x, pageAndItemsPerPage, select, orderBy);
+  if (query === "") Object.assign(x, pageAndItemsPerPage, select, orderBy);
   else Object.assign(x, select, whereQuery, orderBy);
 
   return prisma.note.findMany(x);
@@ -126,5 +136,5 @@ export async function getNoteCount() {
 }
 
 export async function getNoteCountById(id: string) {
-  return prisma.note.count({ where: { userId: id } })
+  return prisma.note.count({ where: { userId: id } });
 }

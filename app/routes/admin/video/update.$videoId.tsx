@@ -197,9 +197,9 @@ export default function UpdatevideoPage() {
             </div>
           </Listbox>
 
-          {actionData?.errors?.artistId && (
-            <div className="pt-1 text-red-700" id="artistId-error">
-              {actionData.errors.artistId}
+          {actionData?.errors?.artist && (
+            <div className="pt-1 text-red-700" id="artist-error">
+              {actionData.errors.artist}
             </div>
           )}
         </div>
