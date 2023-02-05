@@ -1,7 +1,7 @@
 import type { YoutubeInfo } from "@prisma/client";
 
 import { prisma } from "~/utils/db.server";
-import { getYoutubeApiInfoById } from "./youtubeApi.server";
+import { getYoutubeApiInfoById, YoutubeApiInfo } from "../utils/youtubeApi.server";
 
 export function getYoutubeInfoByVideoId(videoId: string) {
   return prisma.youtubeInfo.findFirst({
@@ -9,7 +9,7 @@ export function getYoutubeInfoByVideoId(videoId: string) {
   });
 }
 
-export async function createYoutubeInfo(videoId: string, youtubeId: string) {
+export async function createYoutubeInfo(artistId: string, videoId: string, youtubeId: string) {
   const currentYoutubeInfo = await getYoutubeApiInfoById(youtubeId);
 
   return prisma.youtubeInfo.create({
@@ -25,6 +25,11 @@ export async function createYoutubeInfo(videoId: string, youtubeId: string) {
       video: {
         connect: {
           id: videoId,
+        }
+      },
+      artist: {
+        connect: {
+          id: artistId,
         }
       }
     },
@@ -47,6 +52,23 @@ export async function updateYoutubeInfo(
   });
 }
 
+export async function updateYoutubeInfosByArtistId(
+  artistId: string
+) {
+  // Need : youtubeInfoId, youtubeId
+  const neededData = await prisma.youtubeInfo.findMany({
+    where: { artistId },
+    select: { id: true, youtubeId: true }
+  })
+
+  await Promise.all(
+    neededData.map(
+      (item: any): Promise<YoutubeApiInfo> =>
+        updateYoutubeInfo(item.id, item.youtubeId)
+    )
+  );
+}
+
 // export function deleteNote({
 //   id,
 //   userId,
@@ -66,7 +88,6 @@ export async function getYoutubeInfos(videoId: string) {
 }
 
 export async function getYoutubeApiInfosByIdArray(allVideos: Array<{ id: string }>) {
-  console.log(allVideos);
   let youtubeInfos: Array<YoutubeInfo>;
 
   youtubeInfos = await Promise.all(

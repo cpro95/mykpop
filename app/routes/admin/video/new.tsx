@@ -76,7 +76,7 @@ export const action: ActionFunction = async ({ request }) => {
   // const { artistId, title, youtubeId } = formValidation.data;
 
   const video = await createVideo(artistId, title, youtubeId);
-  await createYoutubeInfo(video.id, youtubeId);
+  await createYoutubeInfo(artistId, video.id, youtubeId);
 
   return redirect(`/admin/video/${video.id}`);
   // return json({});

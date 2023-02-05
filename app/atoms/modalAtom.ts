@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import type { YoutubeInfo } from "~/models/youtubeApi.server";
+import type { YoutubeInfo } from "~/utils/youtubeApi.server";
 
 export const modalState = atom({
     key: 'modalState',

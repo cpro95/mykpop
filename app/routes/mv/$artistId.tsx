@@ -5,7 +5,7 @@ import invariant from "tiny-invariant";
 import type { YoutubeInfo } from "@prisma/client";
 import { useRecoilState } from "recoil";
 import { modalState, videoState } from "~/atoms/modalAtom";
-import Modal from "~/components/modal";
+import YoutubeModal from "~/components/youtubemodal";
 import { getYoutubeApiInfosByIdArray } from "~/models/youtubeInfo.server";
 import { getVideoIdsByArtistId } from "~/models/video.server";
 
@@ -75,7 +75,7 @@ export default function MVArtistDetailsPage() {
               </div>
             </button>
           ))}
-        {showModal && <Modal />}
+        {showModal && <YoutubeModal />}
       </div>
     </div>
   );

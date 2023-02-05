@@ -50,6 +50,18 @@ export async function getVideoIdsByArtistId(id: string) {
 
 export async function getVideosOfArtistId(id: string) {
     return await prisma.video.findMany({
+        select: {
+            id: true, title: true, role: true, youtubeId: true,
+            artist: {
+                select: { name: true },
+            },
+            youtubeInfo: {
+                select: {
+                    youtubeTitle: true,
+                    youtubeViewCount: true,
+                }
+            }
+        },
         where: { artistId: id }
     })
 }
@@ -66,6 +78,12 @@ export async function getAllVideo(query: string, page: number, itemsPerPage: num
         select: {
             id: true, title: true, role: true, youtubeId: true, updatedAt: true, artist: {
                 select: { name: true, nameKor: true, company: true }
+            },
+            youtubeInfo: {
+                select: {
+                    youtubeTitle: true,
+                    youtubeViewCount: true
+                }
             }
         }
     }

@@ -16,15 +16,16 @@ import { requireUserId } from "~/utils/session.server";
 
 import { deleteVideo } from "~/models/video.server";
 import { getVideo } from "~/models/video.server";
-import type { YoutubeInfo } from "~/models/youtubeApi.server";
+import type { YoutubeApiInfo } from "~/utils/youtubeApi.server";
 import {
   getYoutubeInfoByVideoId,
   updateYoutubeInfo,
 } from "~/models/youtubeInfo.server";
+import { DialogModal } from "~/components/dialogmodal";
 
 type MyLoaderData = {
   video: Video;
-  youtubeInfo: YoutubeInfo;
+  youtubeInfo: YoutubeApiInfo;
 };
 
 export const meta: MetaFunction = (props) => {
@@ -45,10 +46,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const currentYoutubeInfo = await getYoutubeInfoByVideoId(video.id);
+  let currentYoutubeInfo = await getYoutubeInfoByVideoId(video.id);
 
   if (!currentYoutubeInfo) {
-    throw new Response("Not Found", { status: 404 });
+    // throw new Response("Not Found", { status: 404 });
+    currentYoutubeInfo = {};
   }
 
   return json<MyLoaderData>({ video, youtubeInfo: currentYoutubeInfo });
@@ -76,7 +78,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     const youtubeInfoYoutubeId = (await formData).get(
       "youtubeInfoYoutubeId"
     ) as string;
-    console.log(youtubeInfoId, youtubeInfoYoutubeId);
+    // console.log(youtubeInfoId, youtubeInfoYoutubeId);
     await updateYoutubeInfo(youtubeInfoId, youtubeInfoYoutubeId);
 
     return redirect(`/admin/video/${params.videoId}`);
@@ -89,14 +91,6 @@ export default function VideoDetailPage() {
   const { video, youtubeInfo, error } = useLoaderData<typeof loader>();
 
   let [isOpen, setIsOpen] = useState(false);
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
 
   if (error) {
     return (
@@ -123,65 +117,39 @@ export default function VideoDetailPage() {
           <div className="flex items-center justify-center">
             <button
               type="button"
-              onClick={openModal}
+              onClick={() => setIsOpen(true)}
               className="rounded-md bg-black bg-opacity-60 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
             >
               Delete
             </button>
           </div>
-          <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={closeModal}>
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <div className="fixed inset-0 bg-black bg-opacity-25" />
-              </Transition.Child>
 
-              <div className="fixed inset-0 overflow-y-auto">
-                <div className="flex min-h-full items-center justify-center p-4 text-center">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0 scale-95"
-                    enterTo="opacity-100 scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 scale-100"
-                    leaveTo="opacity-0 scale-95"
-                  >
-                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                      <Dialog.Title
-                        as="h3"
-                        className="mb-4 text-lg font-medium leading-6 text-gray-900"
-                      >
-                        Are you sure for Delete?
-                      </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="mb-2 text-sm text-gray-500">
-                          Press ESC key to cancel!
-                        </p>
-                      </div>
-                      <Form method="delete">
-                        <button
-                          type="submit"
-                          name="_action"
-                          value="delete-video"
-                          className="rounded bg-gray-500 bg-opacity-20 py-2 px-4 text-sm font-medium text-white hover:bg-blue-600 focus:bg-blue-400 dark:bg-blue-300 dark:text-gray-700 dark:hover:bg-blue-400"
-                        >
-                          Delete
-                        </button>
-                      </Form>
-                    </Dialog.Panel>
-                  </Transition.Child>
-                </div>
+          <DialogModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            title="Are you sure for Delete?"
+            exitTitle=""
+          >
+            <Form
+              method="delete"
+              className="mx-10 flex justify-between space-x-2"
+            >
+              <button
+                type="submit"
+                name="_action"
+                value="delete-video"
+                className="rounded bg-gray-500 bg-opacity-20 py-2 px-4 text-sm font-medium text-white hover:bg-blue-600 focus:bg-blue-400 dark:bg-blue-300 dark:text-gray-700 dark:hover:bg-blue-400"
+              >
+                Delete
+              </button>
+              <div
+                onClick={() => setIsOpen(false)}
+                className="rounded bg-cyan-900 bg-opacity-50 py-2 px-4 text-sm font-medium text-white hover:bg-cyan-600 focus:bg-cyan-400 dark:bg-cyan-300 dark:text-gray-700 dark:hover:bg-cyan-400"
+              >
+                Close
               </div>
-            </Dialog>
-          </Transition>
+            </Form>
+          </DialogModal>
 
           <Form method="post">
             <button

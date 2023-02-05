@@ -41,12 +41,28 @@ export default function VideoIndex() {
   const navigate = useNavigate();
 
   const [columnDefs] = useState([
+    { field: "id", hide: true },
     { field: "title" },
-    { field: "artist.name", headerName: "Artist" },
-    { field: "artist.nameKor", headerName: "그룹명" },
-    { field: "artist.company" },
-    { field: "youtubeId" },
     { field: "role" },
+    { field: "artist.name", headerName: "Artist" },
+    { field: "artist.nameKor", headerName: "그룹명", hide: true },
+    { field: "artist.company", hide: true },
+    { field: "updatedAt", hide: true },
+    { field: "youtubeId" },
+    {
+      field: "youtubeTitle",
+      valueGetter: (params: any) => {
+        return params.data.youtubeInfo[0].youtubeTitle;
+      },
+    },
+    {
+      field: "youtubeViewCount",
+      valueGetter: (params: any) => {
+        return Number(
+          params.data.youtubeInfo[0].youtubeViewCount
+        ).toLocaleString("ko-KR");
+      },
+    },
   ]);
 
   const defaultColDef = useMemo(() => {

@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import { getAllVideoIds } from "~/models/video.server";
 import { modalState, videoState } from "~/atoms/modalAtom";
 import { useRecoilState } from "recoil";
-import Modal from "~/components/modal";
+import YoutubeModal from "~/components/youtubemodal";
 import { Layout } from "~/components/layout";
 import { getYoutubeApiInfosByIdArray } from "~/models/youtubeInfo.server";
 import type { YoutubeInfo } from "@prisma/client";
@@ -87,7 +87,7 @@ function Home() {
               ))}
           </div>
 
-          {showModal && <Modal />}
+          {showModal && <YoutubeModal />}
         </div>
       </section>
     </Layout>

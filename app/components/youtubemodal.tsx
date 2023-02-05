@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 import { useRecoilState } from "recoil";
 import { videoState, modalState } from "~/atoms/modalAtom";
 
-function Modal() {
+function YoutubeModal() {
   const [video, setVideo] = useRecoilState(videoState);
   const [showModal, setShowModal] = useRecoilState(modalState);
 
@@ -26,7 +26,7 @@ function Modal() {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-95" />
+          <div className="fixed inset-0 bg-black bg-opacity-80" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -76,8 +76,8 @@ function Modal() {
                     height="100%"
                     className="absolute top-0 left-0"
                     playing
-                    light
-                    muted={false}
+                    controls
+                    light={false}
                   />
                 </div>
 
@@ -97,17 +97,24 @@ function Modal() {
                       )}
                     </div>
                     <div className="font-semibold text-green-400">
-                      {Number(video?.youtubeViewCount).toLocaleString("ko-KR")}{" "}
+                      {new Intl.NumberFormat("ko-KR", {
+                        notation: "compact",
+                        maximumFractionDigits: 1,
+                      }).format(video?.youtubeViewCount)}{" "}
                       Views
                     </div>
                     <div className="text-white">
-                      {Number(video?.youtubeLikeCount).toLocaleString("ko-KR")}{" "}
+                      {new Intl.NumberFormat("ko-KR", {
+                        notation: "compact",
+                        maximumFractionDigits: 1,
+                      }).format(video?.youtubeLikeCount)}{" "}
                       Likes
                     </div>
                     <div className="text-gray-300">
-                      {Number(video?.youtubeCommentCount).toLocaleString(
-                        "ko-KR"
-                      )}{" "}
+                      {new Intl.NumberFormat("ko-KR", {
+                        notation: "compact",
+                        maximumFractionDigits: 1,
+                      }).format(video?.youtubeCommentCount)}{" "}
                       Comments
                     </div>
                   </div>{" "}
@@ -121,4 +128,4 @@ function Modal() {
   );
 }
 
-export default Modal;
+export default YoutubeModal;

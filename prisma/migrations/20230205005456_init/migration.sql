@@ -60,11 +60,12 @@ CREATE TABLE "YoutubeInfo" (
     "youtubeViewCount" TEXT NOT NULL,
     "youtubeLikeCount" TEXT NOT NULL,
     "youtubeCommentCount" TEXT NOT NULL,
-    "youtubeFavoriteCount" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "videoId" TEXT NOT NULL,
-    CONSTRAINT "YoutubeInfo_videoId_fkey" FOREIGN KEY ("videoId") REFERENCES "Video" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    "artistId" TEXT NOT NULL,
+    CONSTRAINT "YoutubeInfo_videoId_fkey" FOREIGN KEY ("videoId") REFERENCES "Video" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "YoutubeInfo_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "Artist" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex
