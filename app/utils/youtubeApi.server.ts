@@ -1,12 +1,12 @@
 export type YoutubeApiInfo = {
   youtubeId: string;
-  youtubePublishedAt: string;
+  youtubePublishedAt: Date;
   youtubeTitle: string;
   youtubeDescription: string;
   youtubeThumbnail: string;
-  youtubeViewCount: string;
-  youtubeLikeCount: string;
-  youtubeCommentCount: string;
+  youtubeViewCount: number;
+  youtubeLikeCount: number;
+  youtubeCommentCount: number;
 };
 
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
@@ -26,13 +26,13 @@ export async function getYoutubeApiInfoById(youtubeId: string) {
     console.log("No Video");
     youtubeInfo = {
       youtubeId: "",
-      youtubePublishedAt: "",
+      youtubePublishedAt: new Date(),
       youtubeTitle: "",
       youtubeDescription: "",
       youtubeThumbnail: "",
-      youtubeViewCount: "",
-      youtubeLikeCount: "",
-      youtubeCommentCount: "",
+      youtubeViewCount: 0,
+      youtubeLikeCount: 0,
+      youtubeCommentCount: 0,
     };
   } else {
     youtubeInfo = {

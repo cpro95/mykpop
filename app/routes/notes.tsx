@@ -14,10 +14,11 @@ import { notFound } from "~/utils/http.server";
 import { getAllNotes, getNoteCount } from "~/models/note.server";
 import { getUserId } from "~/utils/session.server";
 import { z } from "zod";
-import { getSearchParams, useFormInputProps } from "remix-params-helper";
+import { useFormInputProps } from "remix-params-helper";
 import MyPagination from "~/components/my-pagination";
 import { Layout } from "~/components/layout";
-import { DEFAULT_LANGUAGE } from "~/utils/utils";
+import { getMyParams } from "~/utils/utils";
+import { DEFAULT_LANGUAGE, ITEMSPERPAGE } from "~/utils/consts";
 
 type MyLoaderData = {
   email?: string | undefined;
@@ -76,28 +77,22 @@ export const meta: MetaFunction = (props) => {
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = (await getUserId(request)) as string;
 
-  const loaderQuery = getSearchParams(request, notesSchema);
-  // console.log("inside loader ===> ", loaderQuery);
+  // Parsing URL query
+  const url = new URL(request.url);
+  let q = url.searchParams.get("q") as string | null;
+  let page = url.searchParams.get("page") as string | number | null;
+  let itemsPerPage = url.searchParams.get("itemsPerPage") as
+    | string
+    | number
+    | null;
+  let sorting = url.searchParams.get("sorting") as string | null;
 
-  let page: number = 1;
-  let itemsPerPage: number = 12;
-  let searchQuery: string = "";
-  if (loaderQuery.data?.query && loaderQuery.data?.query !== "") {
-    searchQuery = loaderQuery.data?.query;
-    // console.log("searchQuery ===> ", searchQuery);
-  }
+  if (q === null) q = "";
+  if (page === null) page = 1;
+  if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;
+  if (sorting === null) sorting = "date";
 
-  if (loaderQuery.data?.page && !isNaN(Number(loaderQuery.data?.page)))
-    page = Number(loaderQuery.data?.page);
-
-  if (
-    loaderQuery.data?.itemsPerPage &&
-    !isNaN(Number(loaderQuery.data?.itemsPerPage))
-  )
-    itemsPerPage = Number(loaderQuery.data?.itemsPerPage);
-  // console.log("xxxxxxx =>", page, itemsPerPage);
-
-  const notes = await getAllNotes(searchQuery, page, itemsPerPage);
+  const notes = await getAllNotes(q, Number(page), Number(itemsPerPage));
   const nbOfNotes = await getNoteCount();
 
   if (!notes) {
@@ -110,33 +105,9 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function NotesPage() {
   const data = useLoaderData() as MyLoaderData;
   // console.log("note data is ====> ", data);
+
   const [myParams] = useSearchParams();
-
-  type paramsType = {
-    [key: string]: string;
-  };
-  let paramsArray: paramsType[] = [];
-  myParams.forEach((value, name) => paramsArray.push({ [name]: value }));
-  // console.log("Inside of NotesPage ===> ", paramsArray);
-  paramsArray.map((p, i) => (p.index === "" ? paramsArray.splice(i, 1) : {}));
-  let viewType = "list";
-  paramsArray.map((p) => (p.hasOwnProperty("view") ? (viewType = p.view) : {}));
-  // console.log(viewType);
-
-  let query: string = "";
-  paramsArray.map((p) => (p.hasOwnProperty("query") ? (query = p.query) : {}));
-  let page: number = 1;
-  let itemsPerPage: number = 12;
-  paramsArray.map((p) =>
-    p.hasOwnProperty("page") ? (page = Number(p.page)) : {}
-  );
-  paramsArray.map((p) =>
-    p.hasOwnProperty("itemsPerPage")
-      ? (itemsPerPage = Number(p.itemsPerPage))
-      : {}
-  );
-  if (isNaN(page)) page = 1;
-  if (isNaN(itemsPerPage)) itemsPerPage = 12;
+  const { q, page, itemsPerPage, sorting } = getMyParams(myParams);
 
   const inputProps = useFormInputProps(searchNotesSchema);
   const transition = useTransition();
@@ -157,18 +128,15 @@ export default function NotesPage() {
 
         {/* Start Search Component */}
         <Form replace className="flex-cols flex w-full pt-2">
-          {paramsArray.map((p, i) =>
-            !p.hasOwnProperty("query") ? (
-              <input
-                key={i}
-                type="hidden"
-                name={Object.keys(p)[0]}
-                value={p[Object.keys(p)[0]]}
-              />
-            ) : (
-              <div key={i}></div>
-            )
-          )}
+          <input type="hidden" name={q} value={q} />
+          <input type="hidden" name={String(page)} value={String(page)} />
+          <input
+            type="hidden"
+            name={String(itemsPerPage)}
+            value={String(itemsPerPage)}
+          />
+          <input type="hidden" name={sorting} value={sorting} />
+
           <label htmlFor="simple-search" className="sr-only">
             Search
           </label>
@@ -240,7 +208,7 @@ export default function NotesPage() {
                           : ""
                       }`
                     }
-                    to={`${note.id}?page=${page}&itemsPerPage=${itemsPerPage}&viewType=${viewType}`}
+                    to={`${note.id}?page=${page}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
                   >
                     <div className="flex flex-col">
                       <div className="text-lg">{note.title}</div>
@@ -262,10 +230,11 @@ export default function NotesPage() {
 
         {/* Pagination */}
         <MyPagination
-          q={query}
+          q={q}
           page={page}
           itemsPerPage={itemsPerPage}
           total_pages={Math.ceil(Number(data.nbOfNotes) / itemsPerPage)}
+          sorting={sorting}
         />
         {/* Pagination */}
       </div>

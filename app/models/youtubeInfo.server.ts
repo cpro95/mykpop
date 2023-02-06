@@ -97,6 +97,157 @@ export async function updateYoutubeInfosAll() {
 //   });
 // }
 
+export async function getAllYoutubeInfosByArtistId(artistId: string, q: string,
+  page: number,
+  itemsPerPage: number, sorting: string) {
+  let x = {};
+  let select = {
+    select: {
+      id: true,
+      youtubeId: true,
+      youtubeTitle: true,
+      youtubeDescription: true,
+      youtubePublishedAt: true,
+      youtubeThumbnail: true,
+      youtubeViewCount: true,
+      youtubeLikeCount: true,
+      youtubeCommentCount: true,
+      createdAt: true,
+      updatedAt: true,
+      artist: {
+        select: { id: true, name: true, nameKor: true, company: true },
+      },
+      video: {
+        select: {
+          id: true,
+          title: true,
+          role: true,
+        },
+      },
+    },
+  };
+
+  let pageAndItemsPerPage = {
+    skip: page === 1 ? 0 : (page - 1) * itemsPerPage,
+    take: itemsPerPage,
+  };
+  let whereQuery = {};
+  if (q === "") {
+    whereQuery = {
+      where: {
+        artist: {
+          id: artistId
+        },
+      },
+    };
+  } else {
+    whereQuery = {
+      where: {
+        AND: [
+          {
+            artist: { id: artistId },
+          },
+        ],
+        OR: [
+          {
+            youtubeTitle: {
+              contains: q,
+            },
+          },
+          {
+            video: {
+              title: {
+                contains: q,
+              }
+            }
+          },
+        ]
+      },
+    };
+  }
+
+  let orderBy = {};
+  if (sorting === "date") {
+    orderBy = { orderBy: { youtubePublishedAt: "desc" } };
+  } else orderBy = { orderBy: { youtubeViewCount: "desc" } };
+
+  Object.assign(x, pageAndItemsPerPage, select, whereQuery, orderBy);
+
+  return prisma.youtubeInfo.findMany(x);
+}
+
+export async function getAllYoutubeInfosByNone(q: string,
+  page: number,
+  itemsPerPage: number, sorting: string) {
+  let x = {};
+  let select = {
+    select: {
+      id: true,
+      youtubeId: true,
+      youtubeTitle: true,
+      youtubeDescription: true,
+      youtubePublishedAt: true,
+      youtubeThumbnail: true,
+      youtubeViewCount: true,
+      youtubeLikeCount: true,
+      youtubeCommentCount: true,
+      createdAt: true,
+      updatedAt: true,
+      artist: {
+        select: { id: true, name: true, nameKor: true, company: true },
+      },
+      video: {
+        select: {
+          id: true,
+          title: true,
+          role: true,
+        },
+      },
+    },
+  };
+
+  let pageAndItemsPerPage = {
+    skip: page === 1 ? 0 : (page - 1) * itemsPerPage,
+    take: itemsPerPage,
+  };
+  let whereQuery = {};
+  if (q === "") {
+    whereQuery = {
+      where: {
+
+      },
+    };
+  } else {
+    whereQuery = {
+      where: {
+        OR: [
+          {
+            youtubeTitle: {
+              contains: q,
+            },
+          },
+          {
+            video: {
+              title: {
+                contains: q,
+              }
+            }
+          },
+        ]
+      },
+    };
+  }
+
+  let orderBy = {};
+  if (sorting === "date") {
+    orderBy = { orderBy: { youtubePublishedAt: "desc" } };
+  } else orderBy = { orderBy: { youtubeViewCount: "desc" } };
+
+  Object.assign(x, pageAndItemsPerPage, select, whereQuery, orderBy);
+
+  return prisma.youtubeInfo.findMany(x);
+}
+
 export async function getYoutubeInfos(videoId: string) {
   const data = await prisma.youtubeInfo.findMany({
     where: { videoId },
@@ -133,4 +284,60 @@ export async function getYoutubeApiInfosByIdArray(
 
 export async function getYoutubeInfoCount() {
   return prisma.youtubeInfo.count();
+}
+
+export async function getAllYoutubeInfosCountByArtistId(artistId: string, q?: string) {
+
+  if (q === undefined || q === "")
+    return prisma.youtubeInfo.count({ where: { artist: { id: artistId } } })
+  else if (q !== undefined && q !== "")
+    return prisma.youtubeInfo.count({
+      where: {
+        AND: [
+          {
+            artist: { id: artistId },
+          },
+        ],
+        OR: [
+          {
+            youtubeTitle: {
+              contains: q,
+            },
+          },
+          {
+            video: {
+              title: {
+                contains: q,
+              },
+            },
+          }
+        ],
+      },
+    })
+}
+
+export async function getAllYoutubeInfosCountByNone(q?: string) {
+
+  if (q === undefined || q === "")
+    return prisma.youtubeInfo.count()
+  else if (q !== undefined && q !== "")
+    return prisma.youtubeInfo.count({
+      where: {
+
+        OR: [
+          {
+            youtubeTitle: {
+              contains: q,
+            },
+          },
+          {
+            video: {
+              title: {
+                contains: q,
+              },
+            },
+          }
+        ],
+      },
+    })
 }

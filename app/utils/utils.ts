@@ -2,10 +2,42 @@ import { useMatches } from "@remix-run/react";
 import { useMemo } from "react";
 
 import type { User } from "~/models/user.server";
+import { DEFAULT_REDIRECT, ITEMSPERPAGE } from "./consts";
 
-const DEFAULT_REDIRECT = "/";
+export function getMyParams(myParams: any) {
+  type paramsType = {
+    [key: string]: string;
+  };
+  let paramsArray: paramsType[] = [];
+  myParams.forEach((value: string, name: string) => paramsArray.push({ [name]: value }));
 
-export const DEFAULT_LANGUAGE = "en-US";
+  // remove weird index params 
+  // paramsArray.map((p, i) => (p.index === "" ? paramsArray.splice(i, 1) : {}));
+  
+  let q: string = "";
+  let page: number = 1;
+  let itemsPerPage: number = ITEMSPERPAGE;
+  let sorting: string = "date";
+  paramsArray.map((p) =>
+    p.hasOwnProperty("q") ? (q = p.q as string) : {}
+  );
+  paramsArray.map((p) =>
+    p.hasOwnProperty("page") ? (page = Number(p.page)) : {}
+  );
+  paramsArray.map((p) =>
+    p.hasOwnProperty("itemsPerPage")
+      ? (itemsPerPage = Number(p.itemsPerPage))
+      : {}
+  );
+  paramsArray.map((p) =>
+    p.hasOwnProperty("sorting") ? (sorting = p.sorting as string) : {}
+  );
+
+  if (isNaN(page)) page = 1;
+  if (isNaN(itemsPerPage)) itemsPerPage = ITEMSPERPAGE;
+
+  return { q, page, itemsPerPage, sorting }
+}
 
 /**
  * This should be used any time the redirect path is user-provided

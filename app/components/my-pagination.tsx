@@ -5,6 +5,7 @@ type PaginationType = {
   page: number;
   itemsPerPage: number;
   total_pages: number;
+  sorting: string;
 };
 
 export default function MyPagination({
@@ -12,6 +13,7 @@ export default function MyPagination({
   page,
   itemsPerPage,
   total_pages,
+  sorting,
 }: PaginationType) {
   // const leftDoubleArrow = (
   //   <svg
@@ -79,13 +81,16 @@ export default function MyPagination({
   const currentLinkStyle =
     "px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-gray-700 rounded-md sm:inline bg-blue-500 text-white dark:bg-blue-500 dark:text-gray-200";
 
+  // 섹션에 아무것도 없을 때 에러 처리
+  if (total_pages === 0) total_pages = 1;
+
   return (
     <nav
       aria-label="Pagination"
       className="mt-4 mb-8 -ml-4 flex justify-evenly py-4 sm:justify-start"
     >
       {/* <Link
-        to={`?q=${q}&page=${1}&itemsPerPage=${itemsPerPage}`}
+        to={`?q=${q}&page=${1}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
         className={linkStyle}
       >
         <span className='sr-only'>First</span>
@@ -95,63 +100,94 @@ export default function MyPagination({
       <Link
         to={`?q=${q}&page=${
           page === 1 ? 1 : page - 1
-        }&itemsPerPage=${itemsPerPage}`}
+        }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
         className={linkStyle}
       >
         <span className="sr-only">Previous</span>
         {leftArrow}
       </Link>
-      {page === 1 ? (
-        <></>
+
+      {page === 3 ? (
+        <Link
+          to={`?q=${q}&page=1&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+          className={linkStyle}
+        >
+          1
+        </Link>
       ) : (
+        <></>
+      )}
+
+      {/* 처음 ... 보여주기 */}
+      {page > 3 ? (
         <>
           <Link
-            to={`?q=${q}&page=${page - 1}&itemsPerPage=${itemsPerPage}`}
-            aria-current="page"
+            to={`?q=${q}&page=1&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
             className={linkStyle}
           >
-            {page - 1}
+            1
           </Link>
+          <button disabled className={linkStyle}>
+            ...
+          </button>
         </>
+      ) : (
+        <></>
       )}
+
+      {/* 이전 페이지인데 1페이지만 스킵 */}
+      {page !== 1 ? (
+        <Link
+          to={`?q=${q}&page=${
+            page - 1
+          }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+          className={linkStyle}
+        >
+          {page - 1}
+        </Link>
+      ) : (
+        <></>
+      )}
+
+      {/* 현재 페이지 */}
       <Link
-        to={`?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}`}
-        aria-current="page"
+        to={`?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
         className={currentLinkStyle}
       >
         {page}
       </Link>
-      {page === total_pages ? (
-        <></>
-      ) : (
+
+      {/* 다음 페이지인데 끝에서 두번째만 아니면 보여준다. */}
+      {page < total_pages - 1 ? (
         <Link
-          to={`?q=${q}&page=${page + 1}&itemsPerPage=${itemsPerPage}`}
+          to={`?q=${q}&page=${
+            page + 1
+          }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
           className={linkStyle}
         >
           {page + 1}
         </Link>
+      ) : (
+        <></>
       )}
 
-      {page < total_pages - 3 ? (
-        <>
-          <button disabled className={linkStyle}>
-            ...
-          </button>
+      {/* 마지막 ... 보여주기 */}
+      {page < total_pages - 2 ? (
+        <button disabled className={linkStyle}>
+          ...
+        </button>
+      ) : (
+        <></>
+      )}
 
-          <Link
-            to={`?q=${q}&page=${total_pages - 1}&itemsPerPage=${itemsPerPage}`}
-            className={linkStyle}
-          >
-            {total_pages - 1}
-          </Link>
-
-          <Link
-            to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}`}
-            className={linkStyle}
-          >
-            {total_pages}
-          </Link>
-        </>
+      {/* 마지막 페이지 보여주기 */}
+      {page !== total_pages ? (
+        <Link
+          to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+          className={linkStyle}
+        >
+          {total_pages}
+        </Link>
       ) : (
         <></>
       )}
@@ -159,7 +195,7 @@ export default function MyPagination({
       <Link
         to={`?q=${q}&page=${
           page === total_pages ? total_pages : page + 1
-        }&itemsPerPage=${itemsPerPage}`}
+        }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
         className={linkStyle}
       >
         <span className="sr-only">Next</span>
@@ -167,7 +203,7 @@ export default function MyPagination({
       </Link>
 
       {/* <Link
-        to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}`}
+        to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
         className={linkStyle}
       >
         <span className='sr-only'>Last</span>

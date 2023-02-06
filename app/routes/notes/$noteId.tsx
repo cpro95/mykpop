@@ -15,9 +15,10 @@ import { requireUserId } from "~/utils/session.server";
 import { getUserById } from "~/models/user.server";
 
 import { Editor } from "@tinymce/tinymce-react";
-import { DEFAULT_LANGUAGE, useOptionalUser } from "~/utils/utils";
+import { useOptionalUser } from "~/utils/utils";
 import { DialogModal } from "~/components/dialogmodal";
 import { useState } from "react";
+import { DEFAULT_LANGUAGE } from "~/utils/consts";
 
 type MyLoaderData = {
   note: Note;

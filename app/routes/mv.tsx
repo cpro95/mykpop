@@ -1,4 +1,8 @@
-import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import {
+  NavLink,
+  Outlet,
+  useLoaderData,
+} from "@remix-run/react";
 import type { LoaderArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Layout } from "~/components/layout";
@@ -18,8 +22,8 @@ function Mv() {
     <Layout title="MV" linkTo="/mv">
       <div className="w-full dark:text-white sm:overflow-hidden lg:w-10/12">
         <div className="flex flex-col md:grid md:grid-cols-12">
-          <div className="md:col-span-2">
-            <ul className="flex flex-row flex-wrap space-x-4 p-4 md:flex-col md:items-baseline md:space-y-4">
+          <div className="md:col-span-3">
+            <ul className="flex flex-row flex-wrap space-x-4 pt-4 pl-2 sm:mt-4 md:flex-col md:items-baseline md:space-y-4">
               {allArtist &&
                 allArtist.map((aa) => (
                   <li key={aa.id}>
@@ -29,7 +33,7 @@ function Mv() {
                           isActive ? "border-b-4 border-b-dodger-500" : ""
                         }`
                       }
-                      to={aa.id}
+                      to={`${aa.id}`}
                     >
                       {aa.name}
                     </NavLink>
@@ -37,7 +41,7 @@ function Mv() {
                 ))}
             </ul>
           </div>
-          <div className="md:col-span-10">
+          <div className="md:col-span-9">
             <Outlet />
           </div>
         </div>

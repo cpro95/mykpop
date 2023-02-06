@@ -67,15 +67,15 @@ model Video {
 }
 
 model YoutubeInfo {
-  id                  String @id @default(cuid())
+  id                  String   @id @default(cuid())
   youtubeId           String
   youtubeTitle        String
   youtubeDescription  String
-  youtubePublishedAt  String
+  youtubePublishedAt  DateTime
   youtubeThumbnail    String
-  youtubeViewCount    String
-  youtubeLikeCount    String
-  youtubeCommentCount String
+  youtubeViewCount    Int
+  youtubeLikeCount    Int
+  youtubeCommentCount Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
