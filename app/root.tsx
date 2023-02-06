@@ -24,6 +24,11 @@ import { getThemeSession } from "./utils/theme.server";
 import invariant from "tiny-invariant";
 import { RecoilRoot } from "recoil";
 
+// import { useChangeLanguage } from "remix-i18next";
+import { useTranslation } from "react-i18next";
+import i18next from "~/i18next.server";
+import { useEffect } from "react";
+
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
 };
@@ -41,10 +46,13 @@ type LoaderData = {
       theme: Theme | null;
     };
   };
+  locale: string;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const themeSession = await getThemeSession(request);
+  let locale = await i18next.getLocale(request);
+
   return json<LoaderData>({
     user: await getUser(request),
     requestInfo: {
@@ -52,15 +60,31 @@ export const loader: LoaderFunction = async ({ request }) => {
         theme: themeSession.getTheme(),
       },
     },
+    locale,
   });
 };
 
-function App() {
+export let handle = {
+  // In the handle export, we can add a i18n key with namespaces our route
+  // will need to load. This key can be a single string or an array of strings.
+  // TIP: In most cases, you should set this to your defaultNS from your i18n config
+  // or if you did not set one, set it to the i18next default namespace "translation"
+  i18n: "common",
+};
+
+function App({ locale }: { locale: string }) {
   const [theme] = useTheme();
   invariant(theme, "theme must be set");
+  let { i18n } = useTranslation();
+
+  // This hook will change the i18n instance language to the current locale
+  // detected by the loader, this way, when we do something to change the
+  // language, this locale will change and i18next will load the correct
+  // translation files
+  useChangeLanguage(locale);
 
   return (
-    <html lang="en" className={theme}>
+    <html lang={locale} dir={i18n.dir()} className={theme}>
       <head>
         <Meta />
         <Links />
@@ -81,10 +105,17 @@ export default function AppWithProviders() {
   return (
     <RecoilRoot>
       <ThemeProvider specifiedTheme={data.requestInfo.session.theme}>
-        <App />
+        <App locale={data.locale} />
       </ThemeProvider>
     </RecoilRoot>
   );
+}
+
+export function useChangeLanguage(locale: string) {
+  let { i18n } = useTranslation();
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
 }
 
 export function ErrorBoundary(props: any) {

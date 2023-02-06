@@ -10,6 +10,7 @@ import { assertIsPost } from "~/utils/http.server";
 import { Theme, useTheme } from "~/utils/theme-provider";
 import { createNote } from "~/models/note.server";
 import { requireUser, requireUserId } from "~/utils/session.server";
+import { useTranslation } from "react-i18next";
 
 export const NewNoteFormSchema = z.object({
   title: z.string().min(2, "require-title"),
@@ -64,6 +65,8 @@ export default function NewNotePage() {
 
   const [theme] = useTheme();
 
+  const { t } = useTranslation();
+
   return (
     <Form method="post">
       <div className="relative w-full">
@@ -87,7 +90,7 @@ export default function NewNotePage() {
           {...inputProps("title")}
           name="title"
           id="title"
-          placeholder="Title"
+          placeholder={t("Title")!}
           className="search-label mb-4"
           aria-invalid={actionData?.errors?.title ? true : undefined}
           aria-errormessage={
@@ -145,7 +148,7 @@ export default function NewNotePage() {
 
       <div className="mt-4 text-left">
         <button type="submit" className="btn-primary mr-2" disabled={disabled}>
-          Post
+          {t("Save")}
         </button>
       </div>
     </Form>

@@ -1,5 +1,4 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import type {
   LoaderFunction,
   ActionFunction,
@@ -17,8 +16,8 @@ import { getVideosOfArtistId } from "~/models/video.server";
 import { AgGridReact } from "ag-grid-react";
 import agGrid from "ag-grid-community/styles/ag-grid.css";
 import agThemeAlpine from "ag-grid-community/styles/ag-theme-alpine.css";
-import { DialogModal } from "~/components/dialogmodal";
-import { updateYoutubeInfosByArtistId } from "~/models/youtubeInfo.server";
+import { DialogModal } from "~/components/dialog-modal";
+import { updateYoutubeInfosByArtistId } from "~/models/youtube-info.server";
 
 export const links: LinksFunction = () => {
   return [

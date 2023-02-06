@@ -14,6 +14,7 @@ import { getUserId, createUserSession } from "~/utils/session.server";
 import { createUser, getUserByEmail } from "~/models/user.server";
 import { safeRedirect, validateEmail } from "~/utils/utils";
 import { Layout } from "~/components/layout";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -73,7 +74,7 @@ export async function action({ request }: ActionArgs) {
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Sign Up",
+    title: "Sign Up / 가입하기",
   };
 };
 
@@ -96,12 +97,14 @@ export default function Join() {
     }
   }, [actionData]);
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <div className="mt-16 mb-8 flex min-h-full w-full flex-col justify-center">
         <div className="m-auto w-full max-w-sm rounded-md bg-dodger-50 p-6 shadow-md dark:bg-dodger-800">
           <h1 className="text-center text-3xl font-semibold text-gray-700 dark:text-white">
-            Sign up
+            {t("Sign up")}
           </h1>
           <Form method="post" className="mt-6 space-y-6" replace>
             <div>
@@ -109,7 +112,7 @@ export default function Join() {
                 htmlFor="email"
                 className="block text-sm text-gray-800 dark:text-gray-200"
               >
-                Email address
+                {t("Email")}
               </label>
               <div className="mt-1">
                 <input
@@ -138,7 +141,7 @@ export default function Join() {
                 htmlFor="password"
                 className="block text-sm text-gray-800 dark:text-gray-200"
               >
-                Password
+                {t("Password")}
               </label>
               <div className="mt-1">
                 <input
@@ -166,11 +169,11 @@ export default function Join() {
               className="w-full transform rounded-md bg-gray-700 px-4 py-2 tracking-wide text-white transition-colors duration-200 hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"
               disabled={disabled}
             >
-              Create Account
+              {t("Create Account")}
             </button>
             <div className="flex items-center justify-center">
               <div className="text-center text-sm text-gray-500 dark:text-gray-300">
-                Already have an account?{" "}
+                {t("have-account")}{" "}
                 <Link
                   className="text-blue-500 underline dark:text-blue-300"
                   to={{
@@ -178,7 +181,7 @@ export default function Join() {
                     search: searchParams.toString(),
                   }}
                 >
-                  Log in
+                  {t("Log in")}
                 </Link>
               </div>
             </div>

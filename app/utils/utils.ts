@@ -13,7 +13,7 @@ export function getMyParams(myParams: any) {
 
   // remove weird index params 
   // paramsArray.map((p, i) => (p.index === "" ? paramsArray.splice(i, 1) : {}));
-  
+
   let q: string = "";
   let page: number = 1;
   let itemsPerPage: number = ITEMSPERPAGE;
@@ -128,3 +128,4 @@ export function getRandomInt(min: number, max: number) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최소값은 포함
 }
+

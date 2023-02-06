@@ -15,7 +15,7 @@ import agThemeAlpine from "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { useMemo, useState, useCallback } from "react";
 import { assertIsPostOrDelete } from "~/utils/http.server";
-import { updateYoutubeInfosAll } from "~/models/youtubeInfo.server";
+import { updateYoutubeInfosAll } from "~/models/youtube-info.server";
 
 type MyLoaderData = {
   allVideo: Video[];

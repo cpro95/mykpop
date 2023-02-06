@@ -6,9 +6,9 @@ import { modalState, videoState } from "~/atoms/modalAtom";
 import {
   getAllYoutubeInfosByNone,
   getAllYoutubeInfosCountByNone,
-} from "~/models/youtubeInfo.server";
-import VideoCard from "~/components/videocard";
-import YoutubeModal from "~/components/youtubemodal";
+} from "~/models/youtube-info.server";
+import VideoCard from "~/components/video-card";
+import YoutubeModal from "~/components/youtube-modal";
 import SearchForm from "~/components/search-form";
 import { getMyParams } from "~/utils/utils";
 import MyPagination from "~/components/my-pagination";
@@ -48,8 +48,8 @@ function MVHome() {
   const { youtubeInfos, totalVidoes } = useLoaderData<typeof loader>();
 
   const [myParams] = useSearchParams();
-  const { q, page, itemsPerPage, sorting } = getMyParams(myParams);
-  const gotParams: gotParamsType = { q, page, itemsPerPage, sorting };
+  const gotParams: gotParamsType = getMyParams(myParams);
+  const { q, page, itemsPerPage, sorting } = gotParams;
 
   const [showModal, setShowModal] = useRecoilState(modalState);
   const [video, setVideo] = useRecoilState(videoState);

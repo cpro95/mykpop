@@ -1,8 +1,11 @@
 import React from "react";
 import type { YoutubeInfo } from "@prisma/client";
+import { useTranslation } from "react-i18next";
 
 function VideoCard({ mv }: { mv: YoutubeInfo }) {
-  //   console.log(mv);
+  const { i18n } = useTranslation();
+  let formatLocale = "";
+  i18n.language === "ko" ? (formatLocale = "ko-KR") : (formatLocale = "en-US");
 
   return (
     <div className="mx-auto max-w-xs overflow-hidden rounded-lg bg-white shadow-lg dark:bg-dodger-700">
@@ -16,18 +19,16 @@ function VideoCard({ mv }: { mv: YoutubeInfo }) {
       )}
 
       <div className="py-5 text-center">
-        <div className="block text-lg font-semibold text-dodger-800 dark:text-dodger-300">
+        <div className="block h-20 text-lg font-semibold text-dodger-800 dark:text-dodger-300">
           {mv.youtubeTitle}
         </div>
         <div className="mx-14 flex items-center justify-between">
           <h6 className="text-sm text-dodger-700 dark:text-dodger-400">
-            {new Date(mv.youtubePublishedAt).toLocaleDateString(
-              "ko-KR"
-            )}
+            {new Date(mv.youtubePublishedAt).toLocaleDateString(formatLocale)}
           </h6>
 
           <h6 className="text-sm font-bold text-dodger-900 dark:text-dodger-300">
-            {new Intl.NumberFormat("ko-KR", {
+            {new Intl.NumberFormat(formatLocale, {
               notation: "compact",
               maximumFractionDigits: 1,
             }).format(Number(mv.youtubeViewCount))}

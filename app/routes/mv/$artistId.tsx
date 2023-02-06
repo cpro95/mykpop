@@ -4,12 +4,12 @@ import { useLoaderData, useSearchParams } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { useRecoilState } from "recoil";
 import { modalState, videoState } from "~/atoms/modalAtom";
-import YoutubeModal from "~/components/youtubemodal";
+import YoutubeModal from "~/components/youtube-modal";
 import {
   getAllYoutubeInfosByArtistId,
   getAllYoutubeInfosCountByArtistId,
-} from "~/models/youtubeInfo.server";
-import VideoCard from "~/components/videocard";
+} from "~/models/youtube-info.server";
+import VideoCard from "~/components/video-card";
 import SearchForm from "~/components/search-form";
 import MyPagination from "~/components/my-pagination";
 import { ITEMSPERPAGE } from "~/utils/consts";

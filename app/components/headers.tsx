@@ -1,9 +1,11 @@
 // import { Menu, Transition } from "@headlessui/react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 // import { ChevronDownIcon, Cog6ToothIcon } from "@heroicons/react/20/solid";
 import { Link } from "@remix-run/react";
-import { DarkMode } from "./darkmode";
-import DropdownMenu from "./dropdownmenu";
+import { DarkMode } from "./dark-mode";
+import DropdownMenu from "./dropdown-menu";
+import { ChangeLanguage } from "./change-language";
+import { useTranslation } from "react-i18next";
 
 const home: { to: string; name: string } = {
   to: "/",
@@ -89,12 +91,28 @@ export function Headers({
   linkTo,
   email,
 }: {
-  title?: string;
+  title?: string | null;
   linkTo?: string;
   email?: string;
 }) {
   const [show, setShow] = useState<boolean>(true);
 
+  const { t } = useTranslation();
+  const home: { to: string; name: string } = {
+    to: "/",
+    name: "myKPop",
+  };
+
+  const links: { to: string; name: string }[] = [
+    {
+      to: "/mv",
+      name: t("MV"),
+    },
+    {
+      to: "/notes",
+      name: t("Notes"),
+    },
+  ];
   const linkStyle =
     "transform p-2.5 text-gray-600 transition-colors duration-200 hover:text-gray-700 focus:text-gray-700 focus:outline-none dark:text-gray-200 dark:hover:text-gray-400 dark:focus:text-gray-400 md:block";
 
@@ -126,6 +144,7 @@ export function Headers({
 
             {/* <!-- Mobile menu button --> */}
             <div className="flex items-center justify-evenly md:hidden">
+              <ChangeLanguage />
               <DarkMode />
               {/* <ReachMenu email={email} /> */}
               <DropdownMenu email={email} />
@@ -182,6 +201,7 @@ export function Headers({
               ))}
             </ul>
             <div className="mt-4 hidden items-center text-gray-700 dark:text-gray-300 md:mt-0 md:flex">
+              <ChangeLanguage />
               <DarkMode />
               {/* <ReachMenu email={email} /> */}
               <DropdownMenu email={email} />

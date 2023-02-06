@@ -1,8 +1,8 @@
 import type { YoutubeInfo } from "@prisma/client";
 
 import { prisma } from "~/utils/db.server";
-import { getYoutubeApiInfoById } from "../utils/youtubeApi.server";
-import type { YoutubeApiInfo } from "../utils/youtubeApi.server";
+import { getYoutubeApiInfoById } from "../utils/youtube-api.server";
+import type { YoutubeApiInfo } from "../utils/youtube-api.server";
 
 export function getYoutubeInfoByVideoId(videoId: string) {
   return prisma.youtubeInfo.findFirst({

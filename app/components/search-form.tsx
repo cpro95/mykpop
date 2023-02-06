@@ -3,6 +3,7 @@ import type { FormMethod } from "@remix-run/react";
 import { z } from "zod";
 import { useFormInputProps } from "remix-params-helper";
 import type { gotParamsType } from "~/utils/types";
+import { useTranslation } from "react-i18next";
 
 export const searchMovieSchema = z.object({
   q: z.string().min(2, "Minimum length is 2"),
@@ -21,6 +22,7 @@ export default function SearchForm({
 }) {
   const inputProps = useFormInputProps(searchMovieSchema);
   const transition = useTransition();
+  const { t } = useTranslation();
 
   let isSubmitting =
     transition.state === "submitting" || transition.state === "loading";
@@ -34,7 +36,7 @@ export default function SearchForm({
       sorting: gotParams.sorting,
     };
     x.sorting = e.target.value;
-    console.log("inside search-form x is ========>", x);
+    // console.log("inside search-form x is ========>", x);
     submit(x, { replace: true });
   }
 
@@ -59,7 +61,7 @@ export default function SearchForm({
           <input
             {...inputProps("q")}
             className="search-label"
-            placeholder="Search"
+            placeholder={t("Search")!}
             type="text"
             name="q"
           />
@@ -91,8 +93,8 @@ export default function SearchForm({
               onChange={handleChange}
               className="bg-transparent font-medium text-gray-700 focus:outline-none dark:text-gray-300"
             >
-              <option value="date">Date</option>
-              <option value="views">Views</option>
+              <option value="date">{t("Date")}</option>
+              <option value="views">{t("Views")}</option>
             </select>
           </div>
         )}

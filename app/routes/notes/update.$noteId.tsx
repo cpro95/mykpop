@@ -3,7 +3,6 @@ import invariant from "tiny-invariant";
 import { Editor } from "@tinymce/tinymce-react";
 import { updateNote } from "~/models/note.server";
 import { requireUserId } from "~/utils/session.server";
-import type { Note } from "~/models/note.server";
 import { getNote } from "~/models/note.server";
 import { json, redirect } from "@remix-run/node";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
@@ -16,6 +15,7 @@ import {
 import { getFormData, useFormInputProps } from "remix-params-helper";
 import { z } from "zod";
 import { Theme, useTheme } from "~/utils/theme-provider";
+import { useTranslation } from "react-i18next";
 
 export const NewNoteFormSchema = z.object({
   title: z.string().min(2, "require-title"),
@@ -86,6 +86,7 @@ export default function NewNotePage() {
   }, [note]);
 
   const [theme] = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Form method="post">
@@ -112,7 +113,7 @@ export default function NewNotePage() {
           ref={titleRef}
           name="title"
           id="title"
-          placeholder="Title"
+          placeholder={t("Title")!}
           className="search-label mb-4 block w-full"
           aria-invalid={actionData?.errors?.title ? true : undefined}
           aria-errormessage={
@@ -214,7 +215,7 @@ export default function NewNotePage() {
           className="btn-primary ml-4 mr-2 mb-2"
           disabled={disabled}
         >
-          Modify
+          {t("Modify")}
         </button>
       </div>
     </Form>

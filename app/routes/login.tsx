@@ -13,6 +13,7 @@ import { createUserSession, getUserId } from "~/utils/session.server";
 import { verifyLogin } from "~/models/user.server";
 import { safeRedirect, validateEmail } from "~/utils/utils";
 import { Layout } from "~/components/layout";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -90,12 +91,14 @@ export default function LoginPage() {
     }
   }, [actionData]);
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <div className="mt-16 mb-8 flex min-h-full w-full flex-col justify-center">
         <div className="m-auto w-full max-w-sm rounded-md bg-dodger-50 p-6 shadow-md dark:bg-dodger-800">
           <h1 className="text-center text-3xl font-semibold text-gray-700 dark:text-white">
-            Log in
+            {t("Log In")}
           </h1>
           <Form method="post" className="mt-6 space-y-6" ref={formRef} replace>
             <div>
@@ -103,7 +106,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-sm text-gray-800 dark:text-gray-200"
               >
-                Email address
+                {t("Email")}
               </label>
 
               <div className="mt-1">
@@ -133,7 +136,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-sm text-gray-800 dark:text-gray-200"
               >
-                Password
+                {t("Password")}
               </label>
               <div className="mt-1">
                 <input
@@ -162,7 +165,7 @@ export default function LoginPage() {
                 className="w-full transform rounded-md bg-gray-700 px-4 py-2 tracking-wide text-white transition-colors duration-200 hover:bg-gray-600 focus:bg-gray-600 focus:outline-none"
                 disabled={disabled}
               >
-                Log in
+                {t("Log In")}
               </button>
             </div>
             <div className="flex items-center justify-center">
@@ -177,11 +180,11 @@ export default function LoginPage() {
                   htmlFor="remember"
                   className="ml-1 mr-4 block text-sm text-gray-900 dark:text-gray-300"
                 >
-                  Remember me
+                  {t("Remember me")}
                 </label>
               </div>
               <div className="text-center text-sm text-gray-500 dark:text-gray-300">
-                Don't have an account?{" "}
+                {t("no-account")}{" "}
                 <Link
                   className="text-blue-500 underline dark:text-blue-200"
                   to={{
@@ -189,7 +192,7 @@ export default function LoginPage() {
                     search: searchParams.toString(),
                   }}
                 >
-                  Sign up
+                  {t("Sign up")}
                 </Link>
               </div>
             </div>

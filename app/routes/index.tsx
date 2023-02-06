@@ -8,13 +8,7 @@ import { getAllArtist, getAllArtistCount } from "~/models/artist.server";
 import { ITEMSPERPAGE } from "~/utils/consts";
 import type { gotParamsType } from "~/utils/types";
 import { getMyParams } from "~/utils/utils";
-
-export function headers() {
-  return {
-    "Cache-Control":
-      "public, max-age=60, s-maxage=6000, stale-while-revalidate=600",
-  };
-}
+import { useTranslation } from "react-i18next";
 
 export const meta: MetaFunction = () => {
   return {
@@ -50,20 +44,22 @@ function Home() {
   const { q, page, itemsPerPage, sorting } = getMyParams(myParams);
   const gotParams: gotParamsType = { q, page, itemsPerPage, sorting };
 
+  let { t } = useTranslation();
+
   return (
-    <Layout title="Home" linkTo="/">
+    <Layout title={t("Home")} linkTo="/">
       <div className="flex w-full flex-col items-center dark:text-white sm:overflow-hidden lg:w-10/12">
-        <section>
-          <div className="w-full rounded-lg border border-dodger-200 bg-white p-4 text-center shadow dark:border-dodger-700 dark:bg-dodger-800 sm:p-8">
-            <h5 className="mb-2 text-3xl font-bold text-dodger-900 dark:text-white">
+        <section className="w-full">
+          <div className="rounded-lg border border-dodger-200 bg-white p-4 text-center shadow dark:border-dodger-700 dark:bg-dodger-800 sm:p-8">
+            <h5 className="mb-6 text-3xl font-bold text-dodger-900 dark:text-white">
               K-Pop is Everywhere!
             </h5>
-            <p className="mb-5 text-base text-dodger-600 dark:text-dodger-400 sm:text-lg">
-              Stay up to date and find out how many k-pop music videos have
-              youtube views!
+            <p className="text-base text-dodger-600 dark:text-dodger-400 sm:text-lg">
+              {t("greeting")}
             </p>
           </div>
         </section>
+
         <div className="w-full">
           <SearchForm
             method="get"
@@ -96,7 +92,7 @@ function Home() {
                     </h5>
 
                     <p className="mb-3 font-normal text-dodger-700 dark:text-dodger-400">
-                      {aa._count.videos} Music Videos
+                      {`${aa._count.videos}${t("Music-Videos")}`}
                     </p>
                     <p className="mb-3 font-bold text-dodger-800 dark:text-dodger-300">
                       {aa.company}

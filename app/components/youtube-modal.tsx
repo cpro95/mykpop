@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
 import ReactPlayer from "react-player";
 import { useRecoilState } from "recoil";
 import { videoState, modalState } from "~/atoms/modalAtom";
@@ -7,6 +8,10 @@ import { videoState, modalState } from "~/atoms/modalAtom";
 function YoutubeModal() {
   const [video, setVideo] = useRecoilState(videoState);
   const [showModal, setShowModal] = useRecoilState(modalState);
+
+  const { i18n, t } = useTranslation();
+  let formatLocale = "";
+  i18n.language === "ko" ? (formatLocale = "ko-KR") : (formatLocale = "en-US");
 
   const handleClose = () => {
     setShowModal(false);
@@ -94,33 +99,33 @@ function YoutubeModal() {
                     </span>
                     <div className="mt-5 flex flex-col items-center justify-center gap-x-3 gap-y-3 text-sm md:flex-row">
                       <div className="rounded border border-white/40 py-1 px-1.5 text-xs font-bold text-dodger-200">
-                        YOUTUBE
+                        {t("YOUTUBE")}
                       </div>
                       <div className="font-light text-dodger-200">
                         {new Date(video.youtubePublishedAt).toLocaleDateString(
-                          "ko-KR"
+                          formatLocale
                         )}
                       </div>
                       <div className="font-semibold text-dodger-400">
-                        {new Intl.NumberFormat("ko-KR", {
+                        {new Intl.NumberFormat(formatLocale, {
                           notation: "compact",
                           maximumFractionDigits: 1,
                         }).format(Number(video.youtubeViewCount))}{" "}
-                        Views
+                        {t("Views")}
                       </div>
                       <div className="text-dodger-200">
-                        {new Intl.NumberFormat("ko-KR", {
+                        {new Intl.NumberFormat(formatLocale, {
                           notation: "compact",
                           maximumFractionDigits: 1,
                         }).format(Number(video.youtubeLikeCount))}{" "}
-                        Likes
+                        {t("Likes")}
                       </div>
                       <div className="text-dodger-300">
-                        {new Intl.NumberFormat("ko-KR", {
+                        {new Intl.NumberFormat(formatLocale, {
                           notation: "compact",
                           maximumFractionDigits: 1,
                         }).format(Number(video.youtubeCommentCount))}{" "}
-                        Comments
+                        {t("Comments")}
                       </div>
                     </div>{" "}
                   </Dialog.Title>

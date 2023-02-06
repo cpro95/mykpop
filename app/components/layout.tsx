@@ -10,7 +10,7 @@ export function Layout({
   email,
 }: {
   children: ReactNode;
-  title?: string;
+  title?: string | null;
   linkTo?: string;
   email?: string;
 }): JSX.Element {

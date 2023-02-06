@@ -6,37 +6,23 @@ import {
   Link,
   NavLink,
   useSearchParams,
-  useTransition,
-  Form,
 } from "@remix-run/react";
 
 import { notFound } from "~/utils/http.server";
 import { getAllNotes, getNoteCount } from "~/models/note.server";
 import { getUserId } from "~/utils/session.server";
-import { z } from "zod";
-import { useFormInputProps } from "remix-params-helper";
 import MyPagination from "~/components/my-pagination";
 import { Layout } from "~/components/layout";
 import { getMyParams } from "~/utils/utils";
 import { ITEMSPERPAGE } from "~/utils/consts";
+import { useTranslation } from "react-i18next";
+import SearchForm from "~/components/search-form";
 
 type MyLoaderData = {
   email?: string | undefined;
   notes?: Awaited<ReturnType<typeof getAllNotes>>;
   nbOfNotes?: number | undefined;
 };
-
-export const searchNotesSchema = z.object({
-  query: z.string().min(2, "Please provide search query!"),
-});
-
-export const notesSchema = z.object({
-  index: z.void().optional(),
-  query: z.string().optional(),
-  page: z.string().optional(),
-  itemsPerPage: z.string().optional(),
-  viewType: z.string().optional(),
-});
 
 export const meta: MetaFunction = (props) => {
   // console.log("Inside meta ===>", props);
@@ -48,7 +34,7 @@ export const meta: MetaFunction = (props) => {
 
   if (props.location.pathname === "/notes") {
     return {
-      title: "BBS!",
+      title: "Notes!",
     };
   }
 
@@ -58,8 +44,7 @@ export const meta: MetaFunction = (props) => {
     );
     if (returnedTitleObjWrappedWithArray.length !== 0)
       return {
-        title:
-          returnedTitleObjWrappedWithArray[0].title + " in MyMovies Remix App",
+        title: returnedTitleObjWrappedWithArray[0].title + " in myKpop",
         description:
           returnedTitleObjWrappedWithArray[0].title +
           " by " +
@@ -79,6 +64,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   // Parsing URL query
   const url = new URL(request.url);
+
   let q = url.searchParams.get("q") as string | null;
   let page = url.searchParams.get("page") as string | number | null;
   let itemsPerPage = url.searchParams.get("itemsPerPage") as
@@ -86,7 +72,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     | number
     | null;
   let sorting = url.searchParams.get("sorting") as string | null;
-
   if (q === null) q = "";
   if (page === null) page = 1;
   if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;
@@ -104,94 +89,44 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function NotesPage() {
   const data = useLoaderData() as MyLoaderData;
+  const { t, i18n } = useTranslation();
+  let formatLocale = "";
+  i18n.language === "ko" ? (formatLocale = "ko-KR") : (formatLocale = "en-US");
+
   // console.log("note data is ====> ", data);
 
   const [myParams] = useSearchParams();
-  const { q, page, itemsPerPage, sorting } = getMyParams(myParams);
-
-  const inputProps = useFormInputProps(searchNotesSchema);
-  const transition = useTransition();
-  let isSubmitting =
-    transition.state === "submitting" || transition.state === "loading";
+  const gotParams = getMyParams(myParams);
+  const { q, page, itemsPerPage, sorting } = gotParams;
 
   return (
-    <Layout title="notes" linkTo="/notes">
+    <Layout title={t("Notes")} linkTo="/notes">
       <div className="flex w-full flex-col items-center justify-center px-2 pb-2 lg:w-10/12">
         <div className="w-full py-4">
           <Link to="new" className="btn-primary mr-2">
-            New Note
+            {t("New Note")}
           </Link>
           <Link to="/notes" className="btn-primary mr-2">
-            List Notes
+            {t("List Notes")}
           </Link>
         </div>
 
         {/* Start Search Component */}
-        <Form replace className="flex-cols flex w-full pt-2">
-          <input type="hidden" name={q} value={q} />
-          <input type="hidden" name={String(page)} value={String(page)} />
-          <input
-            type="hidden"
-            name={String(itemsPerPage)}
-            value={String(itemsPerPage)}
+        <div className="w-full px-2 pb-4">
+          <SearchForm
+            method="get"
+            action=""
+            gotParams={gotParams}
+            showSorting={false}
           />
-          <input type="hidden" name={sorting} value={sorting} />
-
-          <label htmlFor="simple-search" className="sr-only">
-            Search
-          </label>
-          <div className="relative w-full">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <svg
-                className="h-5 w-5 text-gray-500 dark:text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </div>
-            <input
-              {...inputProps("query")}
-              className="search-label"
-              placeholder="Search"
-              type="text"
-              name="query"
-            />
-          </div>
-          <button
-            className="search-button ml-2"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </button>
-        </Form>
-        {/* End of Search Component */}
+        </div>
 
         <div className="w-full pt-4">
           <Outlet />
         </div>
 
         {data.notes?.length === 0 ? (
-          <p className="p-4">No notes yet</p>
+          <p className="p-4">{t("No-notes-yet")}</p>
         ) : (
           <div className="w-full py-4">
             <ul className="bg-white text-sm font-medium text-gray-900 dark:bg-gray-700 dark:text-gray-200">
@@ -215,7 +150,7 @@ export default function NotesPage() {
                       <div className="flex flex-row justify-between">
                         <div className="text-xs">
                           {new Date(note.createdAt).toLocaleDateString(
-                            "ko-KR"
+                            formatLocale
                           )}
                         </div>
                         <div className="ml-4 text-xs">{note.user.email}</div>

@@ -8,8 +8,11 @@ import {
   WrenchIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "@remix-run/react";
+import { useTranslation } from "react-i18next";
 
 export default function DropdownMenu({ email }: { email: string | undefined }) {
+  const { t } = useTranslation();
+
   return (
     <Menu as="div" className="relative z-50 inline-block text-left">
       <div>
@@ -48,7 +51,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                             className="mr-2 h-5 w-5"
                             aria-hidden="true"
                           />
-                          Log out
+                          {t("Log out")}
                         </button>
                       </form>
                     </div>
@@ -66,7 +69,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                           className="mr-2 h-5 w-5"
                           aria-hidden="true"
                         />
-                        Admin
+                        {t("Admin")}
                       </Link>
                     </div>
                   )}
@@ -78,14 +81,14 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                   <div
                     className={`${
                       active ? "bg-violet-500 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    } group flex w-24 items-center rounded-md px-2 py-2 text-sm`}
                   >
                     <Link to="/login" className="flex w-full">
                       <ArrowRightOnRectangleIcon
                         className="mr-2 h-5 w-5"
                         aria-hidden="true"
                       />
-                      Log In
+                      {t("Log in")}
                     </Link>
                   </div>
                 )}
@@ -100,7 +103,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                 >
                   <Link to="/users" className="flex w-full">
                     <CogIcon className="mr-2 h-5 w-5" aria-hidden="true" />
-                    Settings
+                    {t("Settings")}
                   </Link>
                 </div>
               )}

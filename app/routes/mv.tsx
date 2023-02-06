@@ -1,13 +1,10 @@
-import {
-  NavLink,
-  Outlet,
-  useLoaderData,
-} from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import type { LoaderArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Layout } from "~/components/layout";
 import { getAllArtist } from "~/models/artist.server";
 import type { Artist } from "@prisma/client";
+import { useTranslation } from "react-i18next";
 
 export async function loader({ request }: LoaderArgs) {
   const allArtist = await getAllArtist("", 1, 1000);
@@ -17,9 +14,10 @@ export async function loader({ request }: LoaderArgs) {
 
 function Mv() {
   const allArtist = useLoaderData<Array<Artist>>();
+  const { t } = useTranslation();
 
   return (
-    <Layout title="MV" linkTo="/mv">
+    <Layout title={t("MV")!} linkTo="/mv">
       <div className="w-full dark:text-white sm:overflow-hidden lg:w-10/12">
         <div className="flex flex-col md:grid md:grid-cols-12">
           <div className="md:col-span-3">

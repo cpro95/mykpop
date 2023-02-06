@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import type {
   LoaderFunction,
   ActionFunction,
@@ -15,12 +14,12 @@ import { requireUserId } from "~/utils/session.server";
 
 import { deleteVideo } from "~/models/video.server";
 import { getVideo } from "~/models/video.server";
-import type { YoutubeApiInfo } from "~/utils/youtubeApi.server";
+import type { YoutubeApiInfo } from "~/utils/youtube-api.server";
 import {
   getYoutubeInfoByVideoId,
   updateYoutubeInfo,
-} from "~/models/youtubeInfo.server";
-import { DialogModal } from "~/components/dialogmodal";
+} from "~/models/youtube-info.server";
+import { DialogModal } from "~/components/dialog-modal";
 
 type MyLoaderData = {
   video: Video;

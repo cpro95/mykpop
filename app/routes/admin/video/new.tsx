@@ -19,7 +19,7 @@ import { getArtistsIdAndName } from "~/models/artist.server";
 import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { createYoutubeInfo } from "~/models/youtubeInfo.server";
+import { createYoutubeInfo } from "~/models/youtube-info.server";
 
 const NewVideoFormSchema = z.object({
   title: z.string().min(2, "require-name"),

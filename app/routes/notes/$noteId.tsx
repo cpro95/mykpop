@@ -16,8 +16,9 @@ import { getUserById } from "~/models/user.server";
 
 import { Editor } from "@tinymce/tinymce-react";
 import { useOptionalUser } from "~/utils/utils";
-import { DialogModal } from "~/components/dialogmodal";
+import { DialogModal } from "~/components/dialog-modal";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type MyLoaderData = {
   note: Note;
@@ -35,7 +36,7 @@ export const meta: MetaFunction = (props) => {
 
   // default return
   return {
-    title: "Free BBS in MyMoives!",
+    title: "Free BBS!",
   };
 };
 
@@ -74,10 +75,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function NoteDetailsPage() {
   let [isOpen, setIsOpen] = useState(false);
 
+  const { t, i18n } = useTranslation();
+  let formatLocale = "";
+  i18n.language === "ko" ? (formatLocale = "ko-KR") : (formatLocale = "en-US");
+
   const user = useOptionalUser();
   const data = useLoaderData<typeof loader>();
-  // console.log(data);
-  // console.log("user ===>", user);
 
   const userIsOwner: boolean = data.note.userId === user?.id;
   return (
@@ -103,15 +106,15 @@ export default function NoteDetailsPage() {
         <hr className="mt-1 pt-1" />
         <div className="flex flex-col justify-between">
           <span className="text-xs text-gray-400 dark:text-gray-500">
-            Posted on :
-            {new Date(data.note.createdAt).toLocaleString("ko-KR")}
+            {t("Posted-on")} :
+            {new Date(data.note.createdAt).toLocaleString(formatLocale)}
           </span>
           <span className="text-xs text-gray-400 dark:text-gray-500">
-            Updated on :
-            {new Date(data.note.updatedAt).toLocaleString("ko-KR")}
+            {t("Updated-on")} :
+            {new Date(data.note.updatedAt).toLocaleString(formatLocale)}
           </span>
           <span className="text-xs text-gray-400 dark:text-gray-500">
-            by {data.email}
+            {t("note-author")} {data.email}
           </span>
         </div>
 
@@ -124,12 +127,12 @@ export default function NoteDetailsPage() {
               onClick={() => setIsOpen(true)}
               className="btn-warning mr-2 mb-2"
             >
-              Delete
+              {t("Delete")}
             </button>
             <DialogModal
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              title="Are you sure for Delete?"
+              title={t("delete-title")}
               exitTitle=""
             >
               <Form
@@ -142,13 +145,13 @@ export default function NoteDetailsPage() {
                   value="delete-note"
                   className="btn-warning mr-2 mb-2"
                 >
-                  Delete
+                  {t("Delete")}
                 </button>
                 <div
                   onClick={() => setIsOpen(false)}
                   className="btn-primary mr-2 mb-2"
                 >
-                  Close
+                  {t("Close")}
                 </div>
               </Form>
             </DialogModal>
@@ -159,7 +162,7 @@ export default function NoteDetailsPage() {
                 value="update-note"
                 className="btn-primary mr-2 mb-2"
               >
-                Modify
+                {t("Modify")}
               </button>
             </Form>
           </div>
