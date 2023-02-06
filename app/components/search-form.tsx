@@ -12,10 +12,12 @@ export default function SearchForm({
   method,
   action,
   gotParams,
+  showSorting = true,
 }: {
   method?: FormMethod;
   action?: string;
   gotParams: gotParamsType;
+  showSorting: boolean;
 }) {
   const inputProps = useFormInputProps(searchMovieSchema);
   const transition = useTransition();
@@ -32,24 +34,13 @@ export default function SearchForm({
       sorting: gotParams.sorting,
     };
     x.sorting = e.target.value;
-    console.log("inside search-form x is ========>",x);
+    console.log("inside search-form x is ========>", x);
     submit(x, { replace: true });
   }
 
   return (
     <Form method={method} action={action} replace className="pt-8">
       <div className="flex-cols mx-auto flex w-full">
-        <div className="mx-auto flex items-center justify-center pr-2">          
-          <select
-            name="sorting"
-            onChange={handleChange}
-            className="bg-transparent font-medium text-gray-700 focus:outline-none dark:text-gray-300"
-          >
-            <option value="date">Date</option>
-            <option value="views">Views</option>
-          </select>
-        </div>
-
         <div className="relative w-full">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <svg
@@ -93,6 +84,18 @@ export default function SearchForm({
             ></path>
           </svg>
         </button>
+        {showSorting && (
+          <div className="ml-6 flex items-center justify-center pr-2">
+            <select
+              name="sorting"
+              onChange={handleChange}
+              className="bg-transparent font-medium text-gray-700 focus:outline-none dark:text-gray-300"
+            >
+              <option value="date">Date</option>
+              <option value="views">Views</option>
+            </select>
+          </div>
+        )}
       </div>
     </Form>
   );

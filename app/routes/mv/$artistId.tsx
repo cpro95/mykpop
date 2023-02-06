@@ -16,7 +16,6 @@ import { ITEMSPERPAGE } from "~/utils/consts";
 import type { gotParamsType } from "~/utils/types";
 import { getMyParams } from "~/utils/utils";
 
-
 // export function headers() {
 //   return {
 //     "Cache-Control":
@@ -72,7 +71,12 @@ export default function MVArtistDetailsPage() {
   return (
     <div className="flex flex-col items-center">
       <div className="w-full px-2 pb-4">
-        <SearchForm method="get" action="" gotParams={gotParams} />
+        <SearchForm
+          method="get"
+          action=""
+          gotParams={gotParams}
+          showSorting={true}
+        />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {youtubeInfos.length === 0 && (

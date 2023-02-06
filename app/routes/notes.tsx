@@ -18,7 +18,7 @@ import { useFormInputProps } from "remix-params-helper";
 import MyPagination from "~/components/my-pagination";
 import { Layout } from "~/components/layout";
 import { getMyParams } from "~/utils/utils";
-import { DEFAULT_LANGUAGE, ITEMSPERPAGE } from "~/utils/consts";
+import { ITEMSPERPAGE } from "~/utils/consts";
 
 type MyLoaderData = {
   email?: string | undefined;
@@ -215,7 +215,7 @@ export default function NotesPage() {
                       <div className="flex flex-row justify-between">
                         <div className="text-xs">
                           {new Date(note.createdAt).toLocaleDateString(
-                            DEFAULT_LANGUAGE
+                            "ko-KR"
                           )}
                         </div>
                         <div className="ml-4 text-xs">{note.user.email}</div>

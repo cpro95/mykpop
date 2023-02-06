@@ -1,28 +1,3 @@
-# myKPop
-
-BLACKPINK / https://logos-world.net/wp-content/uploads/2020/12/Blackpink-Logo.png / https://upload.wikimedia.org/wikipedia/commons/0/00/%EB%B8%94%EB%9E%99%ED%95%91%ED%81%AC%28BlackPink%29_-_%EB%A7%88%EC%A7%80%EB%A7%89%EC%B2%98%EB%9F%BC_171001_%EC%BD%94%EB%A6%AC%EC%95%84%EB%AE%A4%EC%A7%81%ED%8E%98%EC%8A%A4%ED%8B%B0%EB%B2%8C.jpg / YG Entertainment
-
-IVE / https://raw.githubusercontent.com/cpro95/cdn/main/images/ive_logo.jpg / https://raw.githubusercontent.com/cpro95/cdn/main/images/ive_poster.jpeg / STARSHIP ENTERTAINMENT
-
-(G)I-DLE / https://raw.githubusercontent.com/cpro95/cdn/main/images/g-i-dle_logo.png / https://raw.githubusercontent.com/cpro95/cdn/main/images/g-i-dle_poster.jpeg / CUBE ENTERTAINMENT
-
-Title / YoutubeID
-TOMBOY / Jh4QFaPmdss
-After LIKE / F0B7HDiY-10
-LOVE DIVE / Y8JFxS1HlDo
-Nxde / fCO7f0SmrDc
-ELEVEN / --FmExEAsM8
-Pink Venom / gQlMMD8auMs
-Shut Down / POe9SOEKotk
-뚜두뚜두 (DDU-DU DDU-DU) / IHNzOHi8sJs
-How You Like That / ioNng23DkIM
-붐바야 (BOOMBAYAH) / bwmSjveL3Lc
-마지막처럼 (AS IF IT'S YOUR LAST) / Amq-qlqbjYA
-Kill This Love / 2S24-y0Ij3Y
-Lovesick Girls / dyRsYk0LyA8
-불장난 (PLAYING WITH FIRE) / 9pdj4iJD08s
-휘파람 (WHISTLE) / dISNgvVpWlo
-
 # Remix Indie Stack
 
 ![The Remix Indie Stack](https://repository-images.githubusercontent.com/465928257/a241fa49-bd4d-485a-a2a5-5cb8e4ee0abf)

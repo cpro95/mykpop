@@ -1,5 +1,4 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 import type {
   LoaderFunction,
@@ -187,12 +186,20 @@ export default function VideoDetailPage() {
             alt={youtubeInfo.youtubeTitle}
           />
           <div>
-            View: {Number(youtubeInfo.youtubeViewCount).toLocaleString("ko-KR")}
+            View:{" "}
+            {Number(youtubeInfo.youtubeViewCount).toLocaleString(
+              "ko-KR"
+            )}
             {" / "}
-            Like: {Number(youtubeInfo.youtubeLikeCount).toLocaleString("ko-KR")}
+            Like:{" "}
+            {Number(youtubeInfo.youtubeLikeCount).toLocaleString(
+              "ko-KR"
+            )}
             {" / "}
             Comment:{" "}
-            {Number(youtubeInfo.youtubeCommentCount).toLocaleString("ko-KR")}
+            {Number(youtubeInfo.youtubeCommentCount).toLocaleString(
+              "ko-KR"
+            )}
           </div>
         </div>
       )}

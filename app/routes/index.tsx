@@ -1,8 +1,13 @@
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { Layout } from "~/components/layout";
-import { getAllArtist } from "~/models/artist.server";
+import MyPagination from "~/components/my-pagination";
+import SearchForm from "~/components/search-form";
+import { getAllArtist, getAllArtistCount } from "~/models/artist.server";
+import { ITEMSPERPAGE } from "~/utils/consts";
+import type { gotParamsType } from "~/utils/types";
+import { getMyParams } from "~/utils/utils";
 
 export function headers() {
   return {
@@ -19,22 +24,36 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderArgs) {
-  const allArtist = await getAllArtist("", 1, 10000);
+  // Parsing URL query
+  const url = new URL(request.url);
 
-  if (!allArtist) {
-    return json({});
-  }
+  let q = url.searchParams.get("q") as string | null;
+  let page = url.searchParams.get("page") as string | number | null;
+  let itemsPerPage = url.searchParams.get("itemsPerPage") as
+    | string
+    | number
+    | null;
+  if (q === null) q = "";
+  if (page === null) page = 1;
+  if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;
 
-  return json(allArtist);
+  const allArtist = await getAllArtist(q, Number(page), Number(itemsPerPage));
+  const totalArtists = await getAllArtistCount(q);
+  // console.log(allArtist, totalArtists);
+
+  return json({ allArtist, totalArtists });
 }
 
 function Home() {
-  const allArtist = useLoaderData<typeof loader>();
+  const { allArtist, totalArtists } = useLoaderData<typeof loader>();
+  const [myParams] = useSearchParams();
+  const { q, page, itemsPerPage, sorting } = getMyParams(myParams);
+  const gotParams: gotParamsType = { q, page, itemsPerPage, sorting };
 
   return (
     <Layout title="Home" linkTo="/">
-      <div className="w-full space-y-8 dark:text-white sm:overflow-hidden lg:w-10/12">
-        <section className="">
+      <div className="flex w-full flex-col items-center dark:text-white sm:overflow-hidden lg:w-10/12">
+        <section>
           <div className="w-full rounded-lg border border-dodger-200 bg-white p-4 text-center shadow dark:border-dodger-700 dark:bg-dodger-800 sm:p-8">
             <h5 className="mb-2 text-3xl font-bold text-dodger-900 dark:text-white">
               K-Pop is Everywhere!
@@ -45,7 +64,15 @@ function Home() {
             </p>
           </div>
         </section>
-        <div className="flex items-center justify-center">
+        <div className="w-full">
+          <SearchForm
+            method="get"
+            action=""
+            gotParams={gotParams}
+            showSorting={false}
+          />
+        </div>
+        <div className="flex w-full items-center justify-center">
           <section className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {allArtist &&
               Array.isArray(allArtist) &&
@@ -53,17 +80,21 @@ function Home() {
                 <Link
                   key={aa.id}
                   to={`mv/${aa.id}`}
-                  className="max-w-sm rounded-lg border border-dodger-200 bg-white shadow dark:border-dodger-700 dark:bg-dodger-800"
+                  className="max-w-sm cursor-pointer rounded-lg border border-dodger-200 bg-white shadow hover:scale-105
+                  hover:shadow-2xl dark:border-dodger-700 dark:bg-dodger-800
+                  "
                 >
                   <img
-                    className="h-48 w-full object-cover"
+                    className="h-44 w-full object-cover"
                     src={aa.artistPoster}
                     alt={aa.nameKor}
                   />
+
                   <div className="p-5">
                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-dodger-900 dark:text-white">
                       {aa.name} / {aa.nameKor}
                     </h5>
+
                     <p className="mb-3 font-normal text-dodger-700 dark:text-dodger-400">
                       {aa._count.videos} Music Videos
                     </p>
@@ -75,6 +106,13 @@ function Home() {
               ))}
           </section>
         </div>
+        <MyPagination
+          q={q}
+          page={page}
+          itemsPerPage={itemsPerPage}
+          total_pages={Math.ceil(Number(totalArtists) / itemsPerPage)}
+          sorting={sorting}
+        />
       </div>
     </Layout>
   );

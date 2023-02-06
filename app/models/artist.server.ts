@@ -1,3 +1,4 @@
+import { QrCodeIcon } from "@heroicons/react/20/solid";
 import type { Artist } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 export type { Artist, Note } from "@prisma/client";
@@ -137,8 +138,26 @@ export async function getAllArtist(
   return prisma.artist.findMany(x);
 }
 
-export async function getArtistCount() {
-  return prisma.artist.count();
+export async function getAllArtistCount(q: string) {
+  if (q === undefined || q === "")
+    return prisma.artist.count()
+  else if (q !== undefined && q !== "")
+    return prisma.artist.count({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: q,
+            },
+          },
+          {
+            nameKor: {
+              contains: q,
+            },
+          },
+        ],
+      },
+    })
 }
 
 // export async function getNoteCountById(id: string) {

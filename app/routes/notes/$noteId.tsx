@@ -18,7 +18,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useOptionalUser } from "~/utils/utils";
 import { DialogModal } from "~/components/dialogmodal";
 import { useState } from "react";
-import { DEFAULT_LANGUAGE } from "~/utils/consts";
 
 type MyLoaderData = {
   note: Note;
@@ -105,11 +104,11 @@ export default function NoteDetailsPage() {
         <div className="flex flex-col justify-between">
           <span className="text-xs text-gray-400 dark:text-gray-500">
             Posted on :
-            {new Date(data.note.createdAt).toLocaleString(DEFAULT_LANGUAGE)}
+            {new Date(data.note.createdAt).toLocaleString("ko-KR")}
           </span>
           <span className="text-xs text-gray-400 dark:text-gray-500">
             Updated on :
-            {new Date(data.note.updatedAt).toLocaleString(DEFAULT_LANGUAGE)}
+            {new Date(data.note.updatedAt).toLocaleString("ko-KR")}
           </span>
           <span className="text-xs text-gray-400 dark:text-gray-500">
             by {data.email}

@@ -21,7 +21,9 @@ function VideoCard({ mv }: { mv: YoutubeInfo }) {
         </div>
         <div className="mx-14 flex items-center justify-between">
           <h6 className="text-sm text-dodger-700 dark:text-dodger-400">
-            {new Date(mv.youtubePublishedAt).toLocaleDateString("ko-Kr")}
+            {new Date(mv.youtubePublishedAt).toLocaleDateString(
+              "ko-KR"
+            )}
           </h6>
 
           <h6 className="text-sm font-bold text-dodger-900 dark:text-dodger-300">
