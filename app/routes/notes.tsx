@@ -126,20 +126,20 @@ export default function NotesPage() {
         </div>
 
         {data.notes?.length === 0 ? (
-          <p className="p-4">{t("No-notes-yet")}</p>
+          <p className="p-4 dark:text-dodger-300">{t("No-notes-yet")}</p>
         ) : (
           <div className="w-full py-4">
-            <ul className="bg-white text-sm font-medium text-gray-900 dark:bg-gray-700 dark:text-gray-200">
+            <ul className="bg-white text-sm font-medium text-dodger-900 dark:bg-dodger-700 dark:text-dodger-200">
               {data.notes?.map((note: any) => (
                 <li
                   key={note.id}
-                  className="flex cursor-pointer flex-row items-center justify-between border-t bg-dodger-50 py-2 text-gray-900 hover:bg-dodger-500 hover:text-gray-900 dark:border-dodger-600 dark:bg-dodger-900 dark:text-gray-300 dark:hover:bg-dodger-600 dark:hover:text-gray-900"
+                  className="flex cursor-pointer flex-row items-center justify-between border-t bg-dodger-50 py-2 text-dodger-900 hover:bg-dodger-500 hover:text-dodger-300 dark:border-dodger-600 dark:bg-dodger-900 dark:text-dodger-300 dark:hover:bg-dodger-600 dark:hover:text-dodger-300"
                 >
                   <NavLink
                     className={({ isActive }) =>
                       `w-full ${
                         isActive
-                          ? "bg-gray-200 px-4 py-2 font-bold underline dark:bg-gray-100 dark:text-gray-700"
+                          ? "bg-dodger-200 px-4 py-2 font-bold underline dark:bg-dodger-600 dark:text-dodger-300"
                           : ""
                       }`
                     }

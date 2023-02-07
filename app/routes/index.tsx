@@ -12,8 +12,8 @@ import { useTranslation } from "react-i18next";
 
 export const meta: MetaFunction = () => {
   return {
-    title: "All About KPop",
-    description: "KPop의 모든 것, All About KPop",
+    title: "All About K-Pop",
+    description: "K-Pop의 모든 것, All About K-Pop",
   };
 };
 

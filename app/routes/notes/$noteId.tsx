@@ -106,11 +106,11 @@ export default function NoteDetailsPage() {
         <hr className="mt-1 pt-1" />
         <div className="flex flex-col justify-between">
           <span className="text-xs text-gray-400 dark:text-gray-500">
-            {t("Posted-on")} :
+            {t("Posted on")} :
             {new Date(data.note.createdAt).toLocaleString(formatLocale)}
           </span>
           <span className="text-xs text-gray-400 dark:text-gray-500">
-            {t("Updated-on")} :
+            {t("Updated on")} :
             {new Date(data.note.updatedAt).toLocaleString(formatLocale)}
           </span>
           <span className="text-xs text-gray-400 dark:text-gray-500">

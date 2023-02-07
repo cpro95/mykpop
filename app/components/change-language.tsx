@@ -1,6 +1,10 @@
+import { useState, Fragment } from "react";
+import { Switch } from "@headlessui/react";
+
 import { useTranslation } from "react-i18next";
 
 export function ChangeLanguage() {
+  const [enabled, setEnabled] = useState(false);
   let { i18n } = useTranslation();
 
   const changeLanguage = (lng: string) => {
@@ -8,12 +12,30 @@ export function ChangeLanguage() {
   };
 
   return (
-    <div className="rounded-lg p-2.5 text-base font-bold text-gray-500 hover:bg-dodger-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-dodger-700 dark:focus:ring-gray-700">
-      {i18n.language === "ko" ? (
-        <button onClick={() => changeLanguage("en")}>EN</button>
-      ) : (
-        <button onClick={() => changeLanguage("ko")}>KO</button>
-      )}
-    </div>
+    <Switch.Group>
+      <div className="flex items-center">
+        <Switch.Label className="mx-1 py-2.5 font-bold">KO</Switch.Label>
+        <Switch checked={enabled} onChange={setEnabled} as={Fragment}>
+          {({ checked }) => (
+            /* Use the `checked` state to conditionally style the button. */
+            <button
+              onClick={() =>
+                checked ? changeLanguage("ko") : changeLanguage("en")
+              }
+              className={`${
+                checked ? "bg-dodger-300" : "bg-dodger-600"
+              } relative inline-flex h-6 w-11 items-center rounded-full`}
+            >
+              <span
+                className={`${
+                  checked ? "translate-x-6" : "translate-x-1"
+                } inline-block h-4 w-4 transform rounded-full bg-white transition`}
+              />
+            </button>
+          )}
+        </Switch>
+        <Switch.Label className="mx-1 py-2.5 font-bold">EN</Switch.Label>
+      </div>
+    </Switch.Group>
   );
 }

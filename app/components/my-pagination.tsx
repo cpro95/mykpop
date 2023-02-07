@@ -76,10 +76,10 @@ export default function MyPagination({
   // )
 
   const linkStyle =
-    "px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-gray-700 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-gray-900 dark:text-gray-200 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white dark:hover:text-gray-200";
+    "px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-dodger-800 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-dodger-900 dark:text-dodger-200 hover:bg-dodger-500 dark:hover:bg-dodger-500 hover:text-white dark:hover:text-dodger-200";
 
   const currentLinkStyle =
-    "px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-gray-700 rounded-md sm:inline bg-blue-500 text-white dark:bg-blue-500 dark:text-gray-200";
+    "px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-dodger-100 rounded-md sm:inline bg-dodger-500 text-white dark:bg-dodger-500 dark:text-dodger-200";
 
   // 섹션에 아무것도 없을 때 에러 처리
   if (total_pages === 0) total_pages = 1;
