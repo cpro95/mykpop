@@ -1,11 +1,12 @@
 import { Link } from "@remix-run/react";
 
 type PaginationType = {
-  q: string;
+  q?: string | undefined | null;
   page: number;
   itemsPerPage: number;
   total_pages: number;
-  sorting: string;
+  sorting?: string | undefined | null;
+  id?: string | undefined | null;
 };
 
 export default function MyPagination({
@@ -14,6 +15,7 @@ export default function MyPagination({
   itemsPerPage,
   total_pages,
   sorting,
+  id,
 }: PaginationType) {
   // const leftDoubleArrow = (
   //   <svg
@@ -90,7 +92,9 @@ export default function MyPagination({
       className="mt-4 mb-8 -ml-4 flex justify-evenly py-4 sm:justify-start"
     >
       {/* <Link
-        to={`?q=${q}&page=${1}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+        to={`?${q ? "q=" + q : ""}&page=${1}&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
+          id ? "&id=" + id : ""
+        }`}
         className={linkStyle}
       >
         <span className='sr-only'>First</span>
@@ -98,9 +102,11 @@ export default function MyPagination({
       </Link> */}
 
       <Link
-        to={`?q=${q}&page=${
+        to={`?${q ? "q=" + q : ""}&page=${
           page === 1 ? 1 : page - 1
-        }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+        }&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
+          id ? "&id=" + id : ""
+        }`}
         className={linkStyle}
       >
         <span className="sr-only">Previous</span>
@@ -109,7 +115,9 @@ export default function MyPagination({
 
       {page === 3 ? (
         <Link
-          to={`?q=${q}&page=1&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+          to={`?${q ? "q=" + q : ""}&page=1&itemsPerPage=${itemsPerPage}${
+            sorting ? "&sorting=" + sorting : ""
+          }${id ? "&id=" + id : ""}`}
           className={linkStyle}
         >
           1
@@ -122,7 +130,9 @@ export default function MyPagination({
       {page > 3 ? (
         <>
           <Link
-            to={`?q=${q}&page=1&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+            to={`?${q ? "q=" + q : ""}&page=1&itemsPerPage=${itemsPerPage}${
+              sorting ? "&sorting=" + sorting : ""
+            }${id ? "&id=" + id : ""}`}
             className={linkStyle}
           >
             1
@@ -138,9 +148,11 @@ export default function MyPagination({
       {/* 이전 페이지인데 1페이지만 스킵 */}
       {page !== 1 ? (
         <Link
-          to={`?q=${q}&page=${
+          to={`?${q ? "q=" + q : ""}&page=${
             page - 1
-          }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+          }&itemsPerPage=${itemsPerPage}${
+            sorting ? "&sorting=" + sorting : ""
+          }${id ? "&id=" + id : ""}`}
           className={linkStyle}
         >
           {page - 1}
@@ -151,7 +163,9 @@ export default function MyPagination({
 
       {/* 현재 페이지 */}
       <Link
-        to={`?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+        to={`?${q ? "q=" + q : ""}&page=${page}&itemsPerPage=${itemsPerPage}${
+          sorting ? "&sorting=" + sorting : ""
+        }${id ? "&id=" + id : ""}`}
         className={currentLinkStyle}
       >
         {page}
@@ -160,9 +174,11 @@ export default function MyPagination({
       {/* 다음 페이지인데 끝에서 두번째만 아니면 보여준다. */}
       {page < total_pages - 1 ? (
         <Link
-          to={`?q=${q}&page=${
+          to={`?${q ? "q=" + q : ""}&page=${
             page + 1
-          }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+          }&itemsPerPage=${itemsPerPage}${
+            sorting ? "&sorting=" + sorting : ""
+          }${id ? "&id=" + id : ""}`}
           className={linkStyle}
         >
           {page + 1}
@@ -183,7 +199,11 @@ export default function MyPagination({
       {/* 마지막 페이지 보여주기 */}
       {page !== total_pages ? (
         <Link
-          to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+          to={`?${
+            q ? "q=" + q : ""
+          }&page=${total_pages}&itemsPerPage=${itemsPerPage}${
+            sorting ? "&sorting=" + sorting : ""
+          }${id ? "&id=" + id : ""}`}
           className={linkStyle}
         >
           {total_pages}
@@ -193,9 +213,11 @@ export default function MyPagination({
       )}
 
       <Link
-        to={`?q=${q}&page=${
+        to={`?${q ? "q=" + q : ""}&page=${
           page === total_pages ? total_pages : page + 1
-        }&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+        }&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
+          id ? "&id=" + id : ""
+        }`}
         className={linkStyle}
       >
         <span className="sr-only">Next</span>
@@ -203,7 +225,9 @@ export default function MyPagination({
       </Link>
 
       {/* <Link
-        to={`?q=${q}&page=${total_pages}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+        to={`?${q ? "q=" + q : ""}&page=${total_pages}&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
+          id ? "&id=" + id : ""
+        }`}
         className={linkStyle}
       >
         <span className='sr-only'>Last</span>

@@ -3,14 +3,6 @@ import type { Artist } from "@prisma/client";
 import { prisma } from "~/utils/db.server";
 export type { Artist, Note } from "@prisma/client";
 
-// export function getNoteListItems({ userId }: { userId: User["id"] }) {
-//     return prisma.note.findMany({
-//         where: { userId },
-//         select: { id: true, title: true },
-//         orderBy: { updatedAt: "desc" },
-//     });
-// }
-
 export function createArtist(
   name: string,
   nameKor: string,
@@ -60,14 +52,6 @@ export function getArtist(id: string) {
     where: { id },
   });
 }
-
-// export async function getNotes({ userId }: { userId: User["id"] }) {
-//     return prisma.note.findMany({
-//         where: { userId },
-//         select: { id: true, title: true, updatedAt: true, userId: true },
-//         orderBy: { updatedAt: "desc" },
-//     });
-// }
 
 export async function getArtistWithUserId(id: string) {
   return prisma.artist.findFirst({
@@ -159,7 +143,3 @@ export async function getAllArtistCount(q: string) {
       },
     })
 }
-
-// export async function getNoteCountById(id: string) {
-//     return prisma.note.count({ where: { userId: id } })
-// }

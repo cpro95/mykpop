@@ -1,13 +1,7 @@
 import { Form, useSubmit, useTransition } from "@remix-run/react";
 import type { FormMethod } from "@remix-run/react";
-import { z } from "zod";
-import { useFormInputProps } from "remix-params-helper";
 import type { gotParamsType } from "~/utils/types";
 import { useTranslation } from "react-i18next";
-
-export const searchMovieSchema = z.object({
-  q: z.string().min(2, "Minimum length is 2"),
-});
 
 export default function SearchForm({
   method,
@@ -20,7 +14,6 @@ export default function SearchForm({
   gotParams: gotParamsType;
   showSorting: boolean;
 }) {
-  const inputProps = useFormInputProps(searchMovieSchema);
   const transition = useTransition();
   const { t } = useTranslation();
 
@@ -30,10 +23,10 @@ export default function SearchForm({
   const submit = useSubmit();
   function handleChange(e: any) {
     let x = {
-      q: gotParams.q,
+      q: gotParams.q || "",
       page: String(gotParams.page),
       itemsPerPage: String(gotParams.itemsPerPage),
-      sorting: gotParams.sorting,
+      sorting: gotParams.sorting || "",
     };
     x.sorting = e.target.value;
     // console.log("inside search-form x is ========>", x);
@@ -41,7 +34,13 @@ export default function SearchForm({
   }
 
   return (
-    <Form method={method} action={action} replace className="pt-8">
+    <Form
+      method={method}
+      action={action}
+      replace
+      reloadDocument
+      className="pt-8"
+    >
       <div className="flex-cols mx-auto flex w-full">
         <div className="relative w-full">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -59,7 +58,6 @@ export default function SearchForm({
             </svg>
           </div>
           <input
-            {...inputProps("q")}
             className="search-label"
             placeholder={t("Search")!}
             type="text"
@@ -87,14 +85,19 @@ export default function SearchForm({
           </svg>
         </button>
         {showSorting && (
-          <div className="ml-6 flex items-center justify-center pr-2">
+          <div className="ml-2 sm:ml-4 md:ml-6 flex items-center justify-center mr-2">
             <select
               name="sorting"
               onChange={handleChange}
               className="bg-transparent font-medium text-gray-700 focus:outline-none dark:text-gray-300"
             >
-              <option value="date">{t("Date")}</option>
-              <option value="views">{t("Views")}</option>
+              <option value="date" selected={gotParams.sorting === "date"}>
+                {t("Date")}
+              </option>
+
+              <option value="views" selected={gotParams.sorting === "views"}>
+                {t("Views")}
+              </option>
             </select>
           </div>
         )}

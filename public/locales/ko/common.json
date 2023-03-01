@@ -34,5 +34,10 @@
   "Remember me": "기억하기",
   "no-account": "계정이 없으신가요?",
   "have-account": "계정이 있으신가요?",
-  "Create Account": "계정 만들기"
+  "Create Account": "계정 만들기",
+  "Stats": "통계",
+  "Artist": "아티스트",
+  "Release Date": "출시일",
+  "Select":"선택",
+  "Submit":"제출"
 }

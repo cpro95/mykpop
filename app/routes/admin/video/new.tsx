@@ -53,31 +53,13 @@ export const action: ActionFunction = async ({ request }) => {
 
   const formData = request.formData();
   const artistId = (await formData).get("artist[id]") as string;
-  // const artistName = (await formData).get("artist[name]") as string;
   const title = (await formData).get("title") as string;
   const youtubeId = (await formData).get("youtubeId") as string;
-  // console.log(artistId, artistName, title, youtubeId);
-
-  // const formValidation = await getFormData(request, NewVideoFormSchema);
-
-  // if (!formValidation.success) {
-  //   return json<ActionData>(
-  //     {
-  //       errors: formValidation.errors,
-  //     },
-  //     {
-  //       status: 400,
-  //     }
-  //   );
-  // }
-
-  // const { artistId, title, youtubeId } = formValidation.data;
 
   const video = await createVideo(artistId, title, youtubeId);
   await createYoutubeInfo(artistId, video.id, youtubeId);
 
   return redirect(`/admin/video/${video.id}`);
-  // return json({});
 };
 
 export default function NewVideoPage() {
@@ -96,6 +78,8 @@ export default function NewVideoPage() {
   } else {
     matchedArtist = allArtist[0];
   }
+  const [selected, setSelected] = useState(matchedArtist);
+
 
   const actionData = useActionData() as ActionData;
   const inputProps = useFormInputProps(NewVideoFormSchema);
@@ -103,7 +87,7 @@ export default function NewVideoPage() {
   const disabled =
     transition.state === "submitting" || transition.state === "loading";
 
-  const [selected, setSelected] = useState(matchedArtist);
+  
 
   return (
     <Form method="post" className="p-2">

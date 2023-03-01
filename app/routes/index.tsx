@@ -41,8 +41,8 @@ export async function loader({ request }: LoaderArgs) {
 function Home() {
   const { allArtist, totalArtists } = useLoaderData<typeof loader>();
   const [myParams] = useSearchParams();
-  const { q, page, itemsPerPage, sorting } = getMyParams(myParams);
-  const gotParams: gotParamsType = { q, page, itemsPerPage, sorting };
+  const { q, page, itemsPerPage } = getMyParams(myParams);
+  const gotParams: gotParamsType = { q, page, itemsPerPage };
 
   let { t } = useTranslation();
 
@@ -69,7 +69,7 @@ function Home() {
           />
         </div>
         <div className="flex w-full items-center justify-center">
-          <section className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          <section className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
             {allArtist &&
               Array.isArray(allArtist) &&
               allArtist.map((aa: any) => (
@@ -107,7 +107,6 @@ function Home() {
           page={page}
           itemsPerPage={itemsPerPage}
           total_pages={Math.ceil(Number(totalArtists) / itemsPerPage)}
-          sorting={sorting}
         />
       </div>
     </Layout>

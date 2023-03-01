@@ -79,9 +79,10 @@ export default function VideoIndex() {
     {
       field: "youtubeViewCount",
       valueGetter: (params: any) => {
-        return Number(
-          params.data.youtubeInfo[0].youtubeViewCount
-        ).toLocaleString("ko-KR");
+        return new Intl.NumberFormat("ko-KR", {
+          notation: "standard",
+          maximumFractionDigits: 1,
+        }).format(params.data.youtubeInfo[0].youtubeViewCount);
       },
     },
   ]);

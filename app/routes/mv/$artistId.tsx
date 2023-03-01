@@ -16,13 +16,6 @@ import { ITEMSPERPAGE } from "~/utils/consts";
 import type { gotParamsType } from "~/utils/types";
 import { getMyParams } from "~/utils/utils";
 
-// export function headers() {
-//   return {
-//     "Cache-Control":
-//       "public, max-age=60, s-maxage=6000, stale-while-revalidate=600",
-//   };
-// }
-
 export async function loader({ request, params }: LoaderArgs) {
   invariant(params.artistId, "artistId not found");
 

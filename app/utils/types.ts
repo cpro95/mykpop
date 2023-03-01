@@ -1,6 +1,7 @@
 export type gotParamsType = {
-  q: string;
+  q?: string | undefined | null;
   page: number;
   itemsPerPage: number;
-  sorting: string;
+  sorting?: string | undefined | null;
+  id?: string | undefined | null;
 };

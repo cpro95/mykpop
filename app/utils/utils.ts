@@ -17,7 +17,8 @@ export function getMyParams(myParams: any) {
   let q: string = "";
   let page: number = 1;
   let itemsPerPage: number = ITEMSPERPAGE;
-  let sorting: string = "date";
+  let sorting = "date";
+  let id = null;
   paramsArray.map((p) =>
     p.hasOwnProperty("q") ? (q = p.q as string) : {}
   );
@@ -33,10 +34,14 @@ export function getMyParams(myParams: any) {
     p.hasOwnProperty("sorting") ? (sorting = p.sorting as string) : {}
   );
 
+  paramsArray.map((p) =>
+    p.hasOwnProperty("id") ? (id = p.id as string) : {}
+  );
+
   if (isNaN(page)) page = 1;
   if (isNaN(itemsPerPage)) itemsPerPage = ITEMSPERPAGE;
 
-  return { q, page, itemsPerPage, sorting }
+  return { q, page, itemsPerPage, sorting, id }
 }
 
 /**

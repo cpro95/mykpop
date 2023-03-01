@@ -1,3 +1,5 @@
+import { getRequiredServerEnvVar } from "./utils";
+
 export type YoutubeApiInfo = {
   youtubeId: string;
   youtubePublishedAt: Date;
@@ -9,7 +11,7 @@ export type YoutubeApiInfo = {
   youtubeCommentCount: number;
 };
 
-const BASE_URL = "https://www.googleapis.com/youtube/v3";
+const BASE_URL = getRequiredServerEnvVar("YOUTUBE_BASE_URL")
 
 export async function getYoutubeApiInfoById(youtubeId: string) {
   const result = await fetch(
@@ -41,9 +43,9 @@ export async function getYoutubeApiInfoById(youtubeId: string) {
       youtubeTitle: youtube.items[0].snippet.title,
       youtubeDescription: youtube.items[0].snippet.description,
       youtubeThumbnail: youtube.items[0].snippet.thumbnails.standard.url,
-      youtubeViewCount: youtube.items[0].statistics.viewCount,
-      youtubeLikeCount: youtube.items[0].statistics.likeCount,
-      youtubeCommentCount: youtube.items[0].statistics.commentCount,
+      youtubeViewCount: parseInt(youtube.items[0].statistics.viewCount),
+      youtubeLikeCount: parseInt(youtube.items[0].statistics.likeCount),
+      youtubeCommentCount: parseInt(youtube.items[0].statistics.commentCount),
     };
   }
 

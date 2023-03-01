@@ -50,10 +50,9 @@ export async function updateYoutubeInfo(
   return prisma.youtubeInfo.update({
     where: { id: youtubeInfoId },
     data: {
-      youtubeThumbnail: currentYoutubeInfo.youtubeThumbnail,
-      youtubeViewCount: currentYoutubeInfo.youtubeViewCount,
-      youtubeLikeCount: currentYoutubeInfo.youtubeLikeCount,
-      youtubeCommentCount: currentYoutubeInfo.youtubeCommentCount,
+      youtubeViewCount: Number(currentYoutubeInfo.youtubeViewCount),
+      youtubeLikeCount: Number(currentYoutubeInfo.youtubeLikeCount),
+      youtubeCommentCount: Number(currentYoutubeInfo.youtubeCommentCount),
     },
   });
 }
@@ -87,15 +86,6 @@ export async function updateYoutubeInfosAll() {
     )
   );
 }
-
-// export function deleteNote({
-//   id,
-//   userId,
-// }: Pick<Note, "id"> & { userId: User["id"] }) {
-//   return prisma.note.deleteMany({
-//     where: { id, userId },
-//   });
-// }
 
 export async function getAllYoutubeInfosByArtistId(artistId: string, q: string,
   page: number,
@@ -248,6 +238,47 @@ export async function getAllYoutubeInfosByNone(q: string,
   return prisma.youtubeInfo.findMany(x);
 }
 
+export async function getStatPageData(
+  page: number,
+  itemsPerPage: number, ids: string[]
+) {
+
+  let whereQuery = {};
+  if (ids.length === 0) {
+    whereQuery = {
+      where: {
+
+      },
+    };
+  } else {
+    whereQuery = {
+      where: {
+        OR: ids.map((id: any) => ({
+          artist: { id },
+        })),
+      },
+    };
+  }
+
+  let x = {};
+  let selectQuery = {
+    select: {
+      youtubeTitle: true,
+      youtubePublishedAt: true,
+      youtubeViewCount: true
+    },
+    orderBy: { youtubeViewCount: "desc" },
+    skip: page === 1 ? 0 : (page - 1) * itemsPerPage,
+    take: itemsPerPage,
+  }
+  Object.assign(x, selectQuery, whereQuery);
+  // console.log(x);
+  const data = await prisma.youtubeInfo.findMany(x);
+
+  // console.log(data);
+  return data;
+}
+
 export async function getYoutubeInfos(videoId: string) {
   const data = await prisma.youtubeInfo.findMany({
     where: { videoId },
@@ -284,6 +315,13 @@ export async function getYoutubeApiInfosByIdArray(
 
 export async function getYoutubeInfoCount() {
   return prisma.youtubeInfo.count();
+}
+
+export async function getTopViewCount() {
+  return prisma.youtubeInfo.findFirst({
+    select: { youtubeViewCount: true },
+    orderBy: { youtubeViewCount: 'desc' }
+  });
 }
 
 export async function getAllYoutubeInfosCountByArtistId(artistId: string, q?: string) {

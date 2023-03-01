@@ -71,11 +71,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     | string
     | number
     | null;
-  let sorting = url.searchParams.get("sorting") as string | null;
   if (q === null) q = "";
   if (page === null) page = 1;
   if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;
-  if (sorting === null) sorting = "date";
 
   const notes = await getAllNotes(q, Number(page), Number(itemsPerPage));
   const nbOfNotes = await getNoteCount();
@@ -97,12 +95,12 @@ export default function NotesPage() {
 
   const [myParams] = useSearchParams();
   const gotParams = getMyParams(myParams);
-  const { q, page, itemsPerPage, sorting } = gotParams;
+  const { q, page, itemsPerPage } = gotParams;
 
   return (
     <Layout title={t("Notes")} linkTo="/notes">
       <div className="flex w-full flex-col items-center justify-center px-2 pb-2 lg:w-10/12">
-        <div className="w-full py-4">
+        <div className="w-full pt-4">
           <Link to="new" className="btn-primary mr-2">
             {t("New Note")}
           </Link>
@@ -133,7 +131,7 @@ export default function NotesPage() {
               {data.notes?.map((note: any) => (
                 <li
                   key={note.id}
-                  className="flex cursor-pointer flex-row items-center justify-between border-t bg-dodger-50 py-2 text-dodger-900 hover:bg-dodger-500 hover:text-dodger-300 dark:border-dodger-600 dark:bg-dodger-900 dark:text-dodger-300 dark:hover:bg-dodger-600 dark:hover:text-dodger-300"
+                  className="flex cursor-pointer flex-row items-center justify-between border-t bg-dodger-50 py-2 text-dodger-900 hover:bg-dodger-300 hover:text-dodger-600 dark:border-dodger-600 dark:bg-dodger-900 dark:text-dodger-300 dark:hover:bg-dodger-600 dark:hover:text-dodger-300"
                 >
                   <NavLink
                     className={({ isActive }) =>
@@ -143,7 +141,7 @@ export default function NotesPage() {
                           : ""
                       }`
                     }
-                    to={`${note.id}?page=${page}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+                    to={`${note.id}?page=${page}&itemsPerPage=${itemsPerPage}`}
                   >
                     <div className="flex flex-col">
                       <div className="text-lg">{note.title}</div>
@@ -169,7 +167,6 @@ export default function NotesPage() {
           page={page}
           itemsPerPage={itemsPerPage}
           total_pages={Math.ceil(Number(data.nbOfNotes) / itemsPerPage)}
-          sorting={sorting}
         />
         {/* Pagination */}
       </div>
