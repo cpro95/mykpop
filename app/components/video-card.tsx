@@ -1,9 +1,8 @@
-import React from "react";
-import type { YoutubeInfo } from "@prisma/client";
 import { useTranslation } from "react-i18next";
+import { YoutubeInfo } from "~/utils/types";
 
 function VideoCard({ mv }: { mv: YoutubeInfo }) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   let formatLocale = "";
   i18n.language === "ko" ? (formatLocale = "ko-KR") : (formatLocale = "en-US");
 
@@ -32,6 +31,10 @@ function VideoCard({ mv }: { mv: YoutubeInfo }) {
               notation: "compact",
               maximumFractionDigits: 1,
             }).format(Number(mv.youtubeViewCount))}
+          </h6>
+
+          <h6 className="text-sm text-dodger-700 dark:text-dodger-400 rounded border border-dodger-500/40 px-2">
+            {mv.video.role === "mv" ? t("Music") : t("Performance")}
           </h6>
         </div>
       </div>

@@ -19,6 +19,7 @@ export function getMyParams(myParams: any) {
   let itemsPerPage: number = ITEMSPERPAGE;
   let sorting = "date";
   let id = null;
+  let role: string = "all";
   paramsArray.map((p) =>
     p.hasOwnProperty("q") ? (q = p.q as string) : {}
   );
@@ -37,11 +38,13 @@ export function getMyParams(myParams: any) {
   paramsArray.map((p) =>
     p.hasOwnProperty("id") ? (id = p.id as string) : {}
   );
-
+  paramsArray.map((p) =>
+    p.hasOwnProperty("role") ? (role = p.role as string) : {}
+  );
   if (isNaN(page)) page = 1;
   if (isNaN(itemsPerPage)) itemsPerPage = ITEMSPERPAGE;
 
-  return { q, page, itemsPerPage, sorting, id }
+  return { q, page, itemsPerPage, sorting, id, role }
 }
 
 /**

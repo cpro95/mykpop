@@ -38,6 +38,10 @@
   "Stats": "통계",
   "Artist": "아티스트",
   "Release Date": "출시일",
-  "Select":"선택",
-  "Submit":"제출"
+  "Select": "선택",
+  "Selected": "선택됨",
+  "All": "모든 타입",
+  "Music": "뮤직",
+  "Performance": "퍼포먼스",
+  "No Results":"검색 결과가 없습니다."
 }

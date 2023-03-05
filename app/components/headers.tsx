@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link } from "@remix-run/react";
 import { DarkMode } from "./dark-mode";
 import DropdownMenu from "./dropdown-menu";
-import { ChangeLanguage } from "./change-language";
 import { useTranslation } from "react-i18next";
+// import { ChangeLanguage } from "./change-language";
 
 export function Headers({
   title,
@@ -67,7 +67,7 @@ export function Headers({
 
             {/* <!-- Mobile menu button --> */}
             <div className="flex items-center justify-evenly md:hidden">
-              <ChangeLanguage />
+              {/* <ChangeLanguage /> */}
               <DarkMode />
               <DropdownMenu email={email} />
               <button
@@ -123,7 +123,7 @@ export function Headers({
               ))}
             </ul>
             <div className="mt-4 -mx-4 hidden items-center text-gray-700 dark:text-gray-300 md:mt-0 md:flex">
-              <ChangeLanguage />
+              {/* <ChangeLanguage /> */}
               <DarkMode />
               {/* <ReachMenu email={email} /> */}
               <DropdownMenu email={email} />

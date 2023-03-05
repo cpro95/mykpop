@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { Link } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
+import { ChangeLanguage } from "./change-language";
 
 export default function DropdownMenu({ email }: { email: string | undefined }) {
   const { t } = useTranslation();
@@ -16,7 +17,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
   return (
     <Menu as="div" className="relative z-50 inline-block text-left">
       <div>
-        <Menu.Button className="mx-1 rounded-lg p-1 sm:p-2.5 text-xs text-gray-500 hover:bg-dodger-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-dodger-700 dark:focus:ring-gray-700">
+        <Menu.Button className="mx-1 rounded-lg p-1 sm:p-2.5 text-xs text-dodger-500 hover:bg-dodger-100 focus:outline-none focus:ring-4 focus:ring-dodger-200 dark:text-dodger-400 dark:hover:bg-dodger-700 dark:focus:ring-dodger-700">
           <Cog6ToothIcon className="h-5 w-5" aria-hidden="true" />
         </Menu.Button>
       </div>
@@ -29,20 +30,28 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="absolute right-0 mt-2 origin-top-right divide-y divide-dodger-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="flex items-center justify-center">
+            <Menu.Item>
+              <div className="p-2 sm:px-2 sm:py-0 text-center text-dodger-800">
+                <ChangeLanguage />
+              </div>
+            </Menu.Item>
+          </div>
           <div className="px-1 py-1">
             {email !== undefined ? (
               <>
                 <Menu.Item>
-                  <p className="p-2 text-center text-sm text-gray-800">
+                  <p className="p-2 text-center text-sm text-dodger-800">
                     {email}
                   </p>
                 </Menu.Item>
+
                 <Menu.Item>
                   {({ active }) => (
                     <div
                       className={`${
-                        active ? "bg-violet-500 text-white" : "text-gray-900"
+                        active ? "bg-violet-500 text-white" : "text-dodger-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <form action="/logout" method="post">
@@ -61,7 +70,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                   {({ active }) => (
                     <div
                       className={`${
-                        active ? "bg-violet-500 text-white" : "text-gray-900"
+                        active ? "bg-violet-500 text-white" : "text-dodger-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <Link to="/admin" className="flex w-full">
@@ -80,7 +89,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                 {({ active }) => (
                   <div
                     className={`${
-                      active ? "bg-violet-500 text-white" : "text-gray-900"
+                      active ? "bg-violet-500 text-white" : "text-dodger-900"
                     } group flex w-24 items-center rounded-md px-2 py-2 text-sm`}
                   >
                     <Link to="/login" className="flex w-full">
@@ -94,11 +103,12 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                 )}
               </Menu.Item>
             )}
+
             <Menu.Item>
               {({ active }) => (
                 <div
                   className={`${
-                    active ? "bg-violet-500 text-white" : "text-gray-900"
+                    active ? "bg-violet-500 text-white" : "text-dodger-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <Link to="/users" className="flex w-full">

@@ -23,6 +23,7 @@ import { createYoutubeInfo } from "~/models/youtube-info.server";
 
 const NewVideoFormSchema = z.object({
   title: z.string().min(2, "require-name"),
+  role: z.string().min(2, "require-role"),
   youtubeId: z.string().min(1, "require-name_kor"),
 });
 
@@ -31,6 +32,7 @@ type ActionData = {
   youtubeId?: string;
   errors?: {
     title?: string;
+    role?: string;
     youtubeId?: string;
   };
 };
@@ -54,9 +56,10 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = request.formData();
   const artistId = (await formData).get("artist[id]") as string;
   const title = (await formData).get("title") as string;
+  const role = (await formData).get("role") as string;
   const youtubeId = (await formData).get("youtubeId") as string;
 
-  const video = await createVideo(artistId, title, youtubeId);
+  const video = await createVideo(artistId, title, role, youtubeId);
   await createYoutubeInfo(artistId, video.id, youtubeId);
 
   return redirect(`/admin/video/${video.id}`);
@@ -78,16 +81,13 @@ export default function NewVideoPage() {
   } else {
     matchedArtist = allArtist[0];
   }
-  const [selected, setSelected] = useState(matchedArtist);
-
+  const [selectedArtist, setSelectedArtist] = useState(matchedArtist);
 
   const actionData = useActionData() as ActionData;
   const inputProps = useFormInputProps(NewVideoFormSchema);
   const transition = useTransition();
   const disabled =
     transition.state === "submitting" || transition.state === "loading";
-
-  
 
   return (
     <Form method="post" className="p-2">
@@ -98,10 +98,15 @@ export default function NewVideoPage() {
         >
           Artist :
         </label>
-        <Listbox value={selected} onChange={setSelected} name="artist">
+        <Listbox
+          value={selectedArtist}
+          onChange={setSelectedArtist}
+          by="id"
+          name="artist"
+        >
           <div className="relative mt-1">
             <Listbox.Button className="relative w-full cursor-default rounded-lg bg-gray-50 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-              <span className="block truncate">{selected.name}</span>
+              <span className="block truncate">{selectedArtist.name}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
                   className="h-5 w-5 text-gray-400"
@@ -171,6 +176,63 @@ export default function NewVideoPage() {
         {actionData?.errors?.title && (
           <div className="pt-1 text-red-700" id="title-error">
             {actionData.errors.title}
+          </div>
+        )}
+      </div>
+
+      <div className="mt-4">
+        <label
+          htmlFor="role"
+          className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+        >
+          Role :
+        </label>
+        <div className="flex items-center mb-4">
+          <input
+            {...inputProps("role")}
+            name="role"
+            id="role1"
+            type="radio"
+            value="mv"
+            className="w-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-700 dark:border-gray-600"
+            aria-invalid={actionData?.errors?.role ? true : undefined}
+            aria-errormessage={
+              actionData?.errors?.role ? "role-error" : undefined
+            }
+            disabled={disabled}
+            checked
+          />
+          <label
+            htmlFor="role1"
+            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            mv
+          </label>
+        </div>
+        <div className="flex items-center mb-4">
+          <input
+            {...inputProps("role")}
+            name="role"
+            id="role2"
+            type="radio"
+            value="perf"
+            className="w-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-700 dark:border-gray-600"
+            aria-invalid={actionData?.errors?.role ? true : undefined}
+            aria-errormessage={
+              actionData?.errors?.role ? "role-error" : undefined
+            }
+            disabled={disabled}
+          />
+          <label
+            htmlFor="role2"
+            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            perf
+          </label>
+        </div>
+        {actionData?.errors?.role && (
+          <div className="pt-1 text-red-700" id="role-error">
+            {actionData.errors.role}
           </div>
         )}
       </div>

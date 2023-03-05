@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import type { YoutubeInfo } from "@prisma/client";
+import { YoutubeInfo } from "~/utils/types";
 
 export const modalState = atom({
   key: "modalState",

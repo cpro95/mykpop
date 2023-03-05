@@ -26,7 +26,7 @@ function Mv() {
 
   const [myParams] = useSearchParams();
   const gotParams: gotParamsType = getMyParams(myParams);
-  const { q, page, itemsPerPage, sorting } = gotParams;
+  const { q, page, itemsPerPage, sorting, role } = gotParams;
 
   return (
     <Layout title={t("MV")!} linkTo="/mv">
@@ -37,7 +37,9 @@ function Mv() {
               <li>
                 <Link
                   className="my-2 text-base tracking-wider dark:text-dodger-200 sm:text-base md:text-xl"
-                  to={`/mv?q=&page=${page}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+                  to={`/mv?page=${page}&itemsPerPage=${itemsPerPage}${
+                    sorting ? "&sorting=" + sorting : ""
+                  }${role ? "&role=" + role : ""}`}
                 >
                   ALL
                 </Link>
@@ -51,7 +53,11 @@ function Mv() {
                           isActive ? "border-b-4 border-b-dodger-500" : ""
                         }`
                       }
-                      to={`/mv/${aa.id}?q=&page=${page}&itemsPerPage=${itemsPerPage}&sorting=${sorting}`}
+                      to={`/mv/${
+                        aa.id
+                      }?page=${page}&itemsPerPage=${itemsPerPage}${
+                        sorting ? "&sorting=" + sorting : ""
+                      }${role ? "&role=" + role : ""}`}
                     >
                       {aa.name}
                     </NavLink>

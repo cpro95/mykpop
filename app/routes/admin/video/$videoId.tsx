@@ -101,7 +101,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function VideoDetailPage() {
   const { video, youtubeInfo, error } = useLoaderData<typeof loader>();
-
   let [isOpen, setIsOpen] = useState(false);
 
   if (error) {
@@ -123,7 +122,7 @@ export default function VideoDetailPage() {
       </div>
       <div className="flex w-full flex-row items-center justify-around">
         <h2 className="text-xl font-semibold">
-          {video.title} / {video.youtube_id}
+          {video.title} / {video.role} / {video.youtubeId}
         </h2>
         <div className="flex space-x-1">
           <div className="flex items-center justify-center">
@@ -185,20 +184,12 @@ export default function VideoDetailPage() {
             alt={youtubeInfo.youtubeTitle}
           />
           <div>
-            View:{" "}
-            {Number(youtubeInfo.youtubeViewCount).toLocaleString(
-              "ko-KR"
-            )}
+            View: {Number(youtubeInfo.youtubeViewCount).toLocaleString("ko-KR")}
             {" / "}
-            Like:{" "}
-            {Number(youtubeInfo.youtubeLikeCount).toLocaleString(
-              "ko-KR"
-            )}
+            Like: {Number(youtubeInfo.youtubeLikeCount).toLocaleString("ko-KR")}
             {" / "}
             Comment:{" "}
-            {Number(youtubeInfo.youtubeCommentCount).toLocaleString(
-              "ko-KR"
-            )}
+            {Number(youtubeInfo.youtubeCommentCount).toLocaleString("ko-KR")}
           </div>
         </div>
       )}

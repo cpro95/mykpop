@@ -230,26 +230,56 @@ export default function UpdatevideoPage() {
           )}
         </div>
 
-        <div>
+        <div className="mt-4">
           <label
-            htmlFor="message"
+            htmlFor="role"
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            role :
+            Role :
           </label>
-          <input
-            {...inputProps("role")}
-            name="role"
-            ref={roleRef}
-            id="role"
-            placeholder="Role"
-            className="mb-4 block w-full rounded-lg border border-gray-300 bg-gray-50 p-1.5 text-sm leading-loose text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            aria-invalid={actionData?.errors?.role ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.role ? "role-error" : undefined
-            }
-            disabled={disabled}
-          />
+          <div className="flex items-center mb-4">
+            <input
+              {...inputProps("role")}
+              name="role"
+              id="role1"
+              type="radio"
+              value="mv"
+              className="w-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-700 dark:border-gray-600"
+              aria-invalid={actionData?.errors?.role ? true : undefined}
+              aria-errormessage={
+                actionData?.errors?.role ? "role-error" : undefined
+              }
+              disabled={disabled}
+              checked
+            />
+            <label
+              htmlFor="role1"
+              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              mv
+            </label>
+          </div>
+          <div className="flex items-center mb-4">
+            <input
+              {...inputProps("role")}
+              name="role"
+              id="role2"
+              type="radio"
+              value="perf"
+              className="w-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-700 dark:border-gray-600"
+              aria-invalid={actionData?.errors?.role ? true : undefined}
+              aria-errormessage={
+                actionData?.errors?.role ? "role-error" : undefined
+              }
+              disabled={disabled}
+            />
+            <label
+              htmlFor="role2"
+              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              perf
+            </label>
+          </div>
           {actionData?.errors?.role && (
             <div className="pt-1 text-red-700" id="role-error">
               {actionData.errors.role}

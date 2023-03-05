@@ -5,11 +5,13 @@ export type { Video } from "@prisma/client";
 export function createVideo(
   artistId: string,
   title: string,
+  role: string,
   youtubeId: string
 ) {
   return prisma.video.create({
     data: {
       title,
+      role,
       youtubeId,
       artist: {
         connect: {
@@ -114,18 +116,20 @@ export async function getAllVideo(
     take: itemsPerPage,
   };
 
-  let whereQuery = {
-    where: {
-      title: {
-        contains: query,
+  let whereQuery = {};
+  if (query !== "") {
+    whereQuery = {
+      where: {
+        title: {
+          contains: query,
+        },
       },
-    },
-  };
+    };
+  }
 
   let orderBy = { orderBy: { updatedAt: "desc" } };
 
-  if (query === "") Object.assign(x, pageAndItemsPerPage, select, orderBy);
-  else Object.assign(x, select, whereQuery, orderBy);
+  Object.assign(x, select, whereQuery, orderBy, pageAndItemsPerPage)
 
   return prisma.video.findMany(x);
 }
@@ -157,7 +161,7 @@ export async function getAllVideoIds(
 
   let orderBy = { orderBy: { updatedAt: "desc" } };
 
-  if (query === "") Object.assign(x, pageAndItemsPerPage, select, orderBy);
+  if (query === "") Object.assign(x, select, orderBy, pageAndItemsPerPage);
   else Object.assign(x, select, whereQuery, orderBy);
 
   return prisma.video.findMany(x);

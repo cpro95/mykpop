@@ -7,6 +7,7 @@ type PaginationType = {
   total_pages: number;
   sorting?: string | undefined | null;
   id?: string | undefined | null;
+  role?: string | undefined | null;
 };
 
 export default function MyPagination({
@@ -16,28 +17,12 @@ export default function MyPagination({
   total_pages,
   sorting,
   id,
+  role,
 }: PaginationType) {
-  // const leftDoubleArrow = (
-  //   <svg
-  //     xmlns='http://www.w3.org/2000/svg'
-  //     className='h-5 w-5'
-  //     fill='none'
-  //     viewBox='0 0 24 24'
-  //     stroke='currentColor'
-  //     strokeWidth='2'
-  //   >
-  //     <path
-  //       strokeLinecap='round'
-  //       strokeLinejoin='round'
-  //       d='M11 19l-7-7 7-7m8 14l-7-7 7-7'
-  //     />
-  //   </svg>
-  // )
-
   const leftArrow = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
+      className="h-4 w-4"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -50,7 +35,7 @@ export default function MyPagination({
   const rightArrow = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-5"
+      className="h-4 w-4"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -60,28 +45,11 @@ export default function MyPagination({
     </svg>
   );
 
-  // const rightDoubleArrow = (
-  //   <svg
-  //     xmlns='http://www.w3.org/2000/svg'
-  //     className='h-5 w-5'
-  //     fill='none'
-  //     viewBox='0 0 24 24'
-  //     stroke='currentColor'
-  //     strokeWidth='2'
-  //   >
-  //     <path
-  //       strokeLinecap='round'
-  //       strokeLinejoin='round'
-  //       d='M13 5l7 7-7 7M5 5l7 7-7 7'
-  //     />
-  //   </svg>
-  // )
-
   const linkStyle =
-    "px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-dodger-800 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-dodger-900 dark:text-dodger-200 hover:bg-dodger-500 dark:hover:bg-dodger-500 hover:text-white dark:hover:text-dodger-200";
+    "px-2 sm:px-3 py-1 sm:py-2 mx-1 sm:mx-1 text-sm text-dodger-800 transition-colors duration-200 transform bg-white rounded-md sm:inline dark:bg-dodger-900 dark:text-dodger-200 hover:bg-dodger-500 dark:hover:bg-dodger-500 hover:text-white dark:hover:text-dodger-200";
 
   const currentLinkStyle =
-    "px-2 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-1 text-dodger-100 rounded-md sm:inline bg-dodger-500 text-white dark:bg-dodger-500 dark:text-dodger-200";
+    "px-2 sm:px-3 py-1 sm:py-2 mx-1 sm:mx-1 text-sm text-dodger-100 rounded-md sm:inline bg-dodger-500 text-white dark:bg-dodger-500 dark:text-dodger-200";
 
   // 섹션에 아무것도 없을 때 에러 처리
   if (total_pages === 0) total_pages = 1;
@@ -94,7 +62,7 @@ export default function MyPagination({
       {/* <Link
         to={`?${q ? "q=" + q : ""}&page=${1}&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
           id ? "&id=" + id : ""
-        }`}
+        }${role ? "&role=" + role : ""}`}
         className={linkStyle}
       >
         <span className='sr-only'>First</span>
@@ -106,7 +74,7 @@ export default function MyPagination({
           page === 1 ? 1 : page - 1
         }&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
           id ? "&id=" + id : ""
-        }`}
+        }${role ? "&role=" + role : ""}`}
         className={linkStyle}
       >
         <span className="sr-only">Previous</span>
@@ -117,7 +85,7 @@ export default function MyPagination({
         <Link
           to={`?${q ? "q=" + q : ""}&page=1&itemsPerPage=${itemsPerPage}${
             sorting ? "&sorting=" + sorting : ""
-          }${id ? "&id=" + id : ""}`}
+          }${id ? "&id=" + id : ""}${role ? "&role=" + role : ""}`}
           className={linkStyle}
         >
           1
@@ -132,7 +100,7 @@ export default function MyPagination({
           <Link
             to={`?${q ? "q=" + q : ""}&page=1&itemsPerPage=${itemsPerPage}${
               sorting ? "&sorting=" + sorting : ""
-            }${id ? "&id=" + id : ""}`}
+            }${id ? "&id=" + id : ""}${role ? "&role=" + role : ""}`}
             className={linkStyle}
           >
             1
@@ -152,7 +120,7 @@ export default function MyPagination({
             page - 1
           }&itemsPerPage=${itemsPerPage}${
             sorting ? "&sorting=" + sorting : ""
-          }${id ? "&id=" + id : ""}`}
+          }${id ? "&id=" + id : ""}${role ? "&role=" + role : ""}`}
           className={linkStyle}
         >
           {page - 1}
@@ -165,7 +133,7 @@ export default function MyPagination({
       <Link
         to={`?${q ? "q=" + q : ""}&page=${page}&itemsPerPage=${itemsPerPage}${
           sorting ? "&sorting=" + sorting : ""
-        }${id ? "&id=" + id : ""}`}
+        }${id ? "&id=" + id : ""}${role ? "&role=" + role : ""}`}
         className={currentLinkStyle}
       >
         {page}
@@ -178,7 +146,7 @@ export default function MyPagination({
             page + 1
           }&itemsPerPage=${itemsPerPage}${
             sorting ? "&sorting=" + sorting : ""
-          }${id ? "&id=" + id : ""}`}
+          }${id ? "&id=" + id : ""}${role ? "&role=" + role : ""}`}
           className={linkStyle}
         >
           {page + 1}
@@ -203,7 +171,7 @@ export default function MyPagination({
             q ? "q=" + q : ""
           }&page=${total_pages}&itemsPerPage=${itemsPerPage}${
             sorting ? "&sorting=" + sorting : ""
-          }${id ? "&id=" + id : ""}`}
+          }${id ? "&id=" + id : ""}${role ? "&role=" + role : ""}`}
           className={linkStyle}
         >
           {total_pages}
@@ -217,7 +185,7 @@ export default function MyPagination({
           page === total_pages ? total_pages : page + 1
         }&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
           id ? "&id=" + id : ""
-        }`}
+        }${role ? "&role=" + role : ""}`}
         className={linkStyle}
       >
         <span className="sr-only">Next</span>
@@ -227,7 +195,7 @@ export default function MyPagination({
       {/* <Link
         to={`?${q ? "q=" + q : ""}&page=${total_pages}&itemsPerPage=${itemsPerPage}${sorting ? "&sorting=" + sorting : ""}${
           id ? "&id=" + id : ""
-        }`}
+        }${role ? "&role=" + role : ""}`}
         className={linkStyle}
       >
         <span className='sr-only'>Last</span>

@@ -10,16 +10,20 @@ import { useTranslation } from "react-i18next";
 import MyPagination from "~/components/my-pagination";
 import {
   getStatPageData,
-  getYoutubeInfoCount,
-  getTopViewCount,
+  getCountInStatPageData,
 } from "~/models/youtube-info.server";
 import { getArtistsIdAndName } from "~/models/artist.server";
 import type { gotParamsType } from "~/utils/types";
 import { getMyParams } from "~/utils/utils";
 import { ITEMSPERPAGE } from "~/utils/consts";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+  ChevronDoubleRightIcon,
+  XCircleIcon,
+} from "@heroicons/react/20/solid";
 import { assertIsPost } from "~/utils/http.server";
 
 export async function loader({ request }: LoaderArgs) {
@@ -31,6 +35,7 @@ export async function loader({ request }: LoaderArgs) {
     | number
     | null;
   let id = url.searchParams.get("id") as string | null;
+  let role = url.searchParams.get("role") as string;
 
   let ids: any;
   if (id === null) {
@@ -40,17 +45,21 @@ export async function loader({ request }: LoaderArgs) {
   }
   if (page === null) page = 1;
   if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;
+  if (role === null) role = "all";
 
   const youtubeInfos = await getStatPageData(
     Number(page),
     Number(itemsPerPage),
-    ids
+    ids,
+    role
   );
-  // console.log(youtubeInfos);
 
-  const totalVidoes = youtubeInfos.length;
+  const totalVidoes = await getCountInStatPageData(ids, role);
 
-  const topViewCount = youtubeInfos[0].youtubeViewCount;
+  let topViewCount = 0;
+  if (youtubeInfos.length !== 0) {
+    topViewCount = youtubeInfos[0].youtubeViewCount;
+  }
 
   const allArtist = await getArtistsIdAndName();
 
@@ -63,39 +72,58 @@ export const action = async ({ request }: ActionArgs) => {
   const formData = request.formData();
   const allEntries = [...(await formData).entries()];
   const itemsPerPage = (await formData).get("itemsPerPage") as string;
+  const role = (await formData).get("role") as string;
 
   const idsArray = allEntries
     .filter(([key, value]) => key.endsWith("[id]"))
     .map(([key, value]) => value);
+  if (idsArray.length === 0)
+    return redirect(
+      `./?itemsPerPage=${itemsPerPage}${role ? "&role=" + role : ""}`
+    );
+  const returnedIds = idsArray.join(",");
 
-  if (idsArray.length === 0) return json({});
-  const returnUrl = idsArray.join(",");
-  // console.log(returnUrl);
-
-  return redirect(`./?id=${returnUrl}&itemsPerPage=${itemsPerPage}`);
+  return redirect(
+    `./?id=${returnedIds}&itemsPerPage=${itemsPerPage}${
+      role ? "&role=" + role : ""
+    }`
+  );
 };
 
+interface selectedArtistType {
+  id: string;
+  name: string;
+}
+
 function StatsHome() {
+
   const { youtubeInfos, totalVidoes, topViewCount, allArtist } =
     useLoaderData<typeof loader>();
 
   const [myParams] = useSearchParams();
   const gotParams: gotParamsType = getMyParams(myParams);
-  const { page, itemsPerPage, id } = gotParams;
+  const { page, itemsPerPage, id, role } = gotParams;
+
+  let ids: string[];
+  let filteredSelected: selectedArtistType[] = [];
+  if (id !== null && id !== undefined) {
+    ids = id?.split(",");
+    filteredSelected = allArtist.filter((item) => ids.includes(item.id));
+  }
+  const [selectedArtist, setSelectedArtist] =
+    useState<selectedArtistType[]>(filteredSelected);
 
   const { t, i18n } = useTranslation();
   let formatLocale = "";
   i18n.language === "ko" ? (formatLocale = "ko-KR") : (formatLocale = "en-US");
 
   let firstView: number;
-  if (!topViewCount) firstView = youtubeInfos[0].youtubeViewCount;
+  if (topViewCount !== 0 && youtubeInfos.length !== 0)
+    firstView = youtubeInfos[0].youtubeViewCount;
   else firstView = topViewCount;
 
-  // console.log(allArtist);
-
-  const [selected, setSelected] = useState([]);
-
   const submit = useSubmit();
+
   function handleChange(e: any) {
     let x = {
       page: String(gotParams.page),
@@ -109,25 +137,64 @@ function StatsHome() {
     submit(x, { replace: true });
   }
 
+  function handleChange2(e: any) {
+    let x = {
+      q: gotParams.q || "",
+      page: "1",
+      itemsPerPage: String(gotParams.itemsPerPage),
+      sorting: gotParams.sorting || "",
+      role: gotParams.role || "all",
+    };
+    x.role = e.target.value;
+    // console.log("inside search-form x is ========>", x);
+    submit(x, { replace: true });
+  }
+
+  function deleteSelected(id: string) {
+    setSelectedArtist(selectedArtist.filter((artist) => artist.id !== id));
+  }
+
   return (
     <div className="flex w-full flex-col items-center dark:text-white sm:overflow-hidden lg:w-10/12">
       <section className="w-full flex flex-col items-center justify-center">
+        <div className="w-full">
+          <span
+            className={`text-dodger-600 mx-2 flex flex-wrap p-2  items-center justify-start text-xs sm:text-sm ${
+              selectedArtist.length === 0 ? "invisible" : "visible"
+            }`}
+          >
+            <ChevronDoubleRightIcon className="text-dodger-600 dark:text-dodger-300  w-4 h-4 sm:w-5 sm:h-5" />
+            {selectedArtist.map((s: selectedArtistType) => (
+              <span
+                key={s.id}
+                className="flex items-center text-dodger-600 dark:text-dodger-300 mx-2"
+              >
+                {s.name}
+                <XCircleIcon
+                  className="text-amber-600 dark:text-amber-400 w-4 h-4 sm:w-5 sm:h-5"
+                  onClick={() => deleteSelected(s.id)}
+                />
+              </span>
+            ))}
+          </span>
+        </div>
         <Form
           method="post"
           replace
           reloadDocument
           autoComplete="off"
-          className="w-full p-2 items-center justify-center grid grid-cols-5 sm:grid-cols-8 gap-4"
+          className="w-full py-2 items-center justify-center grid grid-cols-6 sm:grid-cols-8 sm:gap-4"
         >
-          <div className="w-full col-span-3 sm:col-span-6">
+          <div className="w-full col-span-3 sm:col-span-5">
             <Listbox
-              value={selected}
-              onChange={setSelected}
+              value={selectedArtist}
+              onChange={setSelectedArtist}
               name="artist"
               multiple
+              by="id"
             >
               <div className="relative z-20">
-                <Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 text-sm">
+                <Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 text-xs sm:text-sm">
                   <span className="block truncate">{t("Select")}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
@@ -142,8 +209,8 @@ function StatsHome() {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-dodger-50 dark:bg-dodger-300 text-dodger-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {allArtist.map((aa: any) => (
+                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-dodger-50 dark:bg-dodger-300 text-dodger-700 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-xs sm:text-sm">
+                    {allArtist.map((aa: selectedArtistType) => (
                       <Listbox.Option
                         key={aa.id}
                         className={({ active }) =>
@@ -181,12 +248,22 @@ function StatsHome() {
               </div>
             </Listbox>
           </div>
-          <div className="w-full mx-auto col-span-2 flex items-center justify-center space-x-4">
+          <div className="w-full sm:gap-2 md:gap-4 col-span-3 sm:col-span-3 flex items-center justify-end">
             <select
-              defaultValue={itemsPerPage}
+              name="role"
+              value={gotParams.role}
+              onChange={handleChange2}
+              className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px]"
+            >
+              <option value="all">{t("All")}</option>
+              <option value="mv">{t("Music")}</option>
+              <option value="perf">{t("Performance")}</option>
+            </select>
+            <select
+              value={itemsPerPage}
               name="itemsPerPage"
               onChange={handleChange}
-              className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 text-sm"
+              className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px]"
             >
               <option value="10">10</option>
               <option value="20">20</option>
@@ -197,9 +274,9 @@ function StatsHome() {
             </select>
             <button
               type="submit"
-              className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300  shadow-md text-center text-dodger-700 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 text-sm"
+              className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300  shadow-md text-center text-dodger-700 text-xs sm:text-sm tracking-[-1px]"
             >
-              {t("Submit")}
+              {t("Search")}
             </button>
           </div>
         </Form>
@@ -219,7 +296,7 @@ function StatsHome() {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(youtubeInfos) &&
+            {Array.isArray(youtubeInfos) && youtubeInfos.length !== 0 ? (
               youtubeInfos.map((yinfo) => (
                 <tr
                   className="bg-white border-b dark:bg-dodger-800 dark:border-dodger-700"
@@ -262,7 +339,14 @@ function StatsHome() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan={3} className="text-center">
+                  {t("No Results")}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         <MyPagination
@@ -270,6 +354,7 @@ function StatsHome() {
           itemsPerPage={itemsPerPage}
           total_pages={Math.ceil(Number(totalVidoes) / itemsPerPage)}
           id={id}
+          role={role}
         />
       </section>
     </div>

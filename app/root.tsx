@@ -35,7 +35,8 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "myKPop",
+  title: "All About K-Pop",
+  description: "K-Pop의 모든 것, All About K-Pop",
   viewport: "width=device-width,initial-scale=1",
 });
 
@@ -126,7 +127,7 @@ export function ErrorBoundary(props: any) {
         <title>myKpop</title>
         <Meta />
         <Links />
-        <meta charSet='utf-8' />
+        <meta charSet="utf-8" />
         <meta name="NaverBot" content="All" />
         <meta name="NaverBot" content="index,follow" />
         <meta name="Yeti" content="All" />

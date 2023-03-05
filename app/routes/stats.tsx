@@ -8,7 +8,7 @@ function Stats() {
   const { t } = useTranslation();
 
   return (
-    <Layout title={t("Stat")!} linkTo="/stats">
+    <Layout title={t("Stats")!} linkTo="/stats">
       <Outlet />
     </Layout>
   );

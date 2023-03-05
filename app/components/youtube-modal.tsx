@@ -101,11 +101,17 @@ function YoutubeModal() {
                       <div className="rounded border border-white/40 py-1 px-1.5 text-xs font-bold text-dodger-200">
                         {t("YOUTUBE")}
                       </div>
+                      <div className="rounded border border-amber-500/40 py-1 px-1.5 text-xs font-bold text-dodger-200">
+                        {video.video.role === "mv"
+                          ? t("Music")
+                          : t("Performance")}
+                      </div>
                       <div className="font-light text-dodger-200">
                         {new Date(video.youtubePublishedAt).toLocaleDateString(
                           formatLocale
                         )}
                       </div>
+
                       <div className="font-semibold text-dodger-400">
                         {new Intl.NumberFormat(formatLocale, {
                           notation: "compact",

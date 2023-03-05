@@ -65,10 +65,10 @@ export default function VideoIndex() {
     { field: "id", hide: true },
     { field: "title" },
     { field: "role" },
+    { field: "updatedAt", hide: true },
     { field: "artist.name", headerName: "Artist" },
     { field: "artist.nameKor", headerName: "그룹명", hide: true },
     { field: "artist.company", hide: true },
-    { field: "updatedAt", hide: true },
     { field: "youtubeId" },
     {
       field: "youtubeTitle",

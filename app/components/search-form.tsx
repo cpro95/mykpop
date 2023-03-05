@@ -2,6 +2,7 @@ import { Form, useSubmit, useTransition } from "@remix-run/react";
 import type { FormMethod } from "@remix-run/react";
 import type { gotParamsType } from "~/utils/types";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 export default function SearchForm({
   method,
@@ -21,14 +22,29 @@ export default function SearchForm({
     transition.state === "submitting" || transition.state === "loading";
 
   const submit = useSubmit();
+
   function handleChange(e: any) {
     let x = {
       q: gotParams.q || "",
-      page: String(gotParams.page),
+      page: "1",
       itemsPerPage: String(gotParams.itemsPerPage),
-      sorting: gotParams.sorting || "",
+      sorting: gotParams.sorting || "date",
+      role: gotParams.role || "all",
     };
     x.sorting = e.target.value;
+    // console.log("inside search-form x is ========>", x);
+    submit(x, { replace: true });
+  }
+
+  function handleChange2(e: any) {
+    let x = {
+      q: gotParams.q || "",
+      page: "1",
+      itemsPerPage: String(gotParams.itemsPerPage),
+      sorting: gotParams.sorting || "date",
+      role: gotParams.role || "all",
+    };
+    x.role = e.target.value;
     // console.log("inside search-form x is ========>", x);
     submit(x, { replace: true });
   }
@@ -65,7 +81,7 @@ export default function SearchForm({
           />
         </div>
         <button
-          className="search-button ml-2"
+          className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px] ml-2"
           type="submit"
           disabled={isSubmitting}
         >
@@ -85,21 +101,33 @@ export default function SearchForm({
           </svg>
         </button>
         {showSorting && (
-          <div className="ml-2 sm:ml-4 md:ml-6 flex items-center justify-center mr-2">
-            <select
-              name="sorting"
-              onChange={handleChange}
-              className="bg-transparent font-medium text-gray-700 focus:outline-none dark:text-gray-300"
-            >
-              <option value="date" selected={gotParams.sorting === "date"}>
-                {t("Date")}
-              </option>
+          <>
+            <div className="ml-2 sm:ml-4 md:ml-6 flex items-center justify-center mr-2">
+              <select
+                name="role"
+                value={gotParams.role}
+                onChange={handleChange2}
+                className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px]"
+              >
+                <option value="all">{t("All")}</option>
+                <option value="mv">{t("Music")}</option>
+                <option value="perf">{t("Performance")}</option>
+              </select>
+            </div>
 
-              <option value="views" selected={gotParams.sorting === "views"}>
-                {t("Views")}
-              </option>
-            </select>
-          </div>
+            <div className="ml-2 sm:ml-4 md:ml-6 flex items-center justify-center mr-2">
+              <select
+                name="sorting"
+                onChange={handleChange}
+                value={gotParams.sorting}
+                className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px]"
+              >
+                <option value="date">{t("Date")}</option>
+
+                <option value="views">{t("Views")}</option>
+              </select>
+            </div>
+          </>
         )}
       </div>
     </Form>

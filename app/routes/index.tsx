@@ -70,8 +70,7 @@ function Home() {
         </div>
         <div className="flex w-full items-center justify-center">
           <section className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-            {allArtist &&
-              Array.isArray(allArtist) &&
+            {Array.isArray(allArtist) && allArtist.length !== 0 ? (
               allArtist.map((aa: any) => (
                 <Link
                   key={aa.id}
@@ -99,7 +98,12 @@ function Home() {
                     </p>
                   </div>
                 </Link>
-              ))}
+              ))
+            ) : (
+              <span className="text-sm text-dodger-500 dark:text-dodger-400">
+                {t("No Results")}
+              </span>
+            )}
           </section>
         </div>
         <MyPagination

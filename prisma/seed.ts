@@ -4,14 +4,14 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function seed() {
-  const email = "cpro95@daum.net";
+  const email = "admin@mykpop.fly.dev";
 
   // cleanup the existing database
   await prisma.user.delete({ where: { email } }).catch(() => {
     // no worries if it doesn't exist yet
   });
 
-  const hashedPassword = await bcrypt.hash("rlaaksrl", 10);
+  const hashedPassword = await bcrypt.hash("mykpopiscool", 10);
 
   const user = await prisma.user.create({
     data: {
@@ -27,16 +27,12 @@ async function seed() {
 
   await prisma.note.create({
     data: {
-      title: "My first note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
-  });
+      title: "환영합니다!",
+      body: `Hi, Guys!
 
-  await prisma.note.create({
-    data: {
-      title: "My second note",
-      body: "Hello, world!",
+      K- Pop is Everywhere!
+      
+      유튜브 조회수를 참고하여 최신 케이팝 트렌드를 따라가 보세요!`,
       userId: user.id,
     },
   });
