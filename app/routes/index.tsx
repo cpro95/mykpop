@@ -91,7 +91,7 @@ function Home() {
                     </h5>
 
                     <p className="mb-3 font-normal text-dodger-700 dark:text-dodger-400">
-                      {`${aa._count.videos}${t("Videos")}`}
+                      {`${aa._count.videos} ${t("Videos")}`}
                     </p>
                     <p className="mb-3 font-bold text-dodger-800 dark:text-dodger-300">
                       {aa.company}

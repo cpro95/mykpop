@@ -113,10 +113,10 @@ export default function SearchForm({
                 name="role"
                 value={gotParams.role}
                 onChange={handleChange2}
-                className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px]"
+                className="rounded-lg py-2 px-2 sm:px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px] sm:tracking-normal"
               >
                 <option value="all">{t("All")}</option>
-                <option value="mv">{t("Music")}</option>
+                <option value="mv">{t("Music Video")}</option>
                 <option value="perf">{t("Performance")}</option>
               </select>
             </div>
@@ -126,7 +126,7 @@ export default function SearchForm({
                 name="sorting"
                 onChange={handleChange}
                 value={gotParams.sorting}
-                className="rounded-lg py-2 px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px]"
+                className="rounded-lg py-2 px-2 sm:px-3 bg-dodger-50 dark:bg-dodger-300 text-dodger-700 text-left shadow-md text-xs sm:text-sm tracking-[-1px] sm:tracking-normal"
               >
                 <option value="date">{t("Date")}</option>
 
