@@ -102,9 +102,7 @@ function YoutubeModal() {
                         {t("YOUTUBE")}
                       </div>
                       <div className="rounded border border-amber-500/40 py-1 px-1.5 text-xs font-bold text-dodger-200">
-                        {video.video.role === "mv"
-                          ? t("Music")
-                          : t("Performance")}
+                        {video.video.role === "mv" ? "M" : "P"}
                       </div>
                       <div className="font-light text-dodger-200">
                         {new Date(video.youtubePublishedAt).toLocaleDateString(

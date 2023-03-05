@@ -17,11 +17,11 @@ function VideoCard({ mv }: { mv: YoutubeInfo }) {
         />
       )}
 
-      <div className="py-5 text-center">
+      <div className="w-full py-5 text-center">
         <div className="block h-20 text-lg font-semibold text-dodger-800 dark:text-dodger-300">
           {mv.youtubeTitle}
         </div>
-        <div className="mx-14 flex items-center justify-between">
+        <div className="mx-5 flex items-center justify-between">
           <h6 className="text-sm text-dodger-700 dark:text-dodger-400">
             {new Date(mv.youtubePublishedAt).toLocaleDateString(formatLocale)}
           </h6>
@@ -34,7 +34,7 @@ function VideoCard({ mv }: { mv: YoutubeInfo }) {
           </h6>
 
           <h6 className="text-sm text-dodger-700 dark:text-dodger-400 rounded border border-dodger-500/40 px-2">
-            {mv.video.role === "mv" ? t("Music") : t("Performance")}
+            {mv.video.role === "mv" ? "M" : "P"}
           </h6>
         </div>
       </div>

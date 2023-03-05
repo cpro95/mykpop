@@ -37,7 +37,7 @@ function Mv() {
               <li>
                 <Link
                   className="my-2 text-base tracking-wider dark:text-dodger-200 sm:text-base md:text-xl"
-                  to={`/mv?page=${page}&itemsPerPage=${itemsPerPage}${
+                  to={`/mv?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}${
                     sorting ? "&sorting=" + sorting : ""
                   }${role ? "&role=" + role : ""}`}
                 >
@@ -55,7 +55,7 @@ function Mv() {
                       }
                       to={`/mv/${
                         aa.id
-                      }?page=${page}&itemsPerPage=${itemsPerPage}${
+                      }?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}${
                         sorting ? "&sorting=" + sorting : ""
                       }${role ? "&role=" + role : ""}`}
                     >

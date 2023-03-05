@@ -121,6 +121,7 @@ export async function getAllYoutubeInfosByArtistId(artistId: string, q: string,
     skip: page === 1 ? 0 : (page - 1) * itemsPerPage,
     take: itemsPerPage,
   };
+
   let whereQuery = {};
   if (q === "" && role === "all") {
     whereQuery = {
@@ -130,34 +131,43 @@ export async function getAllYoutubeInfosByArtistId(artistId: string, q: string,
         },
       },
     };
-  } else if (q === "" && role !== "all") {
-    whereQuery = {
-      where: {
-        video: { role },
-      },
-    }
-  }
-  else if (q !== "" && role === "all") {
+  } else if (q !== "" && role === "all") {
     whereQuery = {
       where: {
         AND: [
           {
             artist: { id: artistId },
           },
-        ],
-        OR: [
           {
-            youtubeTitle: {
-              contains: q,
-            },
+            OR: [
+              {
+                youtubeTitle: {
+                  contains: q,
+                },
+              },
+              {
+                video: {
+                  title: {
+                    contains: q,
+                  }
+                }
+              },
+            ]
           },
-          {
-            video: {
-              title: {
-                contains: q,
-              }
-            }
+        ]
+      },
+    };
+  } else if (q === "" && role !== "all") {
+    whereQuery = {
+      where: {
+        AND: [{
+          artist: {
+            id: artistId
           },
+        },
+        {
+          video: { role }
+        }
         ]
       },
     };
@@ -166,35 +176,40 @@ export async function getAllYoutubeInfosByArtistId(artistId: string, q: string,
       where: {
         AND: [
           {
-            artist: { id: artistId },
-          },
-          { video: { role } }
-        ],
-        OR: [
-          {
-            youtubeTitle: {
-              contains: q,
-            },
+            AND: [
+
+              {
+                artist: { id: artistId },
+              },
+              { video: { role } }
+            ],
           },
           {
-            video: {
-              title: {
-                contains: q,
-              }
-            }
+            OR: [
+              {
+                youtubeTitle: {
+                  contains: q,
+                },
+              },
+              {
+                video: {
+                  title: {
+                    contains: q,
+                  }
+                }
+              },
+            ]
           },
         ]
       },
     };
   }
-
   let orderBy = {};
   if (sorting === "date") {
     orderBy = { orderBy: { youtubePublishedAt: "desc" } };
   } else orderBy = { orderBy: { youtubeViewCount: "desc" } };
 
   Object.assign(x, orderBy, select, whereQuery, pageAndItemsPerPage);
-
   return prisma.youtubeInfo.findMany(x);
 }
 
@@ -464,21 +479,23 @@ export async function getAllYoutubeInfosCountByArtistId(artistId: string, q: str
           {
             artist: { id: artistId },
           },
-        ],
-        OR: [
           {
-            youtubeTitle: {
-              contains: q,
-            },
-          },
-          {
-            video: {
-              title: {
-                contains: q,
+            OR: [
+              {
+                youtubeTitle: {
+                  contains: q,
+                },
               },
-            },
-          }
-        ],
+              {
+                video: {
+                  title: {
+                    contains: q,
+                  },
+                },
+              }
+            ],
+          },
+        ]
       },
     })
   else if (q === "" && role !== "all")
@@ -497,24 +514,29 @@ export async function getAllYoutubeInfosCountByArtistId(artistId: string, q: str
       where: {
         AND: [
           {
-            artist: { id: artistId },
-          },
-          { video: { role } }
-        ],
-        OR: [
-          {
-            youtubeTitle: {
-              contains: q,
-            },
-          },
-          {
-            video: {
-              title: {
-                contains: q,
+            AND: [
+              {
+                artist: { id: artistId },
               },
-            },
+              { video: { role } }
+            ],
+          }, {
+            OR: [
+              {
+                youtubeTitle: {
+                  contains: q,
+                },
+              },
+              {
+                video: {
+                  title: {
+                    contains: q,
+                  },
+                },
+              }
+            ],
           }
-        ],
+        ]
       },
     })
 }
@@ -548,24 +570,26 @@ export async function getAllYoutubeInfosCountByNone(q?: string, role?: string) {
   else if (q !== "" && role !== "all")
     return prisma.youtubeInfo.count({
       where: {
-        AND: [{
-          video: { role }
-        }, {
-          OR: [
-            {
-              youtubeTitle: {
-                contains: q,
-              },
-            },
-            {
-              video: {
-                title: {
+        AND: [
+          {
+            video: { role }
+          },
+          {
+            OR: [
+              {
+                youtubeTitle: {
                   contains: q,
                 },
               },
-            }
-          ]
-        }],
+              {
+                video: {
+                  title: {
+                    contains: q,
+                  },
+                },
+              }
+            ]
+          }],
       },
     })
 }

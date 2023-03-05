@@ -66,7 +66,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                     </div>
                   )}
                 </Menu.Item>
-                <Menu.Item>
+                {/* <Menu.Item>
                   {({ active }) => (
                     <div
                       className={`${
@@ -82,7 +82,7 @@ export default function DropdownMenu({ email }: { email: string | undefined }) {
                       </Link>
                     </div>
                   )}
-                </Menu.Item>
+                </Menu.Item> */}
               </>
             ) : (
               <Menu.Item>

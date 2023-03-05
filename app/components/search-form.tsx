@@ -2,7 +2,7 @@ import { Form, useSubmit, useTransition } from "@remix-run/react";
 import type { FormMethod } from "@remix-run/react";
 import type { gotParamsType } from "~/utils/types";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function SearchForm({
   method,
@@ -17,6 +17,8 @@ export default function SearchForm({
 }) {
   const transition = useTransition();
   const { t } = useTranslation();
+
+  const [query, setQuery] = useState<string>(gotParams.q);
 
   let isSubmitting =
     transition.state === "submitting" || transition.state === "loading";
@@ -78,6 +80,10 @@ export default function SearchForm({
             placeholder={t("Search")!}
             type="text"
             name="q"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
           />
         </div>
         <button
