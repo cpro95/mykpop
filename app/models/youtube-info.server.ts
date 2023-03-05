@@ -160,14 +160,15 @@ export async function getAllYoutubeInfosByArtistId(artistId: string, q: string,
   } else if (q === "" && role !== "all") {
     whereQuery = {
       where: {
-        AND: [{
-          artist: {
-            id: artistId
+        AND: [
+          {
+            artist: {
+              id: artistId
+            },
           },
-        },
-        {
-          video: { role }
-        }
+          {
+            video: { role }
+          }
         ]
       },
     };
@@ -177,7 +178,6 @@ export async function getAllYoutubeInfosByArtistId(artistId: string, q: string,
         AND: [
           {
             AND: [
-
               {
                 artist: { id: artistId },
               },

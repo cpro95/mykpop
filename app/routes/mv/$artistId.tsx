@@ -29,7 +29,7 @@ export async function loader({ request, params }: LoaderArgs) {
     | null;
   let sorting = url.searchParams.get("sorting") as string | null;
   let role = url.searchParams.get("role") as string | null;
-
+  
   if (q === null) q = "";
   if (page === null) page = 1;
   if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;

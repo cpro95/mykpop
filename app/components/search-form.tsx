@@ -18,7 +18,7 @@ export default function SearchForm({
   const transition = useTransition();
   const { t } = useTranslation();
 
-  const [query, setQuery] = useState<string>(gotParams.q);
+  const [query, setQuery] = useState<string>(gotParams.q as string);
 
   let isSubmitting =
     transition.state === "submitting" || transition.state === "loading";
