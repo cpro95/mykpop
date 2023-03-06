@@ -1,9 +1,16 @@
 import { Outlet, Link } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 
 import { requireUserId } from "~/utils/session.server";
 import { useUser } from "~/utils/utils";
 import { Layout } from "~/components/layout";
+
+export const meta: MetaFunction = () => {
+  return {
+    title: `myKPop, KPOP, 케이팝, 마이케이팝`,
+    description: `KPOP, 케이팝, 블랙핑크, BLACKPINK, 뉴진스, NewJeans, 르세라핌, LE SSERAFIM`,
+  };
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);

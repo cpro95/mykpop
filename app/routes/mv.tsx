@@ -5,7 +5,7 @@ import {
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react";
-import type { LoaderArgs } from "@remix-run/server-runtime";
+import type { LoaderArgs, MetaFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { Layout } from "~/components/layout";
 import { getAllArtist } from "~/models/artist.server";
@@ -13,6 +13,13 @@ import type { Artist } from "@prisma/client";
 import { useTranslation } from "react-i18next";
 import { getMyParams } from "~/utils/utils";
 import type { gotParamsType } from "~/utils/types";
+
+export const meta: MetaFunction = () => {
+  return {
+    title: `myKPop, KPOP, 케이팝, 마이케이팝`,
+    description: `KPOP, 케이팝, 블랙핑크, BLACKPINK, 뉴진스, NewJeans, 르세라핌, LE SSERAFIM`,
+  };
+};
 
 export async function loader({ request }: LoaderArgs) {
   const allArtist = await getAllArtist("", 1, 1000);

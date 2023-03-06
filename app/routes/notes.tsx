@@ -25,16 +25,17 @@ type MyLoaderData = {
 };
 
 export const meta: MetaFunction = (props) => {
-  // console.log("Inside meta ===>", props);
   if (props.location.pathname === "/notes/new") {
     return {
-      title: "Writing!",
+      title: `통계, Stats, myKPop, KPOP, 케이팝, 마이케이팝`,
+      description: `KPOP, 케이팝, 블랙핑크, BLACKPINK, 뉴진스, NewJeans, 르세라핌, LE SSERAFIM`,
     };
   }
 
   if (props.location.pathname === "/notes") {
     return {
-      title: "Notes!",
+      title: `통계, Stats, myKPop, KPOP, 케이팝, 마이케이팝`,
+      description: `KPOP, 케이팝, 블랙핑크, BLACKPINK, 뉴진스, NewJeans, 르세라핌, LE SSERAFIM`,
     };
   }
 
@@ -54,8 +55,8 @@ export const meta: MetaFunction = (props) => {
 
   // default return
   return {
-    title: "자유게시판",
-    description: "자유게시판",
+    title: `통계, Stats, myKPop, KPOP, 케이팝, 마이케이팝`,
+    description: `KPOP, 케이팝, 블랙핑크, BLACKPINK, 뉴진스, NewJeans, 르세라핌, LE SSERAFIM`,
   };
 };
 

@@ -4,7 +4,12 @@ import {
   useSearchParams,
   useSubmit,
 } from "@remix-run/react";
-import { ActionArgs, LoaderArgs, redirect } from "@remix-run/server-runtime";
+import type {
+  ActionArgs,
+  LoaderArgs,
+  MetaFunction,
+} from "@remix-run/server-runtime";
+import { redirect } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import { useTranslation } from "react-i18next";
 import MyPagination from "~/components/my-pagination";
@@ -25,6 +30,13 @@ import {
   XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { assertIsPost } from "~/utils/http.server";
+
+export const meta: MetaFunction = () => {
+  return {
+    title: `통계, Stats, myKPop, KPOP, 케이팝, 마이케이팝`,
+    description: `KPOP, 케이팝, 블랙핑크, BLACKPINK, 뉴진스, NewJeans, 르세라핌, LE SSERAFIM`,
+  };
+};
 
 export async function loader({ request }: LoaderArgs) {
   // Parsing URL query
@@ -96,7 +108,6 @@ interface selectedArtistType {
 }
 
 function StatsHome() {
-
   const { youtubeInfos, totalVidoes, topViewCount, allArtist } =
     useLoaderData<typeof loader>();
 

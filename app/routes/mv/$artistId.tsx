@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import invariant from "tiny-invariant";
@@ -15,6 +15,14 @@ import MyPagination from "~/components/my-pagination";
 import { ITEMSPERPAGE } from "~/utils/consts";
 import type { gotParamsType } from "~/utils/types";
 import { getMyParams } from "~/utils/utils";
+import { getArtist } from "~/models/artist.server";
+
+export const meta: MetaFunction = ({ data }) => {
+  return {
+    title: `${data.artistName.name}, ${data.artistName.nameKor}`,
+    description: `Kpop, 케이팝 ${data.artistName.name}, ${data.artistName.nameKor}, ${data.artistName.company}`,
+  };
+};
 
 export async function loader({ request, params }: LoaderArgs) {
   invariant(params.artistId, "artistId not found");
@@ -29,13 +37,21 @@ export async function loader({ request, params }: LoaderArgs) {
     | null;
   let sorting = url.searchParams.get("sorting") as string | null;
   let role = url.searchParams.get("role") as string | null;
-  
+
   if (q === null) q = "";
   if (page === null) page = 1;
   if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;
   if (sorting === null) sorting = "date";
   if (role === null) role = "all";
 
+  const artist = await getArtist(params.artistId);
+
+  const artistName = {
+    name: artist?.name,
+    nameKor: artist?.nameKor,
+    company: artist?.company,
+  };
+  
   const youtubeInfos = await getAllYoutubeInfosByArtistId(
     params.artistId,
     q,
@@ -52,7 +68,7 @@ export async function loader({ request, params }: LoaderArgs) {
   );
   // console.log(youtubeInfos, totalVidoes);
 
-  return json({ youtubeInfos, totalVidoes });
+  return json({ youtubeInfos, totalVidoes, artistName });
 }
 
 export default function MVArtistDetailsPage() {

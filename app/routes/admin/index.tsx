@@ -26,10 +26,10 @@ import {
 } from "~/models/user.server";
 import { useUser } from "~/utils/utils";
 
-export const meta: MetaFunction = (props) => {
+export const meta: MetaFunction = () => {
   return {
-    title: "Admin Dashboard in MyMoives Remix App",
-    description: "Admin Dashboard in MyMoives Remix App",
+    title: `myKPop, KPOP, 케이팝, 마이케이팝`,
+    description: `KPOP, 케이팝, 블랙핑크, BLACKPINK, 뉴진스, NewJeans, 르세라핌, LE SSERAFIM`,
   };
 };
 
