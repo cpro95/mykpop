@@ -137,7 +137,8 @@ function StatsHome() {
 
   function handleChange(e: any) {
     let x = {
-      page: String(gotParams.page),
+      // change itemsPerPage, change page = 1
+      page: "1",
       itemsPerPage: String(gotParams.itemsPerPage),
     };
     x.itemsPerPage = e.target.value;
@@ -307,7 +308,7 @@ function StatsHome() {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(youtubeInfos) && youtubeInfos.length !== 0 ? (
+            {Array.isArray(youtubeInfos) && youtubeInfos.length > 0 ? (
               youtubeInfos.map((yinfo) => (
                 <tr
                   className="bg-white border-b dark:bg-dodger-800 dark:border-dodger-700"
@@ -324,7 +325,7 @@ function StatsHome() {
 
                   <td className="px-6 py-4 w-96">
                     <div className="relative">
-                      <span className="text-dodger-900 z-10 relative ml-2">
+                      <span className="text-dodger-900 dark:text-amber-300 z-10 relative ml-2">
                         {new Intl.NumberFormat(formatLocale, {
                           notation: "compact",
                           maximumFractionDigits: 1,
