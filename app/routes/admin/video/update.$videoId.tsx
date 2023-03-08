@@ -206,7 +206,7 @@ export default function UpdatevideoPage() {
         <div>
           <label
             htmlFor="message"
-            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+            className="pt-2 mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
             title :
           </label>
@@ -250,7 +250,7 @@ export default function UpdatevideoPage() {
                 actionData?.errors?.role ? "role-error" : undefined
               }
               disabled={disabled}
-              checked
+              checked={video.role === "mv"}
             />
             <label
               htmlFor="role1"
@@ -272,6 +272,7 @@ export default function UpdatevideoPage() {
                 actionData?.errors?.role ? "role-error" : undefined
               }
               disabled={disabled}
+              checked={video.role === "perf"}
             />
             <label
               htmlFor="role2"

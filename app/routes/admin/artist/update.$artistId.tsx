@@ -212,7 +212,7 @@ export default function UpdateartistPage() {
             htmlFor="message"
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
-            artistLogo :
+            artistPoster :
           </label>
           <input
             {...inputProps("artistPoster")}

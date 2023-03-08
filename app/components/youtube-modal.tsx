@@ -20,7 +20,7 @@ function YoutubeModal() {
 
   return (
     <Transition appear show={showModal} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={handleClose}>
+      <Dialog as="div" className="relative z-40" onClose={handleClose}>
         {/* 화면 전체를 어둡게 만드는 트랜지션 */}
         <Transition.Child
           as={Fragment}

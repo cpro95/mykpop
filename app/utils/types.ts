@@ -1,10 +1,10 @@
 export type gotParamsType = {
-  q?: string | undefined | null;
+  q?: string;
   page: number;
   itemsPerPage: number;
   sorting?: string;
-  id?: string | undefined | null;
-  role? : string;
+  id?: string | undefined;
+  role?: string | undefined;
 };
 
 export type YoutubeInfo = {

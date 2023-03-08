@@ -4,8 +4,9 @@ import { Switch } from "@headlessui/react";
 import { useTranslation } from "react-i18next";
 
 export function ChangeLanguage() {
-  const [enabled, setEnabled] = useState(false);
   let { i18n } = useTranslation();
+  let isKor: boolean = i18n.language === "ko" ? false : true;
+  const [enabled, setEnabled] = useState(isKor);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -14,7 +15,9 @@ export function ChangeLanguage() {
   return (
     <Switch.Group>
       <div className="flex items-center">
-        <Switch.Label className="mx-1 sm:py-2.5 text-xs sm:text-sm">KO</Switch.Label>
+        <Switch.Label className="mx-1 sm:py-2.5 text-xs sm:text-sm">
+          KO
+        </Switch.Label>
         <Switch checked={enabled} onChange={setEnabled} as={Fragment}>
           {({ checked }) => (
             /* Use the `checked` state to conditionally style the button. */
@@ -34,7 +37,9 @@ export function ChangeLanguage() {
             </button>
           )}
         </Switch>
-        <Switch.Label className="mx-1 sm:py-2.5 text-xs sm:text-sm">EN</Switch.Label>
+        <Switch.Label className="mx-1 sm:py-2.5 text-xs sm:text-sm">
+          EN
+        </Switch.Label>
       </div>
     </Switch.Group>
   );

@@ -30,6 +30,9 @@ import {
   XCircleIcon,
 } from "@heroicons/react/20/solid";
 import { assertIsPost } from "~/utils/http.server";
+import { useRecoilState } from "recoil";
+import { modalState, videoState } from "~/atoms/modalAtom";
+import YoutubeModal from "~/components/youtube-modal";
 
 export const meta: MetaFunction = () => {
   return {
@@ -111,6 +114,9 @@ function StatsHome() {
   const { youtubeInfos, totalVidoes, topViewCount, allArtist } =
     useLoaderData<typeof loader>();
 
+  const [showModal, setShowModal] = useRecoilState(modalState);
+  const [video, setVideo] = useRecoilState(videoState);
+
   const [myParams] = useSearchParams();
   const gotParams: gotParamsType = getMyParams(myParams);
   const { page, itemsPerPage, id, role } = gotParams;
@@ -136,15 +142,18 @@ function StatsHome() {
   const submit = useSubmit();
 
   function handleChange(e: any) {
+    let ids = selectedArtist.map((a) => a.id).join(",");
     let x = {
       // change itemsPerPage, change page = 1
       page: "1",
       itemsPerPage: String(gotParams.itemsPerPage),
+      id: ids || "",
     };
-    x.itemsPerPage = e.target.value;
     if (gotParams.id) {
       Object.assign(x, { id: gotParams.id });
     }
+    x.itemsPerPage = e.target.value;
+
     // console.log("inside search-form x is ========>", x);
     submit(x, { replace: true });
   }
@@ -158,6 +167,10 @@ function StatsHome() {
       role: gotParams.role || "all",
     };
     x.role = e.target.value;
+    if (gotParams.id) {
+      Object.assign(x, { id: gotParams.id });
+    }
+
     // console.log("inside search-form x is ========>", x);
     submit(x, { replace: true });
   }
@@ -165,6 +178,24 @@ function StatsHome() {
   function deleteSelected(id: string) {
     setSelectedArtist(selectedArtist.filter((artist) => artist.id !== id));
   }
+
+  useEffect(() => {
+    let ids = selectedArtist.map((a) => a.id).join(",");
+    console.log(ids);
+
+    let x = {
+      q: gotParams.q || "",
+      page: "1",
+      itemsPerPage: String(gotParams.itemsPerPage),
+      sorting: gotParams.sorting || "",
+      role: gotParams.role || "all",
+    };
+    if (ids.length > 0) {
+      Object.assign(x, { id: ids });
+    }
+    console.log("inside search-form x is ========>", x);
+    submit(x, { replace: true });
+  }, [selectedArtist]);
 
   return (
     <div className="flex w-full flex-col items-center dark:text-white sm:overflow-hidden lg:w-10/12">
@@ -312,7 +343,7 @@ function StatsHome() {
               youtubeInfos.map((yinfo) => (
                 <tr
                   className="bg-white border-b dark:bg-dodger-800 dark:border-dodger-700"
-                  key={yinfo.youtubeTitle}
+                  key={yinfo.youtubeId}
                 >
                   <td className="text-left px-6 py-4 text-dodger-800 dark:text-dodger-300 hidden lg:table-cell">
                     {new Date(yinfo.youtubePublishedAt).toLocaleDateString(
@@ -320,12 +351,21 @@ function StatsHome() {
                     )}
                   </td>
                   <td className="text-left px-6 py-4 text-dodger-800 dark:text-dodger-300 hidden md:table-cell">
-                    {yinfo.youtubeTitle}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowModal(true);
+                        setVideo(yinfo as any);
+                      }}
+                      className="cursor-pointer hover:scale-105 hover:shadow-2xl"
+                    >
+                      {yinfo.youtubeTitle}
+                    </button>
                   </td>
 
                   <td className="px-6 py-4 w-96">
                     <div className="relative">
-                      <span className="text-dodger-900 dark:text-amber-300 z-10 relative ml-2">
+                      <span className="text-dodger-900 dark:text-amber-200 z-10 relative ml-2">
                         {new Intl.NumberFormat(formatLocale, {
                           notation: "compact",
                           maximumFractionDigits: 1,
@@ -346,7 +386,18 @@ function StatsHome() {
                             yinfo.youtubePublishedAt
                           ).toLocaleDateString(formatLocale)}
                         </div>
-                        <div>{yinfo.youtubeTitle}</div>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowModal(true);
+                              setVideo(yinfo as any);
+                            }}
+                            className="cursor-pointer hover:scale-105 hover:shadow-2xl"
+                          >
+                            {yinfo.youtubeTitle}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -361,6 +412,7 @@ function StatsHome() {
             )}
           </tbody>
         </table>
+        {showModal && <YoutubeModal />}
         <MyPagination
           page={page}
           itemsPerPage={itemsPerPage}

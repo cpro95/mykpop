@@ -7,7 +7,7 @@ import SearchForm from "~/components/search-form";
 import { getAllArtist, getAllArtistCount } from "~/models/artist.server";
 import { ITEMSPERPAGE } from "~/utils/consts";
 import type { gotParamsType } from "~/utils/types";
-import { getMyParams } from "~/utils/utils";
+import { getMyParams, getRandomInt } from "~/utils/utils";
 import { useTranslation } from "react-i18next";
 
 export const meta: MetaFunction = () => {
@@ -40,6 +40,15 @@ export async function loader({ request }: LoaderArgs) {
 
 function Home() {
   const { allArtist, totalArtists } = useLoaderData<typeof loader>();
+  let randomInt = getRandomInt(0, allArtist.length);
+  let mainPoster: string =
+    "https://raw.githubusercontent.com/cpro95/cdn/main/images/mykpop/blackpink_poster.jpg";
+  let mainArtistName: string = "블랙핑크";
+
+  if (totalArtists !== undefined && allArtist.length > 0) {
+    mainPoster = allArtist[randomInt].artistPoster;
+    mainArtistName = allArtist[randomInt].nameKor;
+  }
   const [myParams] = useSearchParams();
   const { q, page, itemsPerPage } = getMyParams(myParams);
   const gotParams: gotParamsType = { q, page, itemsPerPage };
@@ -49,18 +58,38 @@ function Home() {
   return (
     <Layout title={t("Home")} linkTo="/">
       <div className="flex w-full flex-col items-center dark:text-white sm:overflow-hidden lg:w-10/12">
-        <section className="w-full">
-          <div className="rounded-lg border border-dodger-200 bg-white p-4 text-center shadow dark:border-dodger-700 dark:bg-dodger-800 sm:p-8">
-            <h5 className="mb-6 text-3xl font-bold text-dodger-900 dark:text-white">
-              K-Pop is Everywhere!
-            </h5>
-            <p className="text-base text-dodger-600 dark:text-dodger-400 sm:text-lg">
-              {t("greeting")}
-            </p>
+        {/* Header */}
+        <header className="text-center flex flex-col items-center justify-center pt-4 pb-2">
+          <div className="container">
+            <div className="flex flex-wrap items-center">
+              <div className="w-full md:w-1/2 lg:w-5/12 xl:w-5/12 mb-6 md:mb-0">
+                <div className="container">
+                  <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-4">
+                    KPop is Everywhere!
+                  </h1>
+                  <p className="text-base md:text-lg mb-6">{t("greeting")}</p>
+                  <Link
+                    to="/mv"
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-xl tracking-wider"
+                  >
+                    {t("Let's Go")}
+                  </Link>
+                </div>
+              </div>
+              <div className="px-4 sm:pl-8 w-full md:w-1/2 lg:w-7/12 xl:w-7/12">
+                <div className="object-cover">
+                  <img
+                    className="w-full h-auto rounded-2xl"
+                    src={mainPoster}
+                    alt={mainArtistName}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        </section>
+        </header>
 
-        <div className="w-full">
+        <div className="w-11/12 py-4">
           <SearchForm
             method="get"
             action=""

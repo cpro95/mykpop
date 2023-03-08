@@ -407,9 +407,29 @@ export async function getStatPageData(
   let x = {};
   let selectQuery = {
     select: {
+      id: true,
+      youtubeId: true,
       youtubeTitle: true,
       youtubePublishedAt: true,
-      youtubeViewCount: true
+      youtubeThumbnail: true,
+      youtubeViewCount: true,
+      youtubeLikeCount: true,
+      youtubeCommentCount: true,
+      artist: {
+        select: {
+          id: true,
+          name: true,
+          nameKor: true,
+          company: true,
+        }
+      },
+      video: {
+        select: {
+          id: true,
+          title: true,
+          role: true,
+        }
+      },
     },
     orderBy: { youtubeViewCount: "desc" },
     skip: page === 1 ? 0 : (page - 1) * itemsPerPage,
