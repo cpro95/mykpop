@@ -76,7 +76,7 @@ export default function SearchForm({
             </svg>
           </div>
           <input
-            className="search-label"
+            className="block w-full rounded-lg border border-gray-300 bg-dodger-50 p-2.5 pl-10 text-gray-900 focus:border-dodger-500 focus:ring-dodger-500  dark:border-gray-600 dark:bg-dodger-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-dodger-500 dark:focus:ring-dodger-500 text-xs"
             placeholder={t("Search")!}
             type="text"
             name="q"

@@ -147,7 +147,7 @@ function StatsHome() {
       // change itemsPerPage, change page = 1
       page: "1",
       itemsPerPage: String(gotParams.itemsPerPage),
-      id: ids || "",
+      // id: ids || "",
     };
     if (gotParams.id) {
       Object.assign(x, { id: gotParams.id });
@@ -155,7 +155,7 @@ function StatsHome() {
     x.itemsPerPage = e.target.value;
 
     // console.log("inside search-form x is ========>", x);
-    submit(x, { replace: true });
+    submit(x);
   }
 
   function handleChange2(e: any) {
@@ -168,11 +168,11 @@ function StatsHome() {
     };
     x.role = e.target.value;
     if (gotParams.id) {
-      Object.assign(x, { id: gotParams.id });
+      Object.assign(x);
     }
 
     // console.log("inside search-form x is ========>", x);
-    submit(x, { replace: true });
+    submit(x);
   }
 
   function deleteSelected(id: string) {
@@ -181,7 +181,7 @@ function StatsHome() {
 
   useEffect(() => {
     let ids = selectedArtist.map((a) => a.id).join(",");
-    console.log(ids);
+    // console.log(ids);
 
     let x = {
       q: gotParams.q || "",
@@ -194,7 +194,7 @@ function StatsHome() {
       Object.assign(x, { id: ids });
     }
     console.log("inside search-form x is ========>", x);
-    submit(x, { replace: true });
+    submit(x);
   }, [selectedArtist]);
 
   return (
@@ -363,41 +363,44 @@ function StatsHome() {
                     </button>
                   </td>
 
-                  <td className="px-6 py-4 w-96">
-                    <div className="relative">
-                      <span className="text-dodger-900 dark:text-amber-200 z-10 relative ml-2">
+                  <td className="px-6 py-4 w-96 whitespace-nowrap">
+                    <div className="flex items-center justify-between">
+                      <div className="mr-2 text-right w-2/12 text-dodger-800 dark:text-dodger-300">
                         {new Intl.NumberFormat(formatLocale, {
                           notation: "compact",
                           maximumFractionDigits: 1,
                         }).format(Number(yinfo.youtubeViewCount))}
-                      </span>
-
-                      <div
-                        className="absolute inset-0 bg-dodger-300 h-6 w-full z-1 rounded-sm"
-                        style={{
-                          width: `${
-                            (yinfo.youtubeViewCount / firstView) * 100
-                          }%`,
-                        }}
-                      ></div>
-                      <div className="pt-4 space-y-2 text-dodger-800 dark:text-dodger-300 md:hidden">
-                        <div>
-                          {new Date(
-                            yinfo.youtubePublishedAt
-                          ).toLocaleDateString(formatLocale)}
-                        </div>
-                        <div>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setShowModal(true);
-                              setVideo(yinfo as any);
+                      </div>
+                      <div className="relative w-10/12">
+                        <div className="overflow-hidden h-2 text-xs flex rounded bg-dodger-200 dark:bg-dodger-500">
+                          <div
+                            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-dodger-500 dark:bg-dodger-200"
+                            style={{
+                              width: `${
+                                (yinfo.youtubeViewCount / firstView) * 100
+                              }%`,
                             }}
-                            className="cursor-pointer hover:scale-105 hover:shadow-2xl"
-                          >
-                            {yinfo.youtubeTitle}
-                          </button>
+                          ></div>
                         </div>
+                      </div>
+                    </div>
+                    <div className="pt-4 space-y-2 text-dodger-800 dark:text-dodger-300 md:hidden">
+                      <div>
+                        {new Date(yinfo.youtubePublishedAt).toLocaleDateString(
+                          formatLocale
+                        )}
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowModal(true);
+                            setVideo(yinfo as any);
+                          }}
+                          className="cursor-pointer hover:scale-105 hover:shadow-2xl"
+                        >
+                          {yinfo.youtubeTitle}
+                        </button>
                       </div>
                     </div>
                   </td>

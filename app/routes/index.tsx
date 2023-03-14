@@ -29,7 +29,7 @@ export async function loader({ request }: LoaderArgs) {
     | null;
   if (q === null) q = "";
   if (page === null) page = 1;
-  if (itemsPerPage === null) itemsPerPage = ITEMSPERPAGE;
+  if (itemsPerPage === null) itemsPerPage = 12;
 
   const allArtist = await getAllArtist(q, Number(page), Number(itemsPerPage));
   const totalArtists = await getAllArtistCount(q);
