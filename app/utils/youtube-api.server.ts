@@ -11,7 +11,7 @@ export type YoutubeApiInfo = {
   youtubeCommentCount: number;
 };
 
-const BASE_URL = getRequiredServerEnvVar("YOUTUBE_BASE_URL")
+const BASE_URL = getRequiredServerEnvVar("YOUTUBE_BASE_URL");
 
 export async function getYoutubeApiInfoById(youtubeId: string) {
   const result = await fetch(
@@ -44,7 +44,10 @@ export async function getYoutubeApiInfoById(youtubeId: string) {
       youtubeDescription: youtube.items[0].snippet.description,
       youtubeThumbnail: youtube.items[0].snippet.thumbnails.standard.url,
       youtubeViewCount: parseInt(youtube.items[0].statistics.viewCount),
-      youtubeLikeCount: parseInt(youtube.items[0].statistics.likeCount),
+      youtubeLikeCount:
+        youtube.items[0].statistics.likeCount === undefined
+          ? 0
+          : parseInt(youtube.items[0].statistics.likeCount),
       youtubeCommentCount: parseInt(youtube.items[0].statistics.commentCount),
     };
   }
